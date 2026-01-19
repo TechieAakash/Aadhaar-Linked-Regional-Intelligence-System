@@ -38,15 +38,15 @@ async function initDashboard() {
     try {
         console.log("Initializing Dashboard...");
         
-        // Fetch Data
-        const res = await fetch('/api/social/risk', { headers: API_HEADERS });
-        if (!res.ok) throw new Error("Failed to fetch API data");
+        // Fetch Data from static CSV converted to JSON
+        const res = await fetch('/data/integrated_service_risk.json');
+        if (!res.ok) throw new Error("Failed to fetch risk data");
         const riskData = await res.json();
         globalData = riskData;
 
         // Fetch Anomalies for Hotspots
         try {
-            const anomalyRes = await fetch('/api/data/anomalies.json'); // Adjusted path as per standard structure
+            const anomalyRes = await fetch('/data/anomalies.json');
             if(anomalyRes.ok) {
                 const anomalyData = await anomalyRes.json();
                 globalAnomalies = anomalyData.state_anomalies || [];
@@ -71,11 +71,13 @@ async function initDashboard() {
 
 // Export Functions
 function exportToCSV() {
-    window.location.href = '/api/social/export/csv';
+    // Export functionality disabled on static hosting
+    alert('CSV export requires backend API. Please download data manually from the data directory.');
 }
 
 function exportToPDF() {
-    window.location.href = '/api/social/export/pdf';
+    // Export functionality disabled on static hosting
+    alert('PDF export requires backend API. Please download data manually from the data directory.');
 }
 
 // Bind Export Buttons

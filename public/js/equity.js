@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // API Endpoints
     // API Endpoints
     // API Endpoints
-    const DATA_URL = '/api/social/fairness'; // Real Backend Data
-    const SUMMARY_URL = '/api/stats'; // System Stats as fallback or computed locally
+    const DATA_URL = '/data/social_fairness_analysis.json'; // Static data
+    const SUMMARY_URL = null; // Not available on static hosting
 
     // UIDAI Authentication
     const API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16";

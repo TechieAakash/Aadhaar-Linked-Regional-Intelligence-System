@@ -45,11 +45,8 @@ const DataLoader = {
     },
 
     async getSystemHealth() {
-        try {
-            const response = await fetch('/api/stats');
-            if (response.ok) return await response.json();
-        } catch (e) {}
-        return { status: "Offline", engine_health: "Standby", total_records: "N/A" };
+        // Static hosting - return default status
+        return { status: "Static", engine_health: "Active", total_records: "Pre-calculated" };
     },
 
     async fetchBenchmarkingData() {
@@ -58,7 +55,7 @@ const DataLoader = {
 
     async fetchSocialRisk() {
         try {
-            const response = await fetch('/api/social/risk');
+            const response = await fetch('/data/integrated_service_risk.json');
             if (response.ok) return await response.json();
         } catch (e) {}
         return [];

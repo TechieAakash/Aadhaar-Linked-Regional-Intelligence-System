@@ -397,6 +397,7 @@ const AnomalyAlertSystem = {
         }
 
         try {
+            alert('Admin features require backend API'); return;
             const res = await fetch('/api/admin/block', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -422,6 +423,7 @@ const AnomalyAlertSystem = {
 
     async executeUndoAction(entityId) {
         try {
+            alert('Admin features require backend API'); return;
             const res = await fetch('/api/admin/undo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -440,7 +442,7 @@ const AnomalyAlertSystem = {
     async downloadAuditTrail() {
         this.showToast("Preparing legal audit trail...", "info");
         try {
-            window.location.href = '/api/admin/download-audit';
+            alert('Download audit requires backend API');
         } catch (e) {
             this.showToast("Failed to initiate download.", "error");
         }
@@ -519,7 +521,7 @@ const AnomalyAlertSystem = {
         if (!container) return;
 
         try {
-            const response = await fetch('/api/data/peer_benchmarks.json');
+            const response = await fetch('/data/peer_benchmarks.json');
             const peerData = await response.json();
             const benchmark = peerData.find(b => b.state.toLowerCase() === stateName.toLowerCase());
 
