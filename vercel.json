@@ -2,34 +2,54 @@
     "version": 2,
     "builds": [
         {
-            "src": "server.py",
+            "src": "api/*.py",
             "use": "@vercel/python"
         }
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
-            "dest": "server.py"
-        },
-        {
-            "src": "/css/(.*)",
-            "dest": "static/css/$1"
-        },
-        {
-            "src": "/js/(.*)",
-            "dest": "static/js/$1"
-        },
-        {
-            "src": "/assets/(.*)",
-            "dest": "static/assets/$1"
+            "src": "/api/data/(.*)",
+            "dest": "api/data_service.py"
         },
         {
             "src": "/data/(.*)",
-            "dest": "data/$1"
+            "dest": "api/data_service.py"
+        },
+        {
+            "src": "/api/train",
+            "dest": "api/data_service.py"
+        },
+        {
+            "src": "/api/social/export/(.*)",
+            "dest": "api/operations_service.py"
+        },
+        {
+            "src": "/api/social/(.*)",
+            "dest": "api/social_service.py"
+        },
+        {
+            "src": "/api/anomaly/(.*)",
+            "dest": "api/social_service.py"
+        },
+        {
+            "src": "/api/budget/(.*)",
+            "dest": "api/optimization_service.py"
+        },
+        {
+            "src": "/css/(.*)",
+            "dest": "/static/css/$1"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/static/js/$1"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/static/assets/$1"
         },
         {
             "src": "/(.*)",
-            "dest": "server.py"
+            "dest": "api/index.py"
         }
     ],
     "env": {
