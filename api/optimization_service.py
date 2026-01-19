@@ -1,19 +1,26 @@
-from flask import Flask, jsonify, request
 import os
-from api.common import require_api_key
+import json
+from api.common import validate_api_key, unauthorized_response
 from backend.budget_optimizer import maximize_inclusion
 
-app = Flask(__name__)
-
-@app.route('/api/budget/optimize', methods=['POST'])
-@require_api_key
-def optimize_budget():
-    """Triggers the budget optimization logic."""
+def handler(event, context):
+    headers = event.get('headers', {})
+    
+    if not validate_api_key(headers):
+        return unauthorized_response()
+    
+    if event.get('httpMethod') != 'POST':
+        return {"statusCode": 405, "body": json.dumps({"error": "Method not allowed"})}
+    
     try:
-        data = request.json
+        data = json.loads(event.get('body', '{}'))
         budget = data.get('budget', 100000000) # Default 10Cr
         
         result = maximize_inclusion(budget)
-        return jsonify(result)
+        return {
+            "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(result)
+        }
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return {"statusCode": 500, "body": json.dumps({"error": str(e)})}

@@ -1,33 +1,43 @@
-from flask import Flask, jsonify, send_from_directory
 import os
-from api.common import DATA_DIR, require_api_key
+import json
+from api.common import DATA_DIR, validate_api_key, unauthorized_response
 
-app = Flask(__name__)
-
-@app.route('/api/data/<path:filename>')
-def get_data(filename):
-    """Serve analytics JSON files from the data directory with fallback."""
-    try:
-        if not filename.endswith('.json'):
-            return jsonify({"error": "Only JSON files allowed"}), 400
-        
-        if os.path.exists(os.path.join(DATA_DIR, filename)):
-            return send_from_directory(DATA_DIR, filename)
+def handler(event, context):
+    path = event.get('path', '')
+    headers = event.get('headers', {})
+    
+    # 1. Handle Training Trigger
+    if 'train' in path:
+        if not validate_api_key(headers):
+            return unauthorized_response()
             
-        return jsonify({"error": "File not found in data directory"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/api/train')
-@require_api_key
-def train_model():
-    """Trigger background model training."""
-    return jsonify({
-        "status": "Training Started", 
-        "message": "Orchestrating 1.4B records for retraining. This will take effect on next refresh."
-    })
-
-@app.route('/data/<path:filename>')
-def get_raw_data(filename):
-    """Fallback route for raw data files."""
-    return send_from_directory(DATA_DIR, filename)
+        return {
+            "statusCode": 200,
+            "body": json.dumps({
+                "status": "Training Started", 
+                "message": "Orchestrating 1.4B records for retraining (Netlify Lambda)."
+            })
+        }
+    
+    # 2. Handle Data Serving
+    filename = path.split('/')[-1]
+    if not filename.endswith('.json'):
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Only JSON files allowed"})
+        }
+    
+    file_path = os.path.join(DATA_DIR, filename)
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return {
+            "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(data)
+        }
+        
+    return {
+        "statusCode": 404,
+        "body": json.dumps({"error": f"File {filename} not found in data directory"})
+    }

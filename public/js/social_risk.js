@@ -46,7 +46,7 @@ async function initDashboard() {
 
         // Fetch Anomalies for Hotspots
         try {
-            const anomalyRes = await fetch('../data/anomalies.json'); // Adjusted path as per standard structure
+            const anomalyRes = await fetch('/api/data/anomalies.json'); // Adjusted path as per standard structure
             if(anomalyRes.ok) {
                 const anomalyData = await anomalyRes.json();
                 globalAnomalies = anomalyData.state_anomalies || [];
@@ -202,8 +202,8 @@ function getStateLogo(stateName) {
         slug = "dadra_and_nagar_haveli_and_daman_and_diu";
     }
 
-    const officialLogo = `../assets/images/states/seal_${slug}.png`;
-    const universalLogo = '../assets/images/states/universal_state_logo.png';
+    const officialLogo = `assets/images/states/seal_${slug}.png`;
+    const universalLogo = 'assets/images/states/universal_state_logo.png';
     
     const availableLogos = [
         "andaman_and_nicobar_islands", "assam", "chandigarh", "delhi", 
