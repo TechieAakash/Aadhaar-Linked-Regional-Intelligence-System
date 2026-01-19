@@ -27,24 +27,20 @@ const DataLoader = {
 
     async fetchJson(filename) {
         const timestamp = new Date().getTime();
-        const apiPath = `/api/data/${filename}?v=${timestamp}`;
+        // Use static path directly on Netlify
+        const staticPath = `/data/${filename}?v=${timestamp}`;
         
-        console.log(`[ALRIS] Fetching: ${apiPath}`);
+        console.log(`[ALRIS] Fetching: ${staticPath}`);
         
         try {
-            const response = await fetch(apiPath);
+            const response = await fetch(staticPath);
             if (!response.ok) {
-                // If API fails, try direct static path as second resort
-                const staticPath = `${window.location.origin}/data/${filename}?v=${timestamp}`;
-                console.warn(`[ALRIS] API Failed (${response.status}). Trying Static: ${staticPath}`);
-                const localResp = await fetch(staticPath);
-                if (localResp.ok) return await localResp.json();
-                throw new Error(`Server API Error: ${response.status} | Static Path Error: ${localResp.status}`);
+                throw new Error(`Static Path Error: ${response.status}`);
             }
             return await response.json();
         } catch (e) {
             console.error(`[ALRIS] Data Sync Failed for ${filename}:`, e.message);
-            throw e; // Propagate the error to the caller
+            return []; // Return empty array as fallback
         }
     },
 
@@ -70,7 +66,7 @@ const DataLoader = {
 
     async fetchWatchlist() {
         try {
-            const response = await fetch('/api/data/watchlist_active.json');
+            const response = await fetch('/data/watchlist_active.json');
             if (response.ok) return await response.json();
         } catch (e) {}
         return {};
