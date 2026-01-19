@@ -36,12 +36,22 @@ const stateCoords = {
 
 async function initDashboard() {
     try {
-        console.log("Initializing Dashboard...");
+        console.log("[ALRIS] Initializing Dashboard...");
         
         // Fetch Data from static CSV converted to JSON
+        console.log("[ALRIS] Fetching risk data from /data/integrated_service_risk.json");
         const res = await fetch('/data/integrated_service_risk.json');
-        if (!res.ok) throw new Error("Failed to fetch risk data");
+        console.log("[ALRIS] Response status:", res.status, res.ok);
+        
+        if (!res.ok) {
+            console.error("[ALRIS] Failed to fetch risk data. Status:", res.status);
+            throw new Error("Failed to fetch risk data");
+        }
+        
         const riskData = await res.json();
+        console.log("[ALRIS] Loaded", riskData.length, "state records");
+        console.log("[ALRIS] Sample data:", riskData[0]);
+        
         globalData = riskData;
 
         // Fetch Anomalies for Hotspots
@@ -50,22 +60,30 @@ async function initDashboard() {
             if(anomalyRes.ok) {
                 const anomalyData = await anomalyRes.json();
                 globalAnomalies = anomalyData.state_anomalies || [];
+                console.log("[ALRIS] Loaded", globalAnomalies.length, "anomalies");
             }
-        } catch (e) { console.warn("Anomalies not found", e); }
+        } catch (e) { console.warn("[ALRIS] Anomalies not found", e); }
 
         // Initialize Components
+        console.log("[ALRIS] Initializing map...");
         initMap();
+        console.log("[ALRIS] Rendering KPIs...");
         renderKPIs(riskData);
+        console.log("[ALRIS] Rendering table...");
         renderTable(riskData);
+        console.log("[ALRIS] Rendering heatmap...");
         renderHeatmap(riskData);
+        console.log("[ALRIS] Initializing charts...");
         initCharts(riskData);
+        console.log("[ALRIS] Populating state selector...");
         populateStateSelector(riskData);
         
         document.getElementById('lastRefresh').innerText = new Date().toLocaleDateString();
+        console.log("[ALRIS] Dashboard initialization complete!");
 
     } catch (error) {
-        console.error("Dashboard Error:", error);
-        // alert("Error loading dashboard data. Please ensure backend is running.");
+        console.error("[ALRIS] Dashboard Error:", error);
+        alert("Error loading dashboard: " + error.message + ". Check browser console for details.");
     }
 }
 
