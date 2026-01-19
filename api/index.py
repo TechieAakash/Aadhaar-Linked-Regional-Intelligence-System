@@ -1,7 +1,11 @@
 from flask import Flask, render_template, send_from_directory
 import os
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+template_dir = os.path.join(BASE_DIR, 'templates')
+static_dir = os.path.join(BASE_DIR, 'static')
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 @app.route('/api/index')
 @app.route('/')
@@ -67,12 +71,12 @@ def benchmarking():
 # --- Static Asset Fallbacks for Local Testing ---
 @app.route('/css/<path:filename>')
 def serve_css(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'static', 'css'), filename)
+    return send_from_directory(os.path.join(static_dir, 'css'), filename)
 
 @app.route('/js/<path:filename>')
 def serve_js(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'static', 'js'), filename)
+    return send_from_directory(os.path.join(static_dir, 'js'), filename)
 
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'static', 'assets'), filename)
+    return send_from_directory(os.path.join(static_dir, 'assets'), filename)

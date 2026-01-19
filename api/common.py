@@ -18,4 +18,5 @@ def require_api_key(f):
     return decorated_function
 
 # --- Config ---
-DATA_DIR = os.path.join(os.getcwd(), 'data')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
