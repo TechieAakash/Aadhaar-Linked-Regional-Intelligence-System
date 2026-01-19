@@ -1,0 +1,69 @@
+/* 
+   ALRIS COMMAND CENTER - Charts & Visual Theme
+   Consistency for D3 and Chart.js
+*/
+
+.chart-box {
+    background: var(--gov-white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    min-height: 400px;
+}
+
+/* D3 Heatmap Styling */
+.heatmap-rect {
+    stroke: #fff;
+    stroke-width: 1px;
+}
+
+/* Quadrant Matrix */
+.quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    height: 350px;
+}
+
+.quadrant {
+    padding: 15px;
+    border: 1px dashed var(--border-color);
+    position: relative;
+}
+
+.quad-label {
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
+/* Stress Calendar */
+.stress-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+}
+
+/* Data Overlays */
+.data-tooltip {
+    position: absolute;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 0.8rem;
+    z-index: 1000;
+}

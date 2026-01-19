@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anomaly Detection | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=3">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+</head>
+
+<body>
+    <div class="watermark">For Official Use Only</div>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">ANOMALY DETECTION SYSTEM</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">AADHAAR ANALYTICS COMMAND
+                    CENTER</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="/assets/images/aadhaar_logo.png" alt="Aadhaar Logo"
+                style="height: 50px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link active">⚠️ Anomalies</a>
+        <a href="/decisions" class="nav-link">🎯 Recommendations</a>
+    </nav>
+
+    <div class="alert-ticker" id="alertTicker"></div>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div class="breadcrumb-trail"><span>India</span> <span>National</span> Anomaly Detection</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-alert);">CRITICAL ALERTS: 2 ACTIVE</div>
+        </div>
+
+        <section class="grid-system">
+            <div class="chart-box" style="grid-column: span 12;">
+                <h4>REGIONAL DEVIATION MATRIX (Z-SCORE > 2.0)</h4>
+                <table class="table-gov">
+                    <thead>
+                        <tr>
+                            <th>State/Region</th>
+                            <th>Anomaly Type</th>
+                            <th>Actual Volume</th>
+                            <th>Z-Score</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="anomalyList"></tbody>
+                </table>
+            </div>
+
+            <div class="card stat-card" style="grid-column: span 12; border-top-color: var(--color-alert);">
+                <h4>DETAILED ANOMALY INVESTIGATION</h4>
+                <div id="anomalyDetail" style="margin-top:20px; color: var(--text-secondary);">
+                    <p>Select a region from the matrix to view detailed potential causes and investigation logs.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="dashboard-container">
+            <div class="footer-grid">
+                <!-- Col 1: Contact & Social -->
+                <div class="footer-col">
+                    <div class="footer-heading">Contact Us</div>
+                    <ul class="footer-links">
+                        <li>
+                            <div class="contact-item"><i class="fas fa-phone-alt"></i> <span
+                                    style="font-size:1.2em; font-weight:700;">1947</span> (Toll Free)</div>
+                        </li>
+                        <li>
+                            <div class="contact-item"><i class="fas fa-envelope"></i> help@uidai.gov.in</div>
+                        </li>
+                        <li>
+                            <div class="contact-item">To Collaborate, email to
+                                us:<br>collaborate[at]uidai[dot]net[dot]in</div>
+                        </li>
+                    </ul>
+
+                    <div class="footer-heading" style="margin-top: 20px;">Follow Us</div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/AadhaarOfficial/" target="_blank" aria-label="Facebook"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/UIDAI" target="_blank" aria-label="Twitter"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/user/AadhaarUID" target="_blank" aria-label="Youtube"><i
+                                class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/aadhaar_official/?hl=en" target="_blank"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/unique-identification-authority-of-india-uidai-"
+                            target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Head Office -->
+                <div class="footer-col">
+                    <div class="footer-heading">UIDAI Head Office</div>
+                    <p style="font-size: 0.85rem; line-height: 1.6; opacity: 0.9;">
+                        <strong>Unique Identification Authority of India</strong><br>
+                        Government of India (GoI)<br>
+                        Bangla Sahib Road, Behind Kali Mandir, Gole Market,<br>
+                        New Delhi - 110001
+                    </p>
+                </div>
+
+                <!-- Col 3: Regional Office -->
+                <div class="footer-col">
+                    <div class="footer-heading">Regional Offices</div>
+                    <p style="font-size: 0.85rem; line-height: 1.6; opacity: 0.9;">
+                        <strong>Delhi</strong><br>
+                        UIDAI Regional Office, Delhi<br>
+                        Ground Floor, Supreme Court Metro Station, Pragati Maidan, New Delhi-110001
+                    </p>
+                </div>
+
+                <!-- Col 4: Website Policy -->
+                <div class="footer-col">
+                    <div class="footer-heading">Website Policy</div>
+                    <ul class="footer-links">
+                        <li><a href="https://uidai.gov.in/en/feedback.html" target="_blank">Terms & Conditions</a></li>
+                        <li><a href="https://uidai.gov.in/en/privacy-policy.html" target="_blank">Privacy Policy</a>
+                        </li>
+                        <li><a href="https://uidai.gov.in/en/hyperlinking-policy.html" target="_blank">Hyperlinking
+                                Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                        <li><a href="https://uidai.gov.in/en/disclaimer.html" target="_blank">Disclaimer</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="/feedback">Feedback</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="bottom-links" style="display:flex; align-items:center; justify-content:center; gap:25px;">
+                    <a href="https://uidai.gov.in" target="_blank">
+                        <img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg" alt="UIDAI"
+                            style="height: 40px; filter: brightness(0) invert(1);">
+                    </a>
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <a href="https://www.india.gov.in/" target="_blank">Government of India</a> |
+                        <a href="https://www.mygov.in/" target="_blank">My Gov</a> |
+                        <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a> |
+                        <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a> |
+                        <a href="https://www.dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+                    </div>
+                </div>
+                <div style="opacity: 0.8; margin-bottom: 10px; font-weight: 600;">
+                    Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+                </div>
+                <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 10px;">
+                    JavaScript must be enabled to access this site. | Supports: Firefox 37+ Google Chrome 6.0+ Internet
+                    Explorer 9.0+ Safari 4.0+
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <a href="#" style="color: #fff; text-decoration: underline; font-size: 0.75rem;">Download GIGW
+                        Website Certificate, October 2023 (PDF)</a>
+                    <span style="margin: 0 10px;">|</span>
+                    <span style="font-size: 0.75rem;">W3C CSS Validator</span>
+                </div>
+                <div style="margin-top: 5px; font-size: 0.75rem; opacity: 0.6;">
+                    Last reviewed and updated on: January 16, 2026
+                </div>
+            </div>
+
+            <div class="bhashini-disclaimer">
+                UIDAI website translation is done by Bhashini Machine Translation. This is done on experimental basis
+                and will be improved over a period of time. Kindly ignore the errors if any.
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/data-loader.js?v=3"></script>
+    <script src="/js/anomaly-alert-system.js?v=3"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const data = await DataLoader.fetchAll();
+            AnomalyAlertSystem.init('alertTicker', data.anomalies);
+            AnomalyAlertSystem.renderDeviationMatrix('anomalyList', data.anomalies);
+
+            // Auto-Investigate Logic for "Redirect from Map"
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetState = urlParams.get('state');
+            if (targetState) {
+                // Scroll to detail section
+                document.getElementById('anomalyDetail').scrollIntoView({ behavior: 'smooth' });
+                // Trigger investigation
+                setTimeout(() => AnomalyAlertSystem.showDetail(targetState), 500);
+            }
+        });
+    </script>
+</body>
+
+</html>

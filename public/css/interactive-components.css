@@ -1,0 +1,94 @@
+/* 
+   ALRIS COMMAND CENTER - Interactive Components
+   Micro-interactions & Animations
+*/
+
+/* Animated Number Counters */
+.counter {
+    font-family: var(--font-data);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gov-blue);
+}
+
+/* Recommendation Priority Tags */
+.priority-tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.priority-high {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #f87171;
+}
+
+.priority-med {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fbbf24;
+}
+
+.priority-low {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #4ade80;
+}
+
+/* Drill-down breadcrumbs */
+.breadcrumb-trail {
+    display: flex;
+    gap: 10px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.breadcrumb-trail span::after {
+    content: '/';
+    margin-left: 10px;
+    opacity: 0.5;
+}
+
+/* Hover effects for tables */
+.table-gov {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-gov tr:hover {
+    background-color: rgba(15, 77, 146, 0.03);
+}
+
+.table-gov th {
+    background-color: var(--bg-light);
+    color: var(--gov-blue);
+    font-weight: 800;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid var(--gov-blue);
+}
+
+.table-gov td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Skeletons */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

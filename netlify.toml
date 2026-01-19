@@ -1,0 +1,43 @@
+[build]
+  publish = "public"
+  functions = "api"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/data/*"
+  to = "/.netlify/functions/data_service/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/train"
+  to = "/.netlify/functions/data_service"
+  status = 200
+
+[[redirects]]
+  from = "/api/social/export/*"
+  to = "/.netlify/functions/operations_service/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/social/*"
+  to = "/.netlify/functions/social_service/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/anomaly/*"
+  to = "/.netlify/functions/social_service/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/budget/*"
+  to = "/.netlify/functions/optimization_service/:splat"
+  status = 200
+
+# Catch-all for SPA-like routing (if needed)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false

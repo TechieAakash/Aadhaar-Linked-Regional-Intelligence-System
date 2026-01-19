@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Decisions | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=3">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js not always here, but safe to assume script order or just link css -->
+</head>
+
+<body>
+    <div class="watermark">For Official Use Only</div>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">POLICY DECISION SUPPORT</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">AADHAAR ANALYTICS COMMAND
+                    CENTER</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link active">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div class="breadcrumb-trail"><span>India</span> <span>National</span> Policy Support Engine</div>
+            <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Actionable Insights Ready</div>
+        </div>
+
+        <section id="policyPanel" class="grid-system" style="gap: 30px;">
+            <!-- Dynamic Recommendation Cards -->
+        </section>
+    </div>
+
+    <!-- Plan Generation Modal -->
+    <div id="planModal" class="gov-modal-overlay">
+        <div class="gov-modal">
+            <div class="gov-modal-header">
+                <h4 style="margin:0;">Strategic Action Plan</h4>
+                <button onclick="RecommendationEngine.closeModal()"
+                    style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div class="gov-modal-body" id="modalContent">
+                <!-- Injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/data-loader.js?v=3"></script>
+    <script src="/js/policy-recommendation-engine.js?v=3"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const data = await DataLoader.fetchAll();
+            RecommendationEngine.render('policyPanel', data.recommendations);
+        });
+    </script>
+</body>
+
+</html>

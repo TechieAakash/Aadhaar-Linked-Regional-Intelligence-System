@@ -1,0 +1,180 @@
+/* 
+   ALRIS - Main Dashboard Layout & Components
+   Modular architecture for digital governance
+*/
+
+.container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Layout Modules */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* UI Components */
+.card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-standard);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--gray-100);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+/* Header Section */
+.gov-masthead {
+    background: var(--white);
+    padding: 1rem 0;
+    border-bottom: 4px solid var(--primary);
+}
+
+.masthead-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.logo-goi {
+    height: 70px;
+}
+
+.logo-aadhaar {
+    height: 60px;
+}
+
+.system-titles {
+    text-align: center;
+}
+
+.system-titles h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.ministry-badge {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--gray-600);
+}
+
+/* Nav System */
+.navbar {
+    background: var(--primary);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1px;
+}
+
+.nav-item a {
+    color: var(--white);
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition-fast);
+}
+
+.nav-item a:hover,
+.nav-item a.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-bottom: 3px solid var(--saffron);
+}
+
+/* Footer Section */
+.gov-footer {
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+}
+
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Utility Classes */
+.text-saffron {
+    color: var(--saffron);
+}
+
+.text-green {
+    color: var(--india-green);
+}
+
+.bg-navy {
+    background: var(--navy-blue);
+    color: var(--white);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .masthead-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

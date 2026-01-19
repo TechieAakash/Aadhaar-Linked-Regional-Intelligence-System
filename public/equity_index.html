@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Service Equity Index - ALRIS Governance Dashboard">
+    <title>Service Equity Index | ALRIS Analytics</title>
+
+    <!-- Gov Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modular Command Center CSS -->
+    <link rel="stylesheet" href="css/govt-design-system.css?v=2">
+    <link rel="stylesheet" href="css/dashboard-layout.css?v=2">
+    <link rel="stylesheet" href="css/charts-theme.css?v=2">
+    <link rel="stylesheet" href="css/interactive-components.css?v=2">
+    <link rel="stylesheet" href="css/unified-footer.css?v=2">
+
+    <style>
+        .sei-score-card {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sei-score-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" opacity="0.05"><path d="M12 2L2 22h20L12 2zm0 3.5L18.5 20h-13L12 5.5z"/></svg>') no-repeat center right;
+            background-size: contain;
+        }
+
+        .metric-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pill-success {
+            background: rgba(56, 161, 105, 0.2);
+            color: #38a169;
+        }
+
+        .pill-warning {
+            background: rgba(221, 107, 32, 0.2);
+            color: #dd6b20;
+        }
+
+        .pill-danger {
+            background: rgba(229, 62, 62, 0.2);
+            color: #e53e3e;
+        }
+
+        .rank-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-item:hover {
+            background: #f8fbff;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-right: 12px;
+        }
+
+        .rank-badge.top-1 {
+            background: #ffd700;
+            color: #856404;
+        }
+
+        .rank-badge.top-2 {
+            background: #c0c0c0;
+            color: #3d3d3d;
+        }
+
+        .rank-badge.top-3 {
+            background: #cd7f32;
+            color: #5a3a22;
+        }
+    </style>
+</head>
+
+<body aria-label="Aadhaar Service Equity Index">
+
+    <div class="watermark">For Official Use Only</div>
+
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">AADHAAR ANALYTICS COMMAND CENTER</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">UNIQUE IDENTIFICATION AUTHORITY
+                    OF INDIA (UIDAI)</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link active">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header" style="margin-top: 0;">
+            <div>
+                <div class="breadcrumb-trail"><span>Analytics</span> Service Equity Index (SEI)</div>
+                <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Govt. Standard Fairness Meter</div>
+            </div>
+            <div
+                style="font-size: 1.1rem; color: var(--nic-saffron); font-weight: 800; margin-top: 5px; letter-spacing: 0.5px; text-align: right;">
+                "SABKA SAATH, SABKA VIKAS, SABKA VISHWAS"
+            </div>
+        </div>
+        <!-- KPI OVERVIEW -->
+        <section class="grid-system" style="margin-bottom: 30px;">
+            <div class="sei-score-card" style="grid-column: span 4;">
+                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 5px;">NATIONAL AVERAGE SEI</div>
+                <div id="nationalScore" style="font-size: 3.5rem; font-weight: 800; line-height: 1;">--.--</div>
+                <div style="margin-top: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    <span id="nationalStatus" style="font-weight: 600;">Calculating...</span>
+                </div>
+            </div>
+
+            <div class="stat-card" style="grid-column: span 2;">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">TOP PERFORMER</div>
+                <div id="topStateName"
+                    style="font-size: 1.4rem; font-weight: 700; color: var(--gov-green); margin: 5px 0;">--</div>
+                <div id="topStateScore" style="font-size: 0.8rem; opacity: 0.8;">Score: --</div>
+            </div>
+
+            <div class="stat-card" style="grid-column: span 2;">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">NEEDS ATTENTION</div>
+                <div id="bottomStateName"
+                    style="font-size: 1.4rem; font-weight: 700; color: var(--color-alert); margin: 5px 0;">--</div>
+                <div id="bottomStateScore" style="font-size: 0.8rem; opacity: 0.8;">Score: --</div>
+            </div>
+
+            <div class="stat-card" style="grid-column: span 4;">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">DIMENSION WEIGHTS</div>
+                <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                    <span class="metric-pill pill-success">Rural Parity (30%)</span>
+                    <span class="metric-pill pill-success">Gender Equity (20%)</span>
+                    <span class="metric-pill pill-warning">Elderly Access (20%)</span>
+                    <span class="metric-pill pill-danger">ST/SC Gap (30%)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT GRID -->
+        <div class="grid-system" style="gap: 20px;">
+            <!-- ROW 1: RANKING (4) + HEATMAP (8) -->
+            <div class="chart-box"
+                style="grid-column: span 4; padding: 0; display: flex; flex-direction: column; height: 550px;">
+                <div style="padding: 15px; border-bottom: 1px solid var(--border-color); background: #f8fbff;">
+                    <h3 style="margin:0; font-size: 1rem;">State Rankings</h3>
+                </div>
+                <div style="flex: 1; overflow-y: auto;">
+                    <ul id="rankingList" class="rank-list">
+                        <li class="rank-item" style="justify-content: center; padding: 20px;">Loading...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="grid-column: span 8; display: flex; flex-direction: column; gap: 20px;">
+                <!-- HEATMAP (High Level) -->
+                <div class="chart-box" style="flex: 1; display: flex; flex-direction: column;">
+                    <h3 style="margin:0 0 15px 0;">State Performance Heatmap</h3>
+                    <div style="flex: 1; position: relative;">
+                        <canvas id="heatmapChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION TO DEEP DIVE -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <a href="/equity/insights#charts-section" class="stat-card"
+                        style="text-decoration: none; border-top-color: #6C5CE7; transition: transform 0.2s; cursor: pointer;">
+                        <div style="font-size: 0.8rem; color: #555; font-weight: 700;">DEEP DIVE ANALYTICS</div>
+                        <div style="font-size: 1.1rem; font-weight: 800; color: #2D3748; margin-top: 5px;">View Parity
+                            Gaps & Radar</div>
+                        <div style="font-size: 0.75rem; color: #6C5CE7; margin-top: 10px; font-weight: 600;">
+                            Explore Rural, Gender & Elderly Dimensions &rarr;
+                        </div>
+                    </a>
+
+                    <a href="/equity/insights#ai-section" class="stat-card"
+                        style="text-decoration: none; border-top-color: #38A169; transition: transform 0.2s; cursor: pointer;">
+                        <div style="font-size: 0.8rem; color: #555; font-weight: 700;">AI PROJECTION MODEL</div>
+                        <div style="font-size: 1.1rem; font-weight: 800; color: #2D3748; margin-top: 5px;">Run 2026
+                            Forecast</div>
+                        <div style="font-size: 0.75rem; color: #38A169; margin-top: 10px; font-weight: 600;">
+                            Simulate Future Inclusion Vectors &rarr;
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/charts.js"></script> <!-- Custom Theme -->
+    <script src="js/equity.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+/* 
+   ALRIS - Chart-Specific Visual Identities
+   Gov-grade visualization styling
+*/
+
+.chart-wrapper {
+    position: relative;
+    height: 350px;
+    width: 100%;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-btn {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.chart-btn:hover {
+    background: var(--gray-200);
+}
+
+/* Tooltip Polish */
+.chartjs-tooltip {
+    background: rgba(0, 0, 128, 0.95) !important;
+    border-radius: 4px !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+/* Stat Cards specific */
+.stat-card {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.stat-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--navy-blue), var(--saffron));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+    color: var(--gray-600);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.trend-indicator {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.trend-up {
+    color: var(--india-green);
+}
+
+.trend-down {
+    color: var(--danger);
+}
+
+/* Heatmap specific */
+.heatmap-cell {
+    aspect-ratio: 1;
+    border: 1px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: transparent;
+}
+
+.heatmap-cell:hover {
+    color: inherit;
+    box-shadow: inset 0 0 0 2px var(--primary);
+}

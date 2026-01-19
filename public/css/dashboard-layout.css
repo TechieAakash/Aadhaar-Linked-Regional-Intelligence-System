@@ -1,0 +1,218 @@
+/* 
+   ALRIS COMMAND CENTER - Dashboard Layout System
+   Optimized for Responsive Grid & Glassmorphism
+*/
+
+/* Masthead - The Official Govt Header */
+.gov-masthead {
+    background: var(--bg-card);
+    border-bottom: 4px solid var(--gov-saffron);
+    /* Tricolor Top Accent */
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Navigation Toolbar */
+.nav-toolbar {
+    background: var(--gov-blue);
+    padding: 0 2rem;
+    display: flex;
+    gap: 2rem;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 999;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    padding: 1rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+    color: white;
+    border-bottom-color: var(--gov-saffron);
+    font-weight: 700;
+}
+
+/* Main Container */
+.dashboard-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Alert Ticker */
+.alert-ticker {
+    background: var(--gov-blue-dark);
+    color: white;
+    font-family: var(--font-data);
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.alert-ticker:hover .ticker-content {
+    animation-play-state: paused;
+}
+
+.ticker-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker 180s linear infinite;
+    white-space: nowrap;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* Grid System */
+.grid-system {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Cards & Panels */
+.stat-card,
+.chart-box {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-highlight);
+}
+
+/* Top Border Accents for Cards */
+.stat-card {
+    border-top: 4px solid var(--gov-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Section Header & Breadcrumbs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.breadcrumb-trail {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.breadcrumb-trail span {
+    color: var(--gov-blue);
+    font-weight: 600;
+    background: #EBF8FF;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.breadcrumb-trail::before {
+    content: '›';
+    margin-right: -0.5rem;
+    color: var(--text-muted);
+}
+
+/* Buttons */
+.btn-tool-blue {
+    background: var(--gov-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-tool-blue:hover {
+    background: var(--gov-blue-light);
+}
+
+.btn-tool-outline {
+    background: transparent;
+    color: var(--gov-blue);
+    border: 1px solid var(--gov-blue);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-tool-outline:hover {
+    background: #EBF8FF;
+}
+
+/* Metric Counter Styles */
+.counter {
+    font-size: 2.25rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0.5rem 0;
+}

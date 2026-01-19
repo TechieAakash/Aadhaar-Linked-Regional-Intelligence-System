@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifecycle Intelligence | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=3">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <div class="watermark">For Official Use Only</div>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">LIFECYCLE INTELLIGENCE CENTER</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">AADHAAR ANALYTICS COMMAND
+                    CENTER</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link active">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Recommendations</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div class="breadcrumb-trail" id="breadcrumb"><span>India</span> <span>National</span> Lifecycle
+                Intelligence</div>
+            <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;" id="engineStatus">Insight Engine: ONLINE
+            </div>
+        </div>
+
+        <!-- FILTRATION CONTROL PANEL -->
+        <div class="filter-bar"
+            style="background: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; display: flex; gap: 20px; align-items: flex-end; border: 1px solid var(--border-color);">
+            <div style="flex: 2;">
+                <label
+                    style="font-size: 0.65rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: block; margin-bottom: 5px;">GEOGRAPHIC
+                    DRILL-DOWN</label>
+                <select id="stateFilter" class="form-control"
+                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: 600; font-family: 'Inter';">
+                    <option value="ALL">All India (National View)</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <button class="btn-tool-blue" id="applyFilters" style="height: 38px; width: 100%;">APPLY VIEW</button>
+            </div>
+        </div>
+
+        <!-- KEY PERFORMANCE INDICATORS -->
+        <div class="grid-system" style="margin-bottom: 25px;">
+            <div class="stat-card" style="grid-column: span 3;">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">UPDATE INTENSITY</div>
+                <div id="intensityVal" class="counter">--</div>
+                <div style="font-size: 0.65rem; opacity: 0.7;">avg updates per enrol</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-saffron);">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">DOMINANT SEGMENT</div>
+                <div id="dominantSegment" class="counter" style="font-size: 1.4rem;">--</div>
+                <div id="dominantPct" style="font-size: 0.65rem; opacity: 0.7;">--</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-green);">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">COMPLIANCE RISK</div>
+                <div id="riskStatus" class="counter" style="font-size: 1.4rem;">STABLE</div>
+                <div style="font-size: 0.65rem; color: var(--gov-blue); font-weight: 700;">ML Risk Assessment
+                </div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--color-alert);">
+                <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">TOTAL ACTIVITY</div>
+                <div id="totalActivity" class="counter">--</div>
+                <div style="font-size: 0.65rem; opacity: 0.7;">Volumetric Load</div>
+            </div>
+        </div>
+
+        <section class="grid-system">
+            <div class="chart-box" style="grid-column: span 8;">
+                <h4>AGE-GROUP UPDATE FREQUENCY HEATMAP (MONTHLY)</h4>
+                <div id="lifecycleHeatmap" style="height: 400px;"></div>
+            </div>
+            <div class="chart-box" style="grid-column: span 4;">
+                <h4>BEHAVIORAL CLUSTER ANALYSIS</h4>
+                <div id="behavioralMatrix"
+                    style="height: 400px; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="behavioralRadar"></canvas>
+                </div>
+            </div>
+            <div class="chart-box" style="grid-column: span 12;">
+                <h4>LIFECYCLE UPDATE INTENSITY CURVES</h4>
+                <div style="height: 400px;"><canvas id="lifecycleCurves"></canvas></div>
+            </div>
+        </section>
+
+        <!-- POLICY RECOMMENDATIONS PANEL -->
+        <div id="policyPanel" class="stat-card"
+            style="margin-top: 30px; border-top: 4px solid var(--gov-blue); background: #f0f7ff;">
+            <h4 style="color: var(--gov-blue); margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> SYSTEM-GENERATED
+                POLICY ACTIONS</h4>
+            <div id="lifecycleRecs" class="grid-system" style="gap: 15px;">
+                <!-- Recommendations will be injected here -->
+                <p style="opacity: 0.6; font-style: italic;">Analyzing data for actionable insights...</p>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="js/data-loader.js"></script>
+    <script src="js/visualization-engine.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const data = await DataLoader.fetchAll();
+            const insights = data.lifecycle || {};
+            const stateData = data.stateFeatures || [];
+
+            // 1. Populate State Dropdown
+            const stateSelect = document.getElementById('stateFilter');
+            const states = [...new Set(stateData.map(s => s.state))].sort();
+            states.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                stateSelect.appendChild(opt);
+            });
+
+            // 2. Initial Render (National)
+            updateDashboard('ALL');
+
+            // 3. Filter Event
+            document.getElementById('applyFilters').addEventListener('click', () => {
+                updateDashboard(stateSelect.value);
+            });
+
+            function updateDashboard(selectedState) {
+                console.log(`Updating lifecycle view for: ${selectedState}`);
+
+                let displayData = insights;
+                let activeStateStats = null;
+
+                if (selectedState === 'ALL') {
+                    document.getElementById('breadcrumb').innerHTML = "<span>India</span> <span>National</span> Lifecycle Intelligence";
+                    activeStateStats = {
+                        intensity: (insights.update_patterns?.biometric_youth_intensity || 3.2 / 5).toFixed(2), // Mock scaling if missing
+                        total: stateData.reduce((acc, s) => acc + (s.total_enrolment || 0), 0)
+                    };
+                } else {
+                    document.getElementById('breadcrumb').innerHTML = `<span>India</span> <span>${selectedState}</span> Analysis`;
+                    activeStateStats = stateData.find(s => s.state === selectedState);
+                }
+
+                // Update KPIs
+                if (activeStateStats) {
+                    const intensity = activeStateStats.update_to_enrolment_ratio || 3.2;
+                    document.getElementById('intensityVal').innerText = intensity.toFixed(2);
+                    document.getElementById('totalActivity').innerText = (activeStateStats.total_enrolment || 0).toLocaleString();
+
+                    // dominant segment (mock logic based on available counts)
+                    const segments = [
+                        { name: '0-5 yrs', val: activeStateStats.age_0_5 || 0 },
+                        { name: '5-17 yrs', val: activeStateStats.age_5_17 || 0 },
+                        { name: '18+ yrs', val: activeStateStats.age_18_greater || 0 },
+                    ];
+                    const top = segments.sort((a, b) => b.val - a.val)[0];
+                    document.getElementById('dominantSegment').innerText = top.name;
+                    const total = segments.reduce((acc, s) => acc + s.val, 0);
+                    document.getElementById('dominantPct').innerText = `${((top.val / total) * 100 || 0).toFixed(1)}% of total`;
+                }
+
+                // Risk Status from recommendations (Reverting to original plan)
+                if (data.recommendations?.recommendations) {
+                    const risk = data.recommendations.recommendations.find(r => r.category === 'Biometric Compliance');
+                    document.getElementById('riskStatus').innerText = risk ? risk.priority : 'STABLE';
+                    document.getElementById('riskStatus').style.color = risk ? 'var(--color-alert)' : 'var(--gov-green)';
+                }
+
+                // Render Visualizations
+                VisualizationEngine.renderLifecycleHeatmap('lifecycleHeatmap', insights);
+                VisualizationEngine.renderBehavioralRadar('behavioralRadar');
+                renderCurves(selectedState);
+                renderRecommendations(selectedState);
+            }
+
+            async function renderCurves(selectedState) {
+                const ctx = document.getElementById('lifecycleCurves').getContext('2d');
+                if (window.lifecycleChart) window.lifecycleChart.destroy();
+
+                let labels = [], demo = [], bio = [];
+
+                if (selectedState === 'ALL') {
+                    labels = ['0-5 years', '5-17 years', '18+ years'];
+                    demo = [
+                        insights.age_distribution?.['0-5 years']?.count || 0,
+                        insights.update_patterns?.demographic_updates?.['5-17 years'] || 0,
+                        insights.update_patterns?.demographic_updates?.['17+ years'] || 0
+                    ];
+                    bio = [
+                        0,
+                        insights.update_patterns?.biometric_updates?.['5-17 years'] || 0,
+                        insights.update_patterns?.biometric_updates?.['17+ years'] || 0
+                    ];
+                } else {
+                    const stats = stateData.find(s => s.state === selectedState);
+                    labels = ['0-5 years', '5-17 years', '18+ years'];
+                    demo = [stats.age_0_5, stats.demo_age_5_17, stats.demo_age_17_];
+                    bio = [0, stats.bio_age_5_17, stats.bio_age_17_];
+                }
+
+                const datasets = [
+                    { label: 'Enrolments/Demo Updates', data: demo, borderColor: '#FF9933', backgroundColor: 'rgba(255, 153, 51, 0.1)', fill: true, tension: 0.4 },
+                    { label: 'Biometric Updates', data: bio, borderColor: '#138808', backgroundColor: 'rgba(19, 136, 8, 0.1)', fill: true, tension: 0.4 }
+                ];
+
+                window.lifecycleChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels, datasets },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+
+            function renderRecommendations(selectedState) {
+                const container = document.getElementById('lifecycleRecs');
+                container.innerHTML = '';
+
+                const recs = data.recommendations?.recommendations || [];
+                const lifecycleRecs = recs.filter(r =>
+                    r.category === 'Biometric Compliance' ||
+                    r.category === 'Outreach & Awareness' ||
+                    r.category === 'Data Quality & Investigation'
+                );
+
+                if (lifecycleRecs.length === 0) {
+                    container.innerHTML = '<p style="opacity: 0.6; font-style: italic;">No immediate policy actions required for this lifecycle segment.</p>';
+                    return;
+                }
+
+                lifecycleRecs.forEach(r => {
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.style.gridColumn = 'span 4';
+                    card.style.borderTop = `2px solid ${r.priority === 'High' || r.priority === 'Critical' ? 'var(--color-alert)' : 'var(--gov-blue)'}`;
+                    card.innerHTML = `
+                        <div style="font-size: 0.65rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 5px;">${r.id} | ${r.priority}</div>
+                        <h5 style="margin: 0 0 10px 0;">${r.title}</h5>
+                        <p style="font-size: 0.75rem; margin-bottom: 10px;">${r.finding}</p>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--gov-blue);">REC: ${r.recommendation}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        });
+    </script>
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

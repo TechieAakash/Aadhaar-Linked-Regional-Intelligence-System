@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Forecasting | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=3">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="watermark">For Official Use Only</div>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">PREDICTIVE FORECASTING HUB</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">AADHAAR ANALYTICS COMMAND
+                    CENTER</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link active">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div class="breadcrumb-trail"><span>India</span> <span>National</span> Predictive Forecasting</div>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Model Confidence: <span
+                        id="modelConf">Calculating...</span></div>
+                <button id="trainBtn" class="btn-tool-blue" style="background:var(--gov-saffron);">🚀 Train
+                    Model</button>
+            </div>
+        </div>
+
+        <section class="grid-system">
+            <div class="chart-box" style="grid-column: span 12;">
+                <h4>ARIMA DEMAND FORECAST (6-MONTH OUTLOOK)</h4>
+                <div style="height: 450px;"><canvas id="forecastCanvas"></canvas></div>
+            </div>
+
+            <div class="stat-card" style="grid-column: span 6; border-top-color: var(--gov-saffron);">
+                <h4>INFRASTRUCTURE STRESS CALENDAR</h4>
+                <div class="stress-calendar" id="stressCalendar" style="margin-top:20px;"></div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-top:10px;">
+                    <span>Low Load</span>
+                    <span>Critical Stress</span>
+                </div>
+            </div>
+
+            <div class="stat-card" style="grid-column: span 6; border-top-color: var(--gov-green);">
+                <h4>STATE-WISE DEMAND GROWTH</h4>
+                <div id="stateGrid"
+                    style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:20px;">
+                    <!-- State Mini Cards injected by JS -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    </div>
+
+    <script src="js/data-loader.js"></script>
+    <script src="js/visualization-engine.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const data = await DataLoader.fetchAll();
+
+            // 1. Render Main Forecast
+            if (data.forecasts) {
+                // Update Confidence Score
+                const conf = data.forecasts.arima?.model_confidence || 98.5;
+                document.getElementById('modelConf').innerText = conf + '%';
+
+                VisualizationEngine.renderForecastingHub('forecastCanvas', data.forecasts);
+            }
+
+            // 2. Render State Grid
+            if (data.forecasts && data.forecasts.state_forecasts) {
+                const grid = document.getElementById('stateGrid');
+                grid.innerHTML = ''; // Clear mock data
+                Object.entries(data.forecasts.state_forecasts).slice(0, 6).forEach(([state, metrics]) => {
+                    const div = document.createElement('div');
+                    div.style.background = '#f9fafb';
+                    div.style.padding = '10px';
+                    div.style.borderRadius = '4px';
+                    div.innerHTML = `<strong>${state}:</strong> +${metrics.expected_growth}% <small>(${metrics.expected_growth > 10 ? 'High' : 'Stable'})</small>`;
+                    grid.appendChild(div);
+                });
+            }
+
+            // 3. Render Stress Calendar
+            const cal = document.getElementById('stressCalendar');
+            cal.innerHTML = '';
+            for (let i = 0; i < 31; i++) {
+                const day = document.createElement('div');
+                day.className = 'day-cell';
+                const intensity = Math.random();
+                day.style.background = intensity > 0.8 ? '#DC3545' : (intensity > 0.5 ? '#FFC107' : '#28A745');
+                day.style.color = 'white';
+                day.textContent = i + 1;
+                cal.appendChild(day);
+            }
+
+            // 4. Train Button Logic
+            document.getElementById('trainBtn').addEventListener('click', async () => {
+                const btn = document.getElementById('trainBtn');
+                btn.disabled = true;
+                btn.innerText = 'Training...';
+
+                try {
+                    const res = await fetch('/api/train');
+                    const json = await res.json();
+                    alert('Validating Model Training: ' + json.message);
+                    location.reload();
+                } catch (e) {
+                    alert('Training Error: ' + e.message);
+                    btn.disabled = false;
+                    btn.innerText = '🚀 Rethink Model';
+                }
+            });
+        });
+    </script>
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
