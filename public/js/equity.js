@@ -48,17 +48,19 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Fetch Data from JSON Artifacts
      */
     async function fetchData() {
-        const [dResponse, sResponse] = await Promise.all([
-            fetch(DATA_URL, { headers: API_HEADERS }),
-            fetch(SUMMARY_URL, { headers: API_HEADERS }).catch(() => ({ ok: true, json: () => ({}) })) // Soft fail on summary
-        ]);
+        console.log('[EQUITY] Fetching data from', DATA_URL);
+        const dResponse = await fetch(DATA_URL);
 
-        if (!dResponse.ok) throw new Error('Data fetch failed');
+        if (!dResponse.ok) {
+            console.error('[EQUITY] Data fetch failed with status:', dResponse.status);
+            throw new Error('Data fetch failed');
+        }
 
         seiData = await dResponse.json();
-        summaryData = {}; // Dummy empty logic for now, using calculated stats in updateKPIs
+        summaryData = {}; // Not available on static hosting
         
-        console.log('SEI Data Loaded:', seiData.length, 'records');
+        console.log('[EQUITY] SEI Data Loaded:', seiData.length, 'records');
+        console.log('[EQUITY] Sample data:', seiData[0]);
     }
 
     /**
