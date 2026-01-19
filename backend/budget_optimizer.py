@@ -1,6 +1,8 @@
 
-import pandas as pd
-import numpy as np
+import csv
+import os
+import json
+from collections import Counter
 
 # --- CONFIGURATION (Fiscal Constants) ---
 API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16" # UIDAI Open Data Key
@@ -44,55 +46,58 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
     Objective: Maximize National Inclusion Score subject to Budget Constraints.
     """
     try:
-        import os
         if not os.path.exists(fairness_path):
             return {"error": "Fairness data not found"}
 
-        # 1. Load & Merge Data (CSV BASE)
-        df_fair = pd.read_csv(fairness_path)
+        # 1. Load Data (Manual Table Join)
+        fairness_data = []
+        with open(fairness_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Convert numeric fields
+                for k in ['inclusion_priority_score', 'social_vulnerability_index', 'rural_parity_index', 'elderly_access_index', 'tribal_parity_index']:
+                    try: row[k] = float(row.get(k, 0))
+                    except: row[k] = 0.0
+                fairness_data.append(row)
         
         # Merge risk data if available
+        risk_map = {}
         if os.path.exists(risk_path):
-            df_risk = pd.read_csv(risk_path)
-            # Ensure we don't duplicate columns if they exist in both
-            cols_to_use = df_risk.columns.difference(df_fair.columns).tolist()
-            if 'state' in cols_to_use: cols_to_use.remove('state')
-            df_risk = df_risk[['state'] + cols_to_use]
-            
-            df = pd.merge(df_fair, df_risk, on='state', how='left')
-        else:
-            df = df_fair
+            with open(risk_path, mode='r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row.get('state'):
+                        risk_map[row['state']] = row
+        
+        # Combine
+        combined_data = fairness_data
+        for item in combined_data:
+            state = item.get('state')
+            if state in risk_map:
+                item.update(risk_map[state])
 
         # --- DYNAMIC DATA INTEGRATION ---
         # Fetch live signals and merge
         live_data = fetch_live_data(API_KEY)
         
-        # Clean numeric cols
-        cols = ['inclusion_priority_score', 'social_vulnerability_index', 'rural_parity_index', 'elderly_access_index', 'tribal_parity_index']
-        for c in cols:
-            if c in df.columns:
-                df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0)
-            else:
-                df[c] = 0
-
         # Apply Live Adjustments
-        for idx, row in df.iterrows():
+        for row in combined_data:
             state = row['state']
             if state in live_data:
                 adj = live_data[state]
                 for k, v in adj.items():
-                    if k in df.columns:
-                        original = df.at[idx, k]
-                        df.at[idx, k] = original + v # Apply dynamic shift
+                    if k in row:
+                        try: row[k] = float(row[k]) + v
+                        except: pass
 
         # 2. GENERATE CANDIDATE PROJECTS (Integer Optimization Space)
         candidates = []
         
-        for idx, row in df.iterrows():
+        for row in combined_data:
             state = row['state']
-            svi = row.get('social_vulnerability_index', 50)
-            score = row.get('inclusion_priority_score', 50)
-            rural_gap = 100 - row.get('rural_parity_index', 0)
+            svi = float(row.get('social_vulnerability_index', 50))
+            score = float(row.get('inclusion_priority_score', 50))
+            rural_gap = 100 - float(row.get('rural_parity_index', 0))
             
             # Weighting Factors
             vuln_weight = 1 + (svi / 100)  # 1.0 - 2.0
@@ -100,7 +105,6 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
             
             # --- Candidate 1: Mobile Units (Target: Rural/Tribal Gaps) ---
             if rural_gap > 20: 
-                # Deciding quantity based on gap size. Max 20 units per state per cycle.
                 qty_needed = min(20, int(rural_gap / 5))
                 for i in range(qty_needed):
                     candidates.append({
@@ -126,8 +130,6 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
                     })
             
             # --- Candidate 3: Tech Upgrades (Target: Efficiency) ---
-            # Randomly assign need if data missing, else use biometric failure proxies? 
-            # Let's assume every state allows 2 upgrades.
             for i in range(2):
                 candidates.append({
                     "state": state,
@@ -174,14 +176,12 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
                         "intervention_types": [],
                         "expected_improvement": 0.0,
                         "risk_reduction_score": 0.0,
-                        "justification": proj['justification'] # Keep highest priority justification
+                        "justification": proj['justification']
                     }
                 
                 state_allocations[s]["total_allocation"] += proj['cost']
-                state_allocations[s]["expected_improvement"] += proj['impact_raw'] # Simplified additive model
+                state_allocations[s]["expected_improvement"] += proj['impact_raw']
                 state_allocations[s]["intervention_types"].append(proj['type'])
-                
-                # Mock Risk reduction
                 state_allocations[s]["risk_reduction_score"] += (proj['impact_raw'] * 0.8)
             else:
                 unfunded_projects.append(proj)
@@ -189,8 +189,6 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
         # 4. FORMAT OUTPUT
         allocations_list = []
         for s, data in state_allocations.items():
-            # Summarize types
-            from collections import Counter
             counts = Counter(data['intervention_types'])
             type_str = ", ".join([f"{k} x{v}" for k, v in counts.items()])
             
@@ -221,7 +219,6 @@ def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_
             
         unfunded_list = []
         for s, data in unfunded_summary.items():
-            from collections import Counter
             counts = Counter(data['types'])
             type_str = ", ".join([f"{k} x{v}" for k, v in counts.items()])
             unfunded_list.append({
