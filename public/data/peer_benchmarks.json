@@ -1,0 +1,565 @@
+[
+    {
+        "state": "Andhra Pradesh",
+        "peer_group": 0,
+        "performance_gap": 1.0210526260469117,
+        "is_lagging": false,
+        "peers": [
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Goa",
+        "peer_group": 0,
+        "performance_gap": -0.19837609051111266,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Gujarat",
+        "peer_group": 0,
+        "performance_gap": -1.2165194534509827,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Haryana",
+        "peer_group": 0,
+        "performance_gap": 3.99149245275143,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Karnataka",
+        "peer_group": 0,
+        "performance_gap": 1.9409607001066345,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Kerala",
+        "peer_group": 0,
+        "performance_gap": -4.420259196980815,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Maharashtra",
+        "peer_group": 0,
+        "performance_gap": -0.29350331279070385,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Punjab",
+        "peer_group": 0,
+        "performance_gap": -4.632695657497602,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Tamil Nadu",
+        "peer_group": 0,
+        "performance_gap": -4.198133741774404,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Telangana",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Telangana",
+        "peer_group": 0,
+        "performance_gap": 13.940443600760641,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Uttarakhand",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "Uttarakhand",
+        "peer_group": 0,
+        "performance_gap": 0.1983760905110978,
+        "is_lagging": false,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "West Bengal"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (75.0% median saturation)."
+    },
+    {
+        "state": "West Bengal",
+        "peer_group": 0,
+        "performance_gap": 27.830839408303703,
+        "is_lagging": true,
+        "peers": [
+            "Andhra Pradesh",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Karnataka",
+            "Kerala",
+            "Maharashtra",
+            "Punjab",
+            "Tamil Nadu",
+            "Telangana",
+            "Uttarakhand"
+        ],
+        "comparative_insight": "Lagging Peer detected. West Bengal is underperforming its demographic cohort (including Andhra Pradesh, Goa) by 27.8% in biometric saturation. Action: Review policy execution parity against Punjab."
+    },
+    {
+        "state": "Arunachal Pradesh",
+        "peer_group": 1,
+        "performance_gap": -8.11560507048648,
+        "is_lagging": false,
+        "peers": [
+            "Manipur",
+            "Meghalaya",
+            "Nagaland"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (70.4% median saturation)."
+    },
+    {
+        "state": "Manipur",
+        "peer_group": 1,
+        "performance_gap": 14.710015379096895,
+        "is_lagging": false,
+        "peers": [
+            "Arunachal Pradesh",
+            "Meghalaya",
+            "Nagaland"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (70.4% median saturation)."
+    },
+    {
+        "state": "Meghalaya",
+        "peer_group": 1,
+        "performance_gap": 8.115605070486463,
+        "is_lagging": false,
+        "peers": [
+            "Arunachal Pradesh",
+            "Manipur",
+            "Nagaland"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (70.4% median saturation)."
+    },
+    {
+        "state": "Nagaland",
+        "peer_group": 1,
+        "performance_gap": -18.873390036599638,
+        "is_lagging": false,
+        "peers": [
+            "Arunachal Pradesh",
+            "Manipur",
+            "Meghalaya"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (70.4% median saturation)."
+    },
+    {
+        "state": "Chandigarh",
+        "peer_group": 2,
+        "performance_gap": 0.7017802441808102,
+        "is_lagging": false,
+        "peers": [
+            "Delhi",
+            "Puducherry"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (65.1% median saturation)."
+    },
+    {
+        "state": "Delhi",
+        "peer_group": 2,
+        "performance_gap": 0.0,
+        "is_lagging": false,
+        "peers": [
+            "Chandigarh",
+            "Puducherry"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (65.1% median saturation)."
+    },
+    {
+        "state": "Puducherry",
+        "peer_group": 2,
+        "performance_gap": -19.96390523659645,
+        "is_lagging": false,
+        "peers": [
+            "Chandigarh",
+            "Delhi"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (65.1% median saturation)."
+    },
+    {
+        "state": "Ladakh",
+        "peer_group": 3,
+        "performance_gap": 26.74953416505353,
+        "is_lagging": true,
+        "peers": [
+            "Lakshadweep",
+            "Mizoram"
+        ],
+        "comparative_insight": "Lagging Peer detected. Ladakh is underperforming its demographic cohort (including Lakshadweep, Mizoram) by 26.7% in biometric saturation. Action: Review policy execution parity against Lakshadweep."
+    },
+    {
+        "state": "Lakshadweep",
+        "peer_group": 3,
+        "performance_gap": -5.656183931333074,
+        "is_lagging": false,
+        "peers": [
+            "Ladakh",
+            "Mizoram"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (82.8% median saturation)."
+    },
+    {
+        "state": "Mizoram",
+        "peer_group": 3,
+        "performance_gap": 0.0,
+        "is_lagging": false,
+        "peers": [
+            "Ladakh",
+            "Lakshadweep"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (82.8% median saturation)."
+    },
+    {
+        "state": "Assam",
+        "peer_group": 4,
+        "performance_gap": 12.84939809836433,
+        "is_lagging": false,
+        "peers": [
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Bihar",
+        "peer_group": 4,
+        "performance_gap": 10.646117422509692,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Chhattisgarh",
+        "peer_group": 4,
+        "performance_gap": 0.8968852472472753,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Himachal Pradesh",
+        "peer_group": 4,
+        "performance_gap": -14.54611919815664,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Jharkhand",
+        "peer_group": 4,
+        "performance_gap": 0.0,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Madhya Pradesh",
+        "peer_group": 4,
+        "performance_gap": -10.911128814042662,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Odisha",
+        "peer_group": 4,
+        "performance_gap": -11.0925789483367,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Rajasthan",
+        "peer_group": 4,
+        "performance_gap": -0.5622782163252448,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Sikkim",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Sikkim",
+        "peer_group": 4,
+        "performance_gap": 7.040925624888744,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Tripura",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Tripura",
+        "peer_group": 4,
+        "performance_gap": -9.304784574857482,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Uttar Pradesh"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    },
+    {
+        "state": "Uttar Pradesh",
+        "peer_group": 4,
+        "performance_gap": 7.947433980361914,
+        "is_lagging": false,
+        "peers": [
+            "Assam",
+            "Bihar",
+            "Chhattisgarh",
+            "Himachal Pradesh",
+            "Jharkhand",
+            "Madhya Pradesh",
+            "Odisha",
+            "Rajasthan",
+            "Sikkim",
+            "Tripura"
+        ],
+        "comparative_insight": "Region is performing at or above demographic peer parity (71.2% median saturation)."
+    }
+]

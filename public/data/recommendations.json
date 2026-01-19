@@ -1,0 +1,213 @@
+{
+  "executive_summary": {
+    "report_title": "ALRIS Decision Support Report",
+    "generated_at": "2026-01-19 21:39:12",
+    "overview": {
+      "total_recommendations": 9,
+      "critical_recommendations": 1,
+      "high_priority_recommendations": 0,
+      "active_alerts": 2,
+      "action_items": 1
+    },
+    "key_findings": [
+      "Lifecycle analysis reveals age-specific patterns in Aadhaar usage",
+      "Regional disparities identified in service accessibility",
+      "Demand forecasting indicates predictable seasonal patterns",
+      "Anomaly detection has flagged periods requiring investigation"
+    ],
+    "immediate_actions": [
+      {
+        "id": "REC-ANO-001",
+        "category": "Data Quality & Investigation",
+        "priority": "Critical",
+        "title": "Investigate Critical Data Anomalies",
+        "finding": "10 critical anomalies detected requiring investigation",
+        "recommendation": "Conduct detailed investigation of flagged periods for data quality or operational issues",
+        "impact": "Ensures data integrity and identifies potential fraud or system issues",
+        "target_audience": [
+          "UIDAI Data Quality Team",
+          "Vigilance Division"
+        ],
+        "timeline": "Immediate",
+        "kpi": "Resolve all critical anomalies within 30 days"
+      }
+    ],
+    "alerts": [
+      {
+        "type": "critical",
+        "message": "8 states identified as high-risk for service delivery",
+        "action": "Prioritize infrastructure investment in flagged states"
+      },
+      {
+        "type": "critical",
+        "message": "10 critical anomalies require immediate attention",
+        "action": "Review anomaly report and initiate investigation"
+      }
+    ],
+    "action_items": [
+      {
+        "title": "Review State-Level Anomalies",
+        "description": "11 states flagged for irregular patterns",
+        "owner": "UIDAI Regional Directors",
+        "due_date": "Within 2 weeks"
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "id": "REC-ANO-001",
+      "category": "Data Quality & Investigation",
+      "priority": "Critical",
+      "title": "Investigate Critical Data Anomalies",
+      "finding": "10 critical anomalies detected requiring investigation",
+      "recommendation": "Conduct detailed investigation of flagged periods for data quality or operational issues",
+      "impact": "Ensures data integrity and identifies potential fraud or system issues",
+      "target_audience": [
+        "UIDAI Data Quality Team",
+        "Vigilance Division"
+      ],
+      "timeline": "Immediate",
+      "kpi": "Resolve all critical anomalies within 30 days"
+    },
+    {
+      "id": "REC-REG-001",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in The Dadra And Nagar Haveli And Daman And Diu",
+      "finding": "The Dadra And Nagar Haveli And Daman And Diu identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-002",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in Westbengal",
+      "finding": "Westbengal identified as high-risk with bio ratio 0.28",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-003",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in Jaipur",
+      "finding": "Jaipur identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-004",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in BALANAGAR",
+      "finding": "BALANAGAR identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-005",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in Madanapalle",
+      "finding": "Madanapalle identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-006",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in Nagpur",
+      "finding": "Nagpur identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-007",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in Raja Annamalai Puram",
+      "finding": "Raja Annamalai Puram identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    },
+    {
+      "id": "REC-REG-008",
+      "category": "Regional Infrastructure",
+      "priority": "Medium",
+      "title": "Address Service Gaps in West Bengli",
+      "finding": "West Bengli identified as high-risk with bio ratio 0.00",
+      "recommendation": "Deploy additional enrolment centers and mobile units",
+      "impact": "Improved service accessibility and reduced regional disparities",
+      "target_audience": [
+        "UIDAI State Office",
+        "State IT Department"
+      ],
+      "timeline": "Within 6 months",
+      "kpi": "Increase biometric update ratio to national average"
+    }
+  ],
+  "alerts": [
+    {
+      "type": "critical",
+      "message": "8 states identified as high-risk for service delivery",
+      "action": "Prioritize infrastructure investment in flagged states"
+    },
+    {
+      "type": "critical",
+      "message": "10 critical anomalies require immediate attention",
+      "action": "Review anomaly report and initiate investigation"
+    }
+  ],
+  "action_items": [
+    {
+      "title": "Review State-Level Anomalies",
+      "description": "11 states flagged for irregular patterns",
+      "owner": "UIDAI Regional Directors",
+      "due_date": "Within 2 weeks"
+    }
+  ]
+}
