@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution Plan | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- Using absolute paths as per previous fix -->
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .document-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-top: 8px solid var(--gov-saffron);
+            min-height: 80vh;
+        }
+
+        .doc-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .doc-watermark {
+            color: rgba(0, 0, 0, 0.05);
+            font-size: 5rem;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            pointer-events: none;
+            z-index: 0;
+            font-weight: 800;
+        }
+
+        .section-box {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            background: #f0f4f8;
+            padding: 10px 15px;
+            border-left: 5px solid var(--gov-blue);
+            color: var(--gov-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .doc-content {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+
+        .action-step {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .step-index {
+            width: 30px;
+            height: 30px;
+            background: var(--gov-saffron);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .authorize-bar {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="watermark">OFFICIAL EXECUTION DOCUMENT</div>
+    <div class="doc-watermark">CONFIDENTIAL</div>
+
+    <nav class="nav-toolbar">
+        <a href="/decisions" class="nav-link">← Back to Recommendations</a>
+        <div style="flex-grow:1;"></div>
+        <span style="opacity:0.7;">ALRIS / EXEC / 2026-GEN</span>
+    </nav>
+
+    <div class="document-container" id="docContainer">
+        <div style="text-align: center; padding: 50px;">
+            <i class="fas fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--gov-blue);"></i>
+            <p style="margin-top: 20px; color: #666;">Retrieving data and generating official execution plan...</p>
+        </div>
+        <!-- Content injected by JS -->
+    </div>
+
+    <div class="authorize-bar">
+        <button class="btn-tool-blue" style="background: #666;" onclick="window.history.back()">Cancel</button>
+        <button class="btn-tool-blue" onclick="authorizePlan()">AUTHORIZE & EXECUTE PLAN</button>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Execution Plan Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const title = urlParams.get('title');
+
+            if (!id) {
+                document.getElementById('docContainer').innerHTML = "<div style='color:red; text-align:center;'>Error: No Reference ID provided.</div>";
+                return;
+            }
+
+            // Simulate Generation Delay
+            setTimeout(() => {
+                renderPlan(id, title);
+            }, 1000);
+        });
+
+        function renderPlan(id, title) {
+            const today = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            const html = `
+                <div class="doc-header">
+                    <img src="/assets/images/goi_logo.png" style="height: 60px; margin-bottom: 15px;">
+                    <h2 style="margin: 0; color: var(--gov-blue); text-transform: uppercase;">Strategic Execution Directive</h2>
+                    <p style="margin: 10px 0 0 0; color: #666; font-weight: 600;">UIDAI REGIONAL OFFICE OPERATIONS</p>
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.9rem; border: 1px solid #ddd; padding: 10px;">
+                        <span><strong>REF NO:</strong> ${id}</span>
+                        <span><strong>DATE:</strong> ${today}</span>
+                        <span><strong>STATUS:</strong> DRAFT FOR APPROVAL</span>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">1. CONTEXTUAL DATA ANALYSIS</div>
+                    <div class="doc-content">
+                        <p>
+                            Pursuant to the actionable recommendation regarding <strong>${title}</strong>, the ALRIS Analytics Engine has performed a deep-dive analysis.
+                            Current metrics indicate a deviation of >15% from the national baseline. 
+                            The <em>Enrolment Forecast Model</em> predicts a surge in demand over the next 45 days, necessitating immediate intervention to prevent service denial gaps.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">2. OPERATIONAL OBJECTIVES</div>
+                    <div class="doc-content">
+                        <ul>
+                            <li><strong>Primary:</strong> Restore service saturation levels to 98% within the target district.</li>
+                            <li><strong>Secondary:</strong> Reduce citizen wait times to < 10 minutes at all Permanent Enrolment Centers (PECs).</li>
+                            <li><strong>Compliance:</strong> Ensure 100% adherence to Exception Handling protocols during this drive.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">3. APPROVED INTERVENTION STRATEGY</div>
+                    
+                    <div class="action-step">
+                        <div class="step-index">01</div>
+                        <div>
+                            <strong>Mobile Unit Mobilization</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #555;">Dispatch 5 fully equipped Mobile Enrolment Kits to high-footfall Gram Panchayats. Activation required within 48 hours.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-step">
+                        <div class="step-index">02</div>
+                        <div>
+                            <strong>Capacity Augmentation</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #555;">Authorize overtime (8 AM - 8 PM) for 15 existing PECs. Sanction additional budget code <strong>[BUD-OVER-2026]</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-step">
+                        <div class="step-index">03</div>
+                        <div>
+                            <strong>Stakeholder Coordination</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #555;">Initiate urgent sync with State Registrar (RES) and District Magistrates to facilitate logistical support.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">4. RESOURCE & BUDGET ALLOCATION</div>
+                    <table class="table-gov" style="font-size: 0.9rem; border: 1px solid #eee;">
+                        <thead>
+                            <tr style="background: #f9f9f9;"><th>Item</th><th>Quantity</th><th>Allocation Code</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Biometric Devices (L1)</td><td>05 Units</td><td>INV-BIO-05</td></tr>
+                            <tr><td>Certified Operators</td><td>15 Personnel</td><td>HR-OPS-Deploy</td></tr>
+                            <tr><td>Vehicle Logistics</td><td>02 Vans</td><td>LOG-FLEET-22</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">5. MONITORING & ESCALATION CONTROL</div>
+                    <div class="doc-content">
+                        <p>
+                            Real-time data from deployed units will be synced to the ALRIS Dashboard every 2 hours. 
+                            Any rejection rate exceeding 3% will trigger an automatic escalation to the Zonal Regional Office (RO).
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 50px; text-align: center;">
+                    <p><em>Generated by ALRIS Decision Support Engine</em></p>
+                    <img src="/assets/images/aadhaar_logo.png" style="height: 40px; opacity: 0.5;">
+                </div>
+            `;
+
+            document.getElementById('docContainer').innerHTML = html;
+        }
+
+        function authorizePlan() {
+            const btn = document.querySelector('.authorize-bar .btn-tool-blue:last-child');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('PLAN AUTHORIZED: Deployment Orders Sent to Regional Office\nTransaction ID: EXEC-2026-998877');
+                window.location.href = '/decisions';
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

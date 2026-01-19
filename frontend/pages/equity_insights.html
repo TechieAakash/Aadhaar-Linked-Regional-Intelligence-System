@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Service Equity Index - ALRIS Governance Dashboard">
+    <title>Service Equity Index | ALRIS Analytics</title>
+
+    <!-- Gov Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modular Command Center CSS -->
+    <link rel="stylesheet" href="../css/govt-design-system.css?v=2">
+    <link rel="stylesheet" href="../css/dashboard-layout.css?v=2">
+    <link rel="stylesheet" href="../css/charts-theme.css?v=2">
+    <link rel="stylesheet" href="../css/interactive-components.css?v=2">
+    <link rel="stylesheet" href="../css/unified-footer.css?v=2">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .sei-score-card {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sei-score-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" opacity="0.05"><path d="M12 2L2 22h20L12 2zm0 3.5L18.5 20h-13L12 5.5z"/></svg>') no-repeat center right;
+            background-size: contain;
+        }
+
+        .metric-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pill-success {
+            background: rgba(56, 161, 105, 0.2);
+            color: #38a169;
+        }
+
+        .pill-warning {
+            background: rgba(221, 107, 32, 0.2);
+            color: #dd6b20;
+        }
+
+        .pill-danger {
+            background: rgba(229, 62, 62, 0.2);
+            color: #e53e3e;
+        }
+
+        .rank-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-item:hover {
+            background: #f8fbff;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-right: 12px;
+        }
+
+        .rank-badge.top-1 {
+            background: #ffd700;
+            color: #856404;
+        }
+
+        .rank-badge.top-2 {
+            background: #c0c0c0;
+            color: #3d3d3d;
+        }
+
+        .rank-badge.top-3 {
+            background: #cd7f32;
+            color: #5a3a22;
+        }
+    </style>
+</head>
+
+<body aria-label="Aadhaar Service Equity Index">
+
+    <div class="watermark">For Official Use Only</div>
+
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="../assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">AADHAAR ANALYTICS COMMAND CENTER</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">UNIQUE IDENTIFICATION AUTHORITY
+                    OF INDIA (UIDAI)</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link active">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header" style="margin-top: 0;">
+            <div>
+                <a href="/equity" style="text-decoration: none; color: inherit;">
+                    <div class="breadcrumb-trail"><span>Analytics</span> <span>Service Equity</span> Deep Insights</div>
+                </a>
+                <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Advanced Parity & Correlation Analysis
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <a href="/equity" class="btn-tool-outline" style="text-decoration: none;">&larr; Back to Dashboard</a>
+            </div>
+        </div>
+        <!-- KPI OVERVIEW -->
+        <!-- MAIN CONTENT GRID -->
+        <div class="grid-system" style="gap: 20px;">
+
+            <!-- SECTION: DEEP DIVE CHARTS -->
+            <div id="charts-section"
+                style="grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px;">
+                <h3
+                    style="grid-column: span 12; margin: 0; font-size: 1.2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; color: var(--text-primary);">
+                    <i class="fas fa-chart-bar" style="margin-right: 8px;"></i>Parity & Inclusion Metrics
+                </h3>
+
+                <!-- PARITY BAR CHART -->
+                <div class="chart-box" style="grid-column: span 6;">
+                    <h3 style="margin:0 0 10px 0;">Parity Gap (Vs National)</h3>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- COMPONENT RADAR -->
+                <div class="chart-box" style="grid-column: span 6;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin:0;">Dimension Radar</h3>
+                        <select id="stateSelect" class="form-control"
+                            style="width: 120px; font-size: 0.8rem; padding: 2px;">
+                            <option value="national">National Avg</option>
+                        </select>
+                    </div>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="componentChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- CORRELATION SCATTER -->
+                <div class="chart-box" style="grid-column: span 6;">
+                    <h3 style="margin:0 0 10px 0;">Correlation: Rural Parity vs Inclusion</h3>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="scatterChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- METRIC PIE -->
+                <div class="chart-box" style="grid-column: span 6;">
+                    <h3 style="margin:0 0 10px 0;">SEI Score Composition</h3>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="compositionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: AI PROJECTION (Distinct Block) -->
+            <div id="ai-section" class="chart-box"
+                style="grid-column: span 12; margin-top: 30px; border: 1px solid #e0e0e0; background: linear-gradient(135deg, #fff 0%, #f9faff 100%);">
+                <div style="display: flex; align-items: flex-start; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h3 style="margin:0 0 10px 0; color: #0A3D62; font-size: 1.4rem;">
+                            <i class="fas fa-microchip" style="margin-right: 8px;"></i>Strategic Policy Simulator
+                        </h3>
+                        <p style="font-size: 0.95rem; color: #555; line-height: 1.5; margin-bottom: 20px;">
+                            Access the high-fidelity scenario modeling engine to simulate the impact of
+                            budget reallocations, mobile unit deployment, and authentication risk
+                            thresholds on the National Inclusion Score.
+                        </p>
+
+                        <div
+                            style="background: rgba(108, 92, 231, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #6C5CE7;">
+                            <p style="font-size: 0.85rem; margin: 0; color: #444;">
+                                <strong>Essential Features:</strong><br>
+                                • Dynamic Multi-State Scenario Modeling<br>
+                                • Biometric Friction vs Inclusion Impact Analysis<br>
+                                • Strategic Zonal Budget Reallocation
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        style="width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 15px;">
+                        <a href="/policy-simulator" class="btn-primary"
+                            style="width: 100%; text-decoration: none; background: #6C5CE7; border: none; padding: 15px; color: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(108, 92, 231, 0.3);">
+                            <i class="fas fa-external-link-alt"></i> Enter Simulator Hub
+                        </a>
+                        <p style="font-size: 0.7rem; color: #888; text-align: center;">Requires Executive Authorization
+                            Level 2</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/charts.js"></script> <!-- Custom Theme -->
+    <script src="../js/equity.js"></script>
+</body>
+
+</html>

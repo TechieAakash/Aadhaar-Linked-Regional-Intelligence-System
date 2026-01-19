@@ -1,0 +1,137 @@
+[
+  {
+    "id": "REC-ANO-001",
+    "category": "Data Quality & Investigation",
+    "priority": "Critical",
+    "title": "Investigate Critical Data Anomalies",
+    "finding": "10 critical anomalies detected requiring investigation",
+    "recommendation": "Conduct detailed investigation of flagged periods for data quality or operational issues",
+    "impact": "Ensures data integrity and identifies potential fraud or system issues",
+    "target_audience": [
+      "UIDAI Data Quality Team",
+      "Vigilance Division"
+    ],
+    "timeline": "Immediate",
+    "kpi": "Resolve all critical anomalies within 30 days"
+  },
+  {
+    "id": "REC-REG-001",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in The Dadra And Nagar Haveli And Daman And Diu",
+    "finding": "The Dadra And Nagar Haveli And Daman And Diu identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-002",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in Westbengal",
+    "finding": "Westbengal identified as high-risk with bio ratio 0.28",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-003",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in Jaipur",
+    "finding": "Jaipur identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-004",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in BALANAGAR",
+    "finding": "BALANAGAR identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-005",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in Madanapalle",
+    "finding": "Madanapalle identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-006",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in Nagpur",
+    "finding": "Nagpur identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-007",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in Raja Annamalai Puram",
+    "finding": "Raja Annamalai Puram identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  },
+  {
+    "id": "REC-REG-008",
+    "category": "Regional Infrastructure",
+    "priority": "Medium",
+    "title": "Address Service Gaps in West Bengli",
+    "finding": "West Bengli identified as high-risk with bio ratio 0.00",
+    "recommendation": "Deploy additional enrolment centers and mobile units",
+    "impact": "Improved service accessibility and reduced regional disparities",
+    "target_audience": [
+      "UIDAI State Office",
+      "State IT Department"
+    ],
+    "timeline": "Within 6 months",
+    "kpi": "Increase biometric update ratio to national average"
+  }
+]

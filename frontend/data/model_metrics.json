@@ -1,0 +1,11 @@
+{
+  "linear_regression": {
+    "target": "total_enrolment",
+    "train_mae": 223692.1,
+    "test_mae": 442722.39,
+    "test_rmse": 509304.73,
+    "r2_score": -9.1764,
+    "coefficient": 184232.2143,
+    "intercept": -46208.2143
+  }
+}

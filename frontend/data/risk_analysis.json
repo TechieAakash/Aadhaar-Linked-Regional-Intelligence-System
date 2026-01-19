@@ -1,0 +1,429 @@
+[
+  {
+    "state": "Uttar Pradesh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.655250770229368,
+    "adult_update_concentration": 0.543517688221337
+  },
+  {
+    "state": "Bihar",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6360409374073765,
+    "adult_update_concentration": 0.6834949133020755
+  },
+  {
+    "state": "Madhya Pradesh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.789490241552919,
+    "adult_update_concentration": 0.5442109494240733
+  },
+  {
+    "state": "West Bengal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.5412991355467419,
+    "adult_update_concentration": 0.7483862652295605
+  },
+  {
+    "state": "Maharashtra",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7522435649669218,
+    "adult_update_concentration": 0.7006327104629761
+  },
+  {
+    "state": "Rajasthan",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7158248064829575,
+    "adult_update_concentration": 0.6038112597432796
+  },
+  {
+    "state": "Gujarat",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7591665752241948,
+    "adult_update_concentration": 0.6257226266458138
+  },
+  {
+    "state": "Assam",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6203574923681884,
+    "adult_update_concentration": 0.5917678170229272
+  },
+  {
+    "state": "Karnataka",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7354841426780224,
+    "adult_update_concentration": 0.6119862947875647
+  },
+  {
+    "state": "Tamil Nadu",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7815299396248746,
+    "adult_update_concentration": 0.6006756626247359
+  },
+  {
+    "state": "Jharkhand",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7118223842772397,
+    "adult_update_concentration": 0.6710693277355878
+  },
+  {
+    "state": "Telangana",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6454829611778005,
+    "adult_update_concentration": 0.5973039572959267
+  },
+  {
+    "state": "Andhra Pradesh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7423838411252327,
+    "adult_update_concentration": 0.5155711540893207
+  },
+  {
+    "state": "Odisha",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7907818442251251,
+    "adult_update_concentration": 0.5844721840837537
+  },
+  {
+    "state": "Meghalaya",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6465329898062059,
+    "adult_update_concentration": 0.69755423621224
+  },
+  {
+    "state": "Chhattisgarh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7054381543260533,
+    "adult_update_concentration": 0.7441182154008495
+  },
+  {
+    "state": "Haryana",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7201042898985586,
+    "adult_update_concentration": 0.6624181522742316
+  },
+  {
+    "state": "Delhi",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6513698163788557,
+    "adult_update_concentration": 0.6820607355211237
+  },
+  {
+    "state": "Punjab",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7847893372317462,
+    "adult_update_concentration": 0.6714565368845438
+  },
+  {
+    "state": "Kerala",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7831959742011447,
+    "adult_update_concentration": 0.6674058558600828
+  },
+  {
+    "state": "Jammu & Kashmir",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7780390559298824,
+    "adult_update_concentration": 0.5583408792525204
+  },
+  {
+    "state": "Uttarakhand",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7485542620345118,
+    "adult_update_concentration": 0.560867513512585
+  },
+  {
+    "state": "Himachal Pradesh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.8153649167733675,
+    "adult_update_concentration": 0.5856826911884531
+  },
+  {
+    "state": "Nagaland",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.83643765981938,
+    "adult_update_concentration": 0.7335584002224917
+  },
+  {
+    "state": "Manipur",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6001322509636049,
+    "adult_update_concentration": 0.5916599236076671
+  },
+  {
+    "state": "Tripura",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.778055923689851,
+    "adult_update_concentration": 0.5874687085848918
+  },
+  {
+    "state": "Mizoram",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.8276781807194604,
+    "adult_update_concentration": 0.3895074634122624
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7607418587731967,
+    "adult_update_concentration": 0.5159241201828586
+  },
+  {
+    "state": "Puducherry",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.7814086692605228,
+    "adult_update_concentration": 0.6659972844380042
+  },
+  {
+    "state": "Chandigarh",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6467986316909521,
+    "adult_update_concentration": 0.5209247517961255
+  },
+  {
+    "state": "Goa",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7515300706881366,
+    "adult_update_concentration": 0.6020235326001039
+  },
+  {
+    "state": "Sikkim",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6617034996189695,
+    "adult_update_concentration": 0.628729702796178
+  },
+  {
+    "state": "Jammu And Kashmir",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 0.0
+  },
+  {
+    "state": "Dadra and Nagar Haveli",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.875871913830581,
+    "adult_update_concentration": 0.62832949420887
+  },
+  {
+    "state": "The Dadra And Nagar Haveli And Daman And Diu",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 0.0
+  },
+  {
+    "state": "Ladakh",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.6062781229912149,
+    "adult_update_concentration": 0.6124919648596528
+  },
+  {
+    "state": "Andaman and Nicobar Islands",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.8254433738304706,
+    "adult_update_concentration": 0.471442535958665
+  },
+  {
+    "state": "Lakshadweep",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.8744931809804645,
+    "adult_update_concentration": 0.5781422779211205
+  },
+  {
+    "state": "Dadra and Nagar Haveli and Daman and Diu",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.5336313324819072,
+    "adult_update_concentration": 0.803107705406556
+  },
+  {
+    "state": "Daman and Diu",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.8929569964052723,
+    "adult_update_concentration": 0.4265743576088404
+  },
+  {
+    "state": "Andaman & Nicobar Islands",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.7837088388214904,
+    "adult_update_concentration": 0.8651646447140381
+  },
+  {
+    "state": "Dadra & Nagar Haveli",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.7839046199701938,
+    "adult_update_concentration": 0.8718330849478391
+  },
+  {
+    "state": "Daman & Diu",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.8434442270058709,
+    "adult_update_concentration": 0.785518590998043
+  },
+  {
+    "state": "West  Bengal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.2926829268292683,
+    "adult_update_concentration": 0.8780487804878049
+  },
+  {
+    "state": "West Bangal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.352112676056338,
+    "adult_update_concentration": 0.8802816901408451
+  },
+  {
+    "state": "West bengal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.3584905660377358,
+    "adult_update_concentration": 0.9056603773584906
+  },
+  {
+    "state": "Westbengal",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.2753623188405797,
+    "adult_update_concentration": 0.9710144927536232
+  },
+  {
+    "state": "andhra pradesh",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.5194805194805194,
+    "adult_update_concentration": 0.7402597402597403
+  },
+  {
+    "state": "WEST BENGAL",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.4594594594594595,
+    "adult_update_concentration": 0.8918918918918919
+  },
+  {
+    "state": "WESTBENGAL",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.2608695652173913,
+    "adult_update_concentration": 0.8913043478260869
+  },
+  {
+    "state": "Jaipur",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "Chhatisgarh",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 0.8333333333333334,
+    "adult_update_concentration": 0.6666666666666666
+  },
+  {
+    "state": "BALANAGAR",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "Madanapalle",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "Tamilnadu",
+    "risk_category": "Low",
+    "risk_score": 0,
+    "biometric_update_ratio": 1.0,
+    "adult_update_concentration": 0.0
+  },
+  {
+    "state": "Nagpur",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "Raja Annamalai Puram",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "Uttaranchal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.4,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "West Bengli",
+    "risk_category": "High",
+    "risk_score": 2,
+    "biometric_update_ratio": 0.0,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "odisha",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.6,
+    "adult_update_concentration": 1.0
+  },
+  {
+    "state": "west Bengal",
+    "risk_category": "Medium",
+    "risk_score": 1,
+    "biometric_update_ratio": 0.1111111111111111,
+    "adult_update_concentration": 0.8888888888888888
+  }
+]

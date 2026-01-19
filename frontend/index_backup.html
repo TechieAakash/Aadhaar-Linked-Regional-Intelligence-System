@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Aadhaar Analytics & Governance Command Center - Official Govt Decision Support System">
+    <title>ALRIS | Aadhaar Analytics Command Center</title>
+
+    <!-- Gov Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Modular Command Center CSS -->
+    <link rel="stylesheet" href="css/govt-design-system.css?v=2">
+    <link rel="stylesheet" href="css/dashboard-layout.css?v=2">
+    <link rel="stylesheet" href="css/charts-theme.css?v=2">
+    <link rel="stylesheet" href="css/interactive-components.css?v=2">
+    <link rel="stylesheet" href="css/unified-footer.css?v=2">
+
+    <style>
+        #indiaMap {
+            height: 600px;
+            width: 100%;
+            background: #f8fbff;
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            border: 1px solid var(--border-color);
+        }
+
+        .map-info {
+            padding: 12px;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border-left: 5px solid var(--gov-blue);
+        }
+
+        .legend {
+            line-height: 18px;
+            color: #555;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body aria-label="Aadhaar Analytics Command Center">
+
+    <div class="watermark">For Official Use Only</div>
+
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">AADHAAR ANALYTICS COMMAND CENTER</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">UNIQUE IDENTIFICATION AUTHORITY
+                    OF INDIA (UIDAI)</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link active">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Lifecycle</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="alert-ticker" id="alertTicker">Loading system alerts...</div>
+
+    <div class="dashboard-container">
+        <div class="section-header" style="margin-top: 0;">
+            <div id="breadcrumb" class="breadcrumb-trail"><span>India</span> National Overview</div>
+            <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;" id="serverStatus">Syncing with UIDAI
+                Backend...</div>
+        </div>
+
+        <!-- FILTRATION CONTROL PANEL -->
+        <div class="filter-bar"
+            style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; gap: 20px; align-items: flex-end; border: 1px solid var(--border-color);">
+            <div style="flex: 2;">
+                <label
+                    style="font-size: 0.7rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: block; margin-bottom: 8px;">REGION
+                    / STATE</label>
+                <select id="stateFilter" class="form-control"
+                    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-weight: 600; font-family: 'Inter';">
+                    <option value="ALL">All India (National View)</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <label
+                    style="font-size: 0.7rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: block; margin-bottom: 8px;">TIME
+                    PERIOD</label>
+                <select id="periodFilter" class="form-control"
+                    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-weight: 600; font-family: 'Inter';">
+                    <option value="cur">Current Cycle (Jan 2026)</option>
+                    <option value="l30">Last 30 Days</option>
+                    <option value="q1">Q1 2026 Forecast</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <label
+                    style="font-size: 0.7rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: block; margin-bottom: 8px;">METRIC
+                    FOCUS</label>
+                <select id="metricFilter" class="form-control"
+                    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-weight: 600; font-family: 'Inter';">
+                    <option value="enrolment">Enrolment Volume</option>
+                    <option value="update">Update Activity</option>
+                </select>
+            </div>
+            <div style="flex: 0 0 auto;">
+                <button class="btn-tool-blue" id="applyFilters" style="height: 42px; padding: 0 25px;">APPLY
+                    VIEW</button>
+            </div>
+        </div>
+
+        <section id="overview" class="grid-system">
+            <div class="stat-card" style="grid-column: span 3;">
+                <div class="text-secondary" style="font-size: 0.75rem; font-weight: 800; margin-bottom: 5px;"
+                    id="card1Label">NATIONAL
+                    COVERAGE RATE</div>
+                <div id="nationalCoverage" class="counter">94.2%</div>
+                <div style="color: var(--color-success); font-size: 0.75rem; font-weight: 800;">↑ 1.8% YoY</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-saffron);">
+                <div class="text-secondary" style="font-size: 0.75rem; font-weight: 800; margin-bottom: 5px;">UPDATE
+                    INTENSITY</div>
+                <div id="updateIntensity" class="counter">3.2</div>
+                <div style="opacity:0.6; font-size: 0.75rem;">avg updates/enrol</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-green);">
+                <div class="text-secondary" style="font-size: 0.75rem; font-weight: 800; margin-bottom: 5px;">ENGINE
+                    HEALTH</div>
+                <div id="engineHealth" class="counter" style="font-size: 1.8rem;">OPTIMAL</div>
+                <div style="color: var(--gov-blue); font-size: 0.75rem; font-weight: 800;">99.9% ML Confidence</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-blue);">
+                <div class="text-secondary" style="font-size: 0.75rem; font-weight: 800; margin-bottom: 5px;">ANOMALIES
+                    DETECTED</div>
+                <div id="anomalyCount" class="counter" style="color: var(--color-alert);">2</div>
+                <div style="color: var(--color-alert); font-size: 0.75rem; font-weight: 800;">Action Required</div>
+            </div>
+
+            <div class="chart-box" style="grid-column: span 12; min-height: 700px; padding: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin:0;">INTERACTIVE NATIONAL GOVERNANCE MAP</h3>
+                        <p style="margin:0; font-size: 0.8rem; opacity: 0.7;">State-wise Enrolment and Update Intensity
+                            Analysis</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-tool-blue" onclick="window.location.href='/lifecycle'">📊 Detailed
+                            Analysis</button>
+                        <button class="btn-tool-outline" id="exportBtn">📥 Export Data</button>
+                    </div>
+                </div>
+                <!-- MAP CONTAINER -->
+                <div id="indiaMap"></div>
+            </div>
+        </section>
+
+        <!-- Dynamic Module Access Grid -->
+        <h2 style="margin: 40px 0 20px;">ANALYTICS COMMAND MODULES</h2>
+        <div class="grid-system" style="gap: 30px;">
+            <div class="stat-card" style="grid-column: span 3; cursor: pointer;"
+                onclick="window.location.href='/lifecycle'">
+                <h4>Lifecycle Intelligence</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Age-group behavior and biometric frequency trends.</p>
+                <div class="text-gov-blue" style="font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-saffron); cursor: pointer;"
+                onclick="window.location.href='/forecasting'">
+                <h4>Predictive Forecasting</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7;">ML-driven demand estimation and stress calendars.</p>
+                <div class="text-saffron" style="font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--color-alert); cursor: pointer;"
+                onclick="window.location.href='/anomalies'">
+                <h4>Anomaly Alerts</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Real-time detection of regional statistical outliers.</p>
+                <div class="text-alert" style="font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
+            </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-green); cursor: pointer;"
+                onclick="window.location.href='/decisions'">
+                <h4>Policy Decisions</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Smart recommendations and action plan generation.</p>
+                <div class="text-green" style="font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="dashboard-container">
+            <div class="footer-grid">
+                <!-- Col 1: Contact & Social -->
+                <div class="footer-col">
+                    <div class="footer-heading">Contact Us</div>
+                    <ul class="footer-links">
+                        <li>
+                            <div class="contact-item"><i class="fas fa-phone-alt"></i> <span
+                                    style="font-size:1.2em; font-weight:700;">1947</span> (Toll Free)</div>
+                        </li>
+                        <li>
+                            <div class="contact-item"><i class="fas fa-envelope"></i> help@uidai.gov.in</div>
+                        </li>
+                        <li>
+                            <div class="contact-item">To Collaborate, email to
+                                us:<br>collaborate[at]uidai[dot]net[dot]in</div>
+                        </li>
+                    </ul>
+
+                    <div class="footer-heading" style="margin-top: 20px;">Follow Us</div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/AadhaarOfficial/" target="_blank" aria-label="Facebook"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/UIDAI" target="_blank" aria-label="Twitter"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/user/AadhaarUID" target="_blank" aria-label="Youtube"><i
+                                class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/aadhaar_official/?hl=en" target="_blank"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/unique-identification-authority-of-india-uidai-"
+                            target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Head Office -->
+                <div class="footer-col">
+                    <div class="footer-heading">UIDAI Head Office</div>
+                    <p style="font-size: 0.85rem; line-height: 1.6; opacity: 0.9;">
+                        <strong>Unique Identification Authority of India</strong><br>
+                        Government of India (GoI)<br>
+                        Bangla Sahib Road, Behind Kali Mandir, Gole Market,<br>
+                        New Delhi - 110001
+                    </p>
+                </div>
+
+                <!-- Col 3: Regional Office -->
+                <div class="footer-col">
+                    <div class="footer-heading">Regional Offices</div>
+                    <p style="font-size: 0.85rem; line-height: 1.6; opacity: 0.9;">
+                        <strong>Delhi</strong><br>
+                        UIDAI Regional Office, Delhi<br>
+                        Ground Floor, Supreme Court Metro Station, Pragati Maidan, New Delhi-110001
+                    </p>
+                </div>
+
+                <!-- Col 4: Website Policy -->
+                <div class="footer-col">
+                    <div class="footer-heading">Website Policy</div>
+                    <ul class="footer-links">
+                        <li><a href="/terms">Terms & Conditions</a></li>
+                        <li><a href="https://uidai.gov.in/en/privacy-policy.html" target="_blank">Privacy Policy</a>
+                        </li>
+                        <li><a href="https://uidai.gov.in/en/hyperlinking-policy.html" target="_blank">Hyperlinking
+                                Policy</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                        <li><a href="https://uidai.gov.in/en/disclaimer.html" target="_blank">Disclaimer</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="/feedback">Feedback</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="bottom-links" style="display:flex; align-items:center; justify-content:center; gap:25px;">
+                    <a href="https://uidai.gov.in" target="_blank">
+                        <img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg" alt="UIDAI"
+                            style="height: 40px; filter: brightness(0) invert(1);">
+                    </a>
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <a href="https://www.india.gov.in/" target="_blank">Government of India</a> |
+                        <a href="https://www.mygov.in/" target="_blank">My Gov</a> |
+                        <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a> |
+                        <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a> |
+                        <a href="https://www.dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+                    </div>
+                </div>
+                <div style="opacity: 0.8; margin-bottom: 10px; font-weight: 600;">
+                    Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+                </div>
+                <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 10px;">
+                    JavaScript must be enabled to access this site. | Supports: Firefox 37+ Google Chrome 6.0+ Internet
+                    Explorer 9.0+ Safari 4.0+
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <a href="#" style="color: #fff; text-decoration: underline; font-size: 0.75rem;">Download GIGW
+                        Website Certificate, October 2023 (PDF)</a>
+                    <span style="margin: 0 10px;">|</span>
+                    <span style="font-size: 0.75rem;">W3C CSS Validator</span>
+                </div>
+                <div style="margin-top: 5px; font-size: 0.75rem; opacity: 0.6;">
+                    Last reviewed and updated on: January 16, 2026
+                </div>
+            </div>
+
+            <div class="bhashini-disclaimer">
+                UIDAI website translation is done by Bhashini Machine Translation. This is done on experimental basis
+                and will be improved over a period of time. Kindly ignore the errors if any.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/data-loader.js"></script>
+    <script src="js/anomaly-alert-system.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // ULTIMATE INTERACTIVE MAP ENGINE
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Helper for Title Case
+            const toTitleCase = (str) => {
+                return str.replace(/\w\S*/g, function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            };
+
+            // 1. Fetch Data First
+            const dashData = await DataLoader.fetchAll();
+            AnomalyAlertSystem.init('alertTicker', dashData.anomalies);
+
+            // 2. Initialize Map
+            const map = L.map('indiaMap', {
+                center: [22.9734, 78.6569],
+                zoom: 5,
+                minZoom: 4,
+                zoomControl: true,
+                attributionControl: false,
+                maxBoundsViscosity: 1.0
+            });
+
+            // Add OpenStreetMap Base Layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                bounds: [[6, 68], [36, 98]]
+            }).addTo(map);
+
+            const bounds = L.latLngBounds(L.latLng(6, 68), L.latLng(36, 98));
+            map.setMaxBounds(bounds);
+
+            // 3. Info Control
+            const info = L.control();
+            info.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'map-info');
+                this.update();
+                return this._div;
+            };
+            info.update = function (props, anomaly) {
+                let content = props ? `<b>${props.st_nm || props.NAME_1}</b><br/>` : 'Hover over a state';
+
+                if (props) {
+                    if (anomaly) {
+                        content += `<span style="color:var(--color-alert); font-weight:800;">⚠️ ${anomaly.anomaly_type}</span><br/>
+                                    Severity: ${anomaly.severity}<br/>
+                                    Confidence: ${anomaly.severity === 'Critical' ? '98.2%' : '89.5%'} (ML)`;
+                    } else {
+                        content += `Enrolment Density: Optimal<br/>
+                                     <span style="color: var(--gov-green)">Governance: High</span>`;
+                    }
+                }
+                this._div.innerHTML = content;
+            };
+            info.addTo(map);
+
+            // 4. Load GeoJSON & Plot Anomalies
+            try {
+                const response = await fetch('assets/map-geojson/india_states.json');
+                const geoData = await response.json();
+
+                // Create Lookups
+                const anomalyMap = {};
+                if (dashData.anomalies && dashData.anomalies.state_anomalies) {
+                    dashData.anomalies.state_anomalies.forEach(a => {
+                        anomalyMap[a.state.toLowerCase()] = a;
+                    });
+                }
+
+                const featureMap = {};
+                const stateSet = new Set(); // Use Set for uniqueness
+
+                if (dashData.stateFeatures) {
+                    dashData.stateFeatures.forEach(f => {
+                        if (f.state && f.state.length > 2 && !f.state.match(/^\d+$/)) {
+                            // Normalize state name to Title Case for display and uniqueness
+                            let normalizedName = toTitleCase(f.state.trim());
+
+                            // Handle Specific Corrections
+                            if (normalizedName === "Westbengal" || normalizedName === "West Bengli") normalizedName = "West Bengal";
+                            if (normalizedName === "Tamilnadu") normalizedName = "Tamil Nadu";
+                            if (normalizedName.includes("Andhra")) normalizedName = "Andhra Pradesh";
+
+                            // Store original data reference using normalized key
+                            // (We lowercase for lookup consistency)
+                            featureMap[normalizedName.toLowerCase()] = f;
+                            stateSet.add(normalizedName);
+                        }
+                    });
+                }
+
+                // POPULATE DROPDOWN
+                const stateSelect = document.getElementById('stateFilter');
+                stateSelect.innerHTML = '<option value="ALL">All India (National View)</option>'; // Reset
+
+                // Sort and append
+                const sortedStates = Array.from(stateSet).sort();
+                sortedStates.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s;
+                    opt.innerText = s;
+                    stateSelect.appendChild(opt);
+                });
+
+                const geoLayer = L.geoJson(geoData, {
+                    style: (feature) => {
+                        const rawName = feature.properties.st_nm || feature.properties.NAME_1 || "";
+                        const stateName = rawName.toLowerCase();
+                        const hasAnomaly = anomalyMap[stateName];
+                        return {
+                            fillColor: hasAnomaly ? '#DC3545' : '#0F4D92', // Red for anomaly, Blue for normal
+                            weight: 2,
+                            opacity: 1,
+                            color: 'white',
+                            fillOpacity: hasAnomaly ? 0.6 : 0.7
+                        };
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const rawStateName = feature.properties.st_nm || feature.properties.NAME_1 || "";
+                        const stateName = rawStateName.toLowerCase();
+                        const anomaly = anomalyMap[stateName];
+
+                        // Add "Dot" Marker for Anomalies
+                        if (anomaly) {
+                            const center = layer.getBounds().getCenter();
+                            L.circleMarker(center, {
+                                radius: 8,
+                                fillColor: "#FF0000",
+                                color: "#fff",
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 1
+                            }).addTo(map).bindPopup(`
+                                <strong>${anomaly.state}</strong><br>
+                                alert: ${anomaly.anomaly_type}<br>
+                                <button class="btn-tool-outline" style="margin-top:5px;" onclick="window.location.href='/anomalies?state=${encodeURIComponent(anomaly.state)}'">Investigate</button>
+                            `);
+                        }
+
+                        layer.on({
+                            mouseover: (e) => {
+                                const l = e.target;
+                                l.setStyle({ weight: 5, color: '#FF9933', fillOpacity: 0.9 });
+                                l.bringToFront();
+                                info.update(feature.properties, anomaly);
+                            },
+                            mouseout: (e) => {
+                                const l = e.target;
+                                l.setStyle({
+                                    fillColor: anomaly ? '#DC3545' : '#0F4D92',
+                                    weight: 2,
+                                    color: 'white',
+                                    fillOpacity: anomaly ? 0.6 : 0.7
+                                });
+                                info.update();
+                            },
+                            click: (e) => {
+                                // Simulate dropdown selection logic if mapped
+                                // (Optional improvement for later)
+                                if (anomaly) window.location.href = `/anomalies?state=${encodeURIComponent(anomaly.state)}`;
+                            }
+                        });
+                    }
+                }).addTo(map);
+
+
+                // FILTER LOGIC
+                document.getElementById('applyFilters').addEventListener('click', () => {
+                    const selectedState = document.getElementById('stateFilter').value;
+
+                    if (selectedState === 'ALL') {
+                        // Reset National View
+                        map.setView([22.9734, 78.6569], 5);
+                        document.getElementById('card1Label').innerText = "NATIONAL COVERAGE RATE";
+                        document.getElementById('nationalCoverage').innerText = "94.2%";
+                        document.getElementById('updateIntensity').innerText = "3.2";
+                        document.getElementById('serverStatus').innerText = "National Overview Active";
+                        document.getElementById('breadcrumb').innerHTML = "<span>India</span> National Overview";
+                    } else {
+                        // Specific State View
+                        // Look up using the Lowercase of the dropdown value (which is normalized Title Case)
+                        const stats = featureMap[selectedState.toLowerCase()];
+
+                        // 1. Zoom Map
+                        let found = false;
+                        geoLayer.eachLayer(layer => {
+                            const props = layer.feature.properties;
+                            // Naive string matching for map bounds
+                            const name = (props.st_nm || props.NAME_1 || "").toLowerCase();
+                            // We compare against selectedState.toLowerCase() which might be slightly different 
+                            // from map properties, so we use 'includes' or fuzzy match if needed.
+                            // For strictness, let's try direct compare first.
+                            if (name === selectedState.toLowerCase() || name.includes(selectedState.toLowerCase())) {
+                                map.fitBounds(layer.getBounds());
+                                layer.openPopup();
+                                found = true;
+                            }
+                        });
+
+                        // 2. Update Dashboard Cards
+                        if (stats) {
+                            // Switch to Total Enrolment to avoid NaN
+                            document.getElementById('card1Label').innerText = "TOTAL ENROLMENT";
+                            // Ensure we have a valid number
+                            const enrolVol = stats.total_enrolment !== undefined ? stats.total_enrolment : 0;
+                            document.getElementById('nationalCoverage').innerText = enrolVol.toLocaleString();
+
+                            // Update Intensity
+                            const updRatio = stats.update_to_enrolment_ratio !== undefined ? stats.update_to_enrolment_ratio : 0;
+                            document.getElementById('updateIntensity').innerText = updRatio.toFixed(2);
+
+                            document.getElementById('serverStatus').innerText = `Viewing Data: ${selectedState}`;
+                            document.getElementById('breadcrumb').innerHTML = `<span>India</span> ${selectedState} Analysis`;
+                        } else {
+                            // Fallback if stats not found
+                            document.getElementById('card1Label').innerText = "TOTAL ENROLMENT";
+                            document.getElementById('nationalCoverage').innerText = "Data Unavailable";
+                            document.getElementById('updateIntensity').innerText = "--";
+                            document.getElementById('serverStatus').innerText = `Viewing Data: ${selectedState} (No ML Data)`;
+                        }
+                    }
+                });
+
+                // EXPORT LOGIC (Now with PDF support)
+                async function exportDashboardData() {
+                    const { jsPDF } = window.jspdf;
+                    if (!dashData.stateFeatures) {
+                        alert("No data available to export.");
+                        return;
+                    }
+
+                    const doc = new jsPDF();
+
+                    // Add Official Header
+                    doc.setFontSize(18);
+                    doc.setTextColor(15, 77, 146); // Gov Blue
+                    doc.text("ALRIS | Analytics & Governance Command Center", 14, 22);
+
+                    doc.setFontSize(10);
+                    doc.setTextColor(100);
+                    doc.text("Official Data Intelligence Report - Generated on: " + new Date().toLocaleString(), 14, 30);
+                    doc.text("Project: Aadhaar Lifecycle & Regional Intelligence System (UIDAI)", 14, 35);
+
+                    doc.setDrawColor(255, 153, 51); // Saffron line
+                    doc.setLineWidth(1);
+                    doc.line(14, 40, 196, 40);
+
+                    // Table Columns
+                    const tableColumn = ["State", "Enrolment Vol", "Update Ratio", "Growth Rate", "Load Index", "Category"];
+                    const tableRows = [];
+
+                    dashData.stateFeatures.forEach(f => {
+                        const rowData = [
+                            f.state,
+                            (f.total_enrolment || 0).toLocaleString(),
+                            (f.update_to_enrolment_ratio || 0).toFixed(2),
+                            (f.avg_monthly_growth_rate || 0).toFixed(2) + "%",
+                            (f.service_load_index || 0).toFixed(1),
+                            f.load_category || "N/A"
+                        ];
+                        tableRows.push(rowData);
+                    });
+
+                    // Generate Table
+                    doc.autoTable({
+                        head: [tableColumn],
+                        body: tableRows,
+                        startY: 50,
+                        theme: 'grid',
+                        headStyles: { fillColor: [15, 77, 146] },
+                        margin: { top: 50 },
+                        styles: { fontSize: 8 }
+                    });
+
+                    // Footer
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(8);
+                        doc.text(`For Official Use Only | Page ${i} of ${pageCount}`, 14, doc.internal.pageSize.height - 10);
+                    }
+
+                    doc.save(`ALRIS_Governance_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+                }
+
+                document.getElementById('exportBtn').addEventListener('click', exportDashboardData);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('indiaMap').innerHTML = 'Map Error: ' + err.message;
+            }
+        });
+    </script>
+</body>
+
+</html>

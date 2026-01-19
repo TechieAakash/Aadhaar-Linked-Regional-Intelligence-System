@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Resource Planning | ALRIS</title>
+    <!-- Gov Typography & Styles -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/govt-design-system.css?v=2">
+    <link rel="stylesheet" href="../css/dashboard-layout.css?v=2">
+    <link rel="stylesheet" href="../css/interactive-components.css?v=2">
+    <link rel="stylesheet" href="../css/unified-footer.css?v=2">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .planning-header {
+            background: linear-gradient(135deg, #1A365D 0%, #2A4365 100%);
+            padding: 30px;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .planning-header h2 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .planning-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .input-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .budget-input-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .budget-input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            font-size: 1.5rem;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-weight: 700;
+            color: #2d3748;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .budget-input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .metric-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-box {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+
+        .metric-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2b6cb0;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .opt-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(56, 161, 105, 0.3);
+        }
+
+        .opt-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px rgba(56, 161, 105, 0.4);
+        }
+
+        .opt-btn:active {
+            transform: translateY(1px);
+        }
+
+        .result-panel {
+            display: none;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Table Styling */
+        .allocation-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.9rem;
+        }
+
+        .allocation-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: #f8fafc;
+            color: #4a5568;
+            font-weight: 600;
+            border-bottom: 2px solid #edf2f7;
+            position: sticky;
+            top: 0;
+        }
+
+        .allocation-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+        }
+
+        .allocation-table tr:hover td {
+            background: #f7fafc;
+        }
+
+        .tag-intervention {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+            background: #ebf8ff;
+            color: #2b6cb0;
+            font-weight: 600;
+            border: 1px solid #bee3f8;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="../assets/images/goi_logo.png" alt="GoI" style="height: 50px;">
+            <div style="margin-left: 15px;">
+                <h1 style="margin:0; font-size: 1.2rem;">ALRIS Command Center</h1>
+                <p style="margin:0; font-size: 0.7rem; font-weight: 600;">Strategic Planning Division</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/planning" class="nav-link active">💰 Strategic Planning</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+
+        <div class="planning-header">
+            <div>
+                <h2>Budget Optimization Model</h2>
+                <p>Maximize National Inclusion Score using Fiscal Linear Programming</p>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.8rem; opacity: 0.8;">MODEL SOURCE</div>
+                <div style="font-weight: 700;">ALRIS-OPT-v4.2 (Finance Grade)</div>
+                <div id="apiStatus" style="font-size: 0.7rem; color: #a0aec0; margin-top: 5px;">
+                    <i class="fas fa-database"></i> Local Cache (Wait for Sync)
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-system" style="gap: 25px;">
+
+            <!-- CONTROLS -->
+            <div style="grid-column: span 4;">
+                <div class="input-panel" style="position: sticky; top: 20px;">
+                    <label style="font-weight: 700; color: #2d3748; letter-spacing: 0.5px; font-size: 0.9rem;">FISCAL
+                        CONSTRAINT (TOTAL BUDGET)</label>
+                    <div class="budget-input-group">
+                        <span class="currency-symbol">₹</span>
+                        <input type="number" id="budgetInput" class="budget-input" value="100000000">
+                    </div>
+                    <p style="font-size: 0.8rem; color: #718096; margin-bottom: 25px; line-height: 1.5;">
+                        Define the hard budget cap for the upcoming fiscal quarter. The engine will solve for optimal
+                        state-wise allocation to maximize service equity.
+                    </p>
+
+                    <button id="btnOptimize" class="opt-btn">
+                        <i class="fas fa-calculator"></i> Run Optimization
+                    </button>
+
+                    <div id="loader" style="display: none; text-align: center; margin-top: 20px;">
+                        <i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: #48bb78;"></i>
+                        <div style="font-size: 0.9rem; margin-top: 10px; color: #2d3748; font-weight: 600;">Running
+                            Scipy Linear Solver...</div>
+                        <div style="font-size: 0.8rem; color: #718096;">Processing 1.4B Vectors</div>
+                    </div>
+
+                    <!-- METRICS PANEL -->
+                    <div id="metricsPanel" class="result-panel">
+                        <h4
+                            style="margin: 25px 0 10px 0; color: #2d3748; border-bottom: 1px solid #edf2f7; padding-bottom: 5px;">
+                            Projected Impact ROI</h4>
+
+                        <div class="metric-card-grid">
+                            <div class="metric-box">
+                                <div class="metric-label">Inclusion Lift</div>
+                                <div class="metric-val" id="liftVal" style="color: #38a169;">--</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Utilization %</div>
+                                <div class="metric-val" id="utilVal" style="color: #2b6cb0;">--</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Risk Reduction</div>
+                                <div class="metric-val" id="riskVal" style="color: #e53e3e;">--</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Efficiency Score</div>
+                                <div class="metric-val" id="roiVal" style="color: #d69e2e;">--</div>
+                            </div>
+                        </div>
+
+                        <div
+                            style="margin-top: 20px; font-size: 0.8rem; color: #718096; background: #f7fafc; padding: 10px; border-radius: 4px;">
+                            <i class="fas fa-info-circle"></i> <strong>Audit Note:</strong> Allocation follows Govt
+                            "Sabka Saath" accountability rules.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISUALIZATION & DATA -->
+            <div style="grid-column: span 8;">
+
+                <!-- CHART -->
+                <div class="chart-box"
+                    style="height: 400px; display: flex; flex-direction: column; margin-bottom: 25px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin:0;">Optimal Allocation Distribution</h3>
+                        <span class="tag-intervention"
+                            style="background: #e6fffa; color: #38b2ac; border-color: #38b2ac;">Top 10
+                            Beneficiaries</span>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- DETAILED TABLE -->
+                <div class="chart-box result-panel" id="tablePanel">
+                    <h3 style="margin:0 0 15px 0;">Strategic Investment Plan (State-wise)</h3>
+                    <div style="overflow-y: auto; max-height: 350px; border: 1px solid #edf2f7; border-radius: 6px;">
+                        <table class="allocation-table">
+                            <thead>
+                                <tr>
+                                    <th>State / UT</th>
+                                    <th>Allocated Funds</th>
+                                    <th>Strategic Intervention Mix</th>
+                                    <th>Exp. Impact</th>
+                                    <th>Risk Mitigation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allocationTableBody">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- UNFUNDED SECTION -->
+                    <div id="unfundedSection" style="margin-top: 30px; display: none;">
+                        <h4
+                            style="color: #e53e3e; border-bottom: 2px solid #fed7d7; padding-bottom: 5px; margin-bottom: 15px;">
+                            <i class="fas fa-exclamation-circle"></i> Unfunded Priorities (Exceeds Fiscal Cap)
+                        </h4>
+                        <div
+                            style="overflow-y: auto; max-height: 200px; border: 1px solid #fed7d7; border-radius: 6px; background: #fff5f5;">
+                            <table class="allocation-table">
+                                <thead style="background: #fff5f5;">
+                                    <tr>
+                                        <th style="color: #c53030;">State / UT</th>
+                                        <th style="color: #c53030;">Required Budget</th>
+                                        <th style="color: #c53030;">Missed Interventions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="unfundedTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px; text-align: right;">
+                        <button class="btn-secondary"
+                            style="border: 1px solid #cbd5e0; background: white; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                            <i class="fas fa-file-export"></i> Export Proposal (PDF)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        const API_URL = '/api/budget/optimize';
+        let chart = null;
+
+        document.getElementById('btnOptimize').addEventListener('click', async () => {
+            const budget = document.getElementById('budgetInput').value;
+            const loader = document.getElementById('loader');
+
+            // UI Transition
+            document.getElementById('btnOptimize').style.display = 'none';
+            loader.style.display = 'block';
+
+            document.querySelectorAll('.result-panel').forEach(el => el.style.display = 'none');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ budget: parseFloat(budget) })
+                });
+
+                const data = await response.json();
+
+                // Simulate processing delay for "Heavy Lift" feel
+                setTimeout(() => {
+                    renderDashboard(data);
+
+                    loader.style.display = 'none';
+                    document.getElementById('btnOptimize').style.display = 'flex'; // Restore as flex
+                    document.querySelectorAll('.result-panel').forEach(el => el.style.display = 'block');
+
+                    // Smooth scroll to results
+                    document.getElementById('allocationChart').scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+
+            } catch (err) {
+                console.error(err);
+                loader.innerHTML = '<span style="color:red">Optimization Failed. Server Error.</span>';
+            }
+        });
+
+        function renderDashboard(data) {
+            // 0. Update Source Status
+            if (data.data_source) {
+                document.getElementById('apiStatus').innerHTML = `<i class="fas fa-link" style="color:#48bb78;"></i> ${data.data_source}`;
+            }
+
+            // 1. METRICS
+            document.getElementById('liftVal').innerText = '+' + data.impact_metrics.national_inclusion_lift;
+            document.getElementById('utilVal').innerText = data.fiscal_summary.utilization_pct + '%';
+            document.getElementById('riskVal').innerText = '-' + (data.impact_metrics.high_risk_states_covered * 1.5).toFixed(1); // Derived metric
+            document.getElementById('roiVal').innerText = data.impact_metrics.roi_index;
+
+            // 2. TABLE
+            const tbody = document.getElementById('allocationTableBody');
+            tbody.innerHTML = '';
+
+            data.allocations.slice(0, 15).forEach(row => {
+                const tr = document.createElement('tr');
+
+                // Parse intervention string to badges
+                // Example: "Mobile Unit x5, Awareness Drive x1"
+                const badges = row.intervention_summary.split(', ').map(s => {
+                    return `<span class="tag-intervention">${s}</span>`;
+                }).join('');
+
+                const riskColor = row.risk_reduction > 5 ? '#38a169' : '#718096';
+
+                tr.innerHTML = `
+                    <td style="font-weight: 600; color: #2d3748;">
+                        ${row.state}
+                        <div style="font-size: 0.75rem; color: #718096; font-weight: 400; margin-top: 4px;">
+                            ${row.justification.substring(0, 45)}...
+                        </div>
+                    </td>
+                    <td style="font-family: 'Inter', monospace; font-weight: 600; color: #2b6cb0;">
+                        ₹ ${(row.allocation / 100000).toFixed(1)} L
+                    </td>
+                    <td>
+                        <div style="line-height: 1.6;">${badges}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: #38a169;">+${row.improvement}</div>
+                    </td>
+                    <td style="text-align: center;">
+                         <span style="color: ${riskColor}; font-weight: 600;">-${row.risk_reduction}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // 2.5 UNFUNDED TABLE
+            const unfundedBody = document.getElementById('unfundedTableBody');
+            const unfundedSection = document.getElementById('unfundedSection');
+
+            if (data.unfunded_mandates && data.unfunded_mandates.length > 0) {
+                unfundedSection.style.display = 'block';
+                unfundedBody.innerHTML = '';
+                data.unfunded_mandates.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.style.opacity = '0.8';
+                    tr.innerHTML = `
+                        <td style="font-weight: 600;">${row.state}</td>
+                        <td style="font-family: monospace; color: #e53e3e;">₹ ${(row.required_budget / 100000).toFixed(1)} L</td>
+                        <td style="font-size: 0.8rem;">${row.intervention_summary}</td>
+                    `;
+                    unfundedBody.appendChild(tr);
+                });
+            } else {
+                unfundedSection.style.display = 'none';
+            }
+
+            // 3. CHART
+            if (chart) chart.destroy();
+            const ctx = document.getElementById('allocationChart').getContext('2d');
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.chart_labels,
+                    datasets: [{
+                        label: 'Allocated Budget (INR)',
+                        data: data.chart_values,
+                        backgroundColor: '#4299e1',
+                        borderRadius: 6,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ₹ ${ctx.raw.toLocaleString()}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [5, 5], color: '#f7fafc' },
+                            ticks: {
+                                callback: function (value) {
+                                    return '₹' + (value / 100000) + 'L';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+    </script>
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

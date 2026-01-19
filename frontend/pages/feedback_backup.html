@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grievance & Feedback | ALRIS</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-top: 5px solid var(--gov-blue);
+        }
+
+        .form-header {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            color: var(--gov-blue);
+            font-size: 1.5rem;
+        }
+
+        .form-header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-section-title {
+            background: #f9f9f9;
+            padding: 10px 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gov-saffron);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .form-group label span.required {
+            color: #dc3545;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--gov-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 77, 146, 0.1);
+        }
+
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+            background: #fafafa;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            border-color: var(--gov-blue);
+            background: #f0f7ff;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .faq-section {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 15px 20px;
+            background: #f8fbff;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 20px;
+            display: none;
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-top: 1px solid #eee;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-question {
+            background: var(--gov-blue);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Standard Header -->
+    <div class="watermark">For Official Use Only</div>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">RESIDENT FEEDBACK PORTAL</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">UNIQUE IDENTIFICATION AUTHORITY
+                    OF INDIA (UIDAI)</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="/assets/images/aadhaar_logo.png" alt="Aadhaar Logo"
+                style="height: 50px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <div style="flex-grow:1 text-align:right; font-size:0.9rem; margin-left: 20px; opacity: 0.8;">
+            Grievance Redressal Mechanism v2.0
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h2>Grievance / Feedback Form</h2>
+            <p>Please enter required details to lodge your request.</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); submitGrievance();">
+            <div class="form-section-title">Personal Details</div>
+
+            <div class="form-group">
+                <label>Name as per Aadhaar <span class="required">*</span></label>
+                <input type="text" class="form-control" placeholder="Enter full name" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Mobile Number <span class="required">*</span></label>
+                    <input type="tel" class="form-control" placeholder="Enter 10-digit mobile number" required
+                        pattern="[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" placeholder="name@example.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>State <span class="required">*</span></label>
+                <select class="form-control" required>
+                    <option value="">-- Select State --</option>
+                    <option value="DL">Delhi</option>
+                    <option value="MH">Maharashtra</option>
+                    <option value="KA">Karnataka</option>
+                    <option value="TN">Tamil Nadu</option>
+                    <option value="UP">Uttar Pradesh</option>
+                    <option value="WB">West Bengal</option>
+                </select>
+            </div>
+
+            <div class="form-section-title">Grievance Details</div>
+
+            <div class="form-group">
+                <label>Grievance / Feedback For (Self/Others) <span class="required">*</span></label>
+                <select class="form-control" required>
+                    <option value="Self">Self</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Enter Grievance / Feedback Type <span class="required">*</span></label>
+                <select class="form-control" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="Enrolment">Enrolment Related</option>
+                    <option value="Update">Update Related</option>
+                    <option value="Operator">Operator/Center Behaviour</option>
+                    <option value="Technical">Technical Issue</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Enter Category Type <span class="required">*</span></label>
+                <select class="form-control" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="Delay">Delay in processing</option>
+                    <option value="Rejection">Rejection without valid reason</option>
+                    <option value="Corruption">Demand for excess money</option>
+                    <option value="Rude">Rude behaviour</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Select Supporting Document (if any)</label>
+                <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gov-blue);"></i>
+                    <p style="margin: 10px 0 0;">Click to upload document (PDF/JPG, Max 2MB)</p>
+                    <input type="file" id="fileInput" style="display: none;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 30px;">
+                <label>Enter Captcha <span class="required">*</span></label>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div
+                        style="background: #eee; padding: 10px 20px; font-family: monospace; font-size: 1.2rem; letter-spacing: 5px; font-weight: bold; border-radius: 4px;">
+                        8X2k9L
+                    </div>
+                    <button type="button" class="btn-tool-outline" style="min-width: 40px; padding: 0 10px;"><i
+                            class="fas fa-sync-alt"></i></button>
+                    <input type="text" class="form-control" style="max-width: 150px;" required placeholder="Enter code">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-tool-outline" onclick="window.history.back()">Back</button>
+                <button type="submit" class="btn-tool-blue" style="padding: 0 40px;">Next &nbsp; <i
+                        class="fas fa-arrow-right"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h3
+            style="color: var(--gov-blue); margin-bottom: 20px; border-bottom: 2px solid var(--gov-saffron); display: inline-block; padding-bottom: 5px;">
+            Frequently Asked Questions</h3>
+
+        <div class="faq-item">
+            <div class="faq-question">What is the timeline for grievance redressal? <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">Normally, grievances are resolved within 15 working days. However, complex cases
+                requiring field verification may take up to 30 days. You can track status using the SRN provided.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Can I file a complaint for someone else? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Yes, select "Others" in the "Grievance For" dropdown. You will need to provide their
+                EID/UID details if available.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What documents are supported for upload? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">We accept PDF, JPG, and PNG files. The file size should not exceed 2MB per document.
+                Ensure the scanned copy is legible.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">How do I track my previous complaints? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Use the "Check Status" link on the dashboard or call 1947 with your Service Request
+                Number (SRN).</div>
+        </div>
+    </div>
+
+    <!-- Global Footer -->
+    <footer class="uidai-global-footer">
+        <div class="dashboard-container">
+            <div style="text-align: center; font-size: 0.8rem; opacity: 0.8;">
+                <p>Copyright © 2026 Unique Identification Authority of India (UIDAI)</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle Logic
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.parentElement;
+                parent.classList.toggle('active');
+
+                // Toggle icon
+                const icon = item.querySelector('i');
+                if (parent.classList.contains('active')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+        });
+
+        function submitGrievance() {
+            const btn = document.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Grievance Submitted Successfully!\nYour Service Request Number (SRN) is: SR-2026-889900');
+                window.location.href = '/';
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

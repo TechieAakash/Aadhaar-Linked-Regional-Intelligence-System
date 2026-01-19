@@ -1,0 +1,223 @@
+/* 
+   ALRIS COMMAND CENTER - Official Design System (High Fidelity)
+   Ref: GoI Digital Identity Guidelines | WCAG 2.1 AA
+   Updated for Premium Aesthetics & Glassmorphism
+*/
+
+:root {
+    /* Core Government Palette - Deep & Authoritative */
+    --gov-blue: #0F4D92;
+    --gov-blue-dark: #0a3666;
+    --gov-blue-light: #2c6cb4;
+
+    --gov-saffron: #FF9933;
+    --gov-saffron-dark: #d67a1f;
+
+    --gov-green: #138808;
+    --gov-green-dark: #0d6306;
+
+    --gov-white: #FFFFFF;
+
+    /* Semantic Colors */
+    --color-alert: #D32F2F;
+    --color-alert-light: #fdecea;
+    --color-warning: #FF9800;
+    --color-warning-light: #fff3e0;
+    --color-success: #2E7D32;
+    --color-success-light: #e8f5e9;
+    --color-info: #0288D1;
+
+    /* Grays & Neutrals - Premium Slate Tones */
+    --bg-body: #F4F7FB;
+    /* Slight blue tint for premium feel */
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #FFFFFF;
+
+    --text-primary: #1A202C;
+    --text-secondary: #4A5568;
+    --text-muted: #718096;
+
+    --border-color: #E2E8F0;
+    --border-highlight: #CBD5E0;
+
+    /* Effects */
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-input: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+    /* Typography */
+    --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-data: 'Roboto Mono', monospace;
+
+    /* Spacing */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+}
+
+/* Global Reset & Base */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Overrides */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--gov-blue);
+    margin-top: 0;
+    letter-spacing: -0.015em;
+}
+
+h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* Utilities */
+.text-gov-blue {
+    color: var(--gov-blue);
+}
+
+.text-saffron {
+    color: var(--gov-saffron);
+}
+
+.text-green {
+    color: var(--gov-green);
+}
+
+.text-alert {
+    color: var(--color-alert);
+}
+
+.bg-white {
+    background-color: white;
+}
+
+/* Official Watermark */
+.watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 8rem;
+    color: var(--gov-blue);
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-family: var(--font-heading);
+    white-space: nowrap;
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E0;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #A0AEC0;
+}
+
+/* Tool Buttons */
+.btn-tool-outline {
+    background: transparent;
+    border: 1px solid var(--gov-blue);
+    color: var(--gov-blue);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-tool-outline:hover {
+    background: rgba(15, 77, 146, 0.05);
+}
+
+.btn-tool-blue {
+    background: var(--gov-blue);
+    border: 1px solid var(--gov-blue);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-tool-blue:hover {
+    background: var(--gov-blue-dark);
+}
+
+.btn-tool-red {
+    background: var(--color-alert);
+    border: 1px solid var(--color-alert);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-tool-red:hover {
+    background: #b91c1c;
+}
+
+.btn-tool-outline[disabled],
+.btn-tool-blue[disabled],
+.btn-tool-red[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

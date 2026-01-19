@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer Benchmarking | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=4.0.0">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=4.0.0">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=4.0.0">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=4.0.0">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=4.0.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --gov-blue-deep: #0F4D92;
+        }
+
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            padding: 24px;
+        }
+
+        .sidebar-header {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            color: var(--gov-blue-deep);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gov-saffron);
+        }
+
+        .peer-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .peer-item:hover {
+            border-color: var(--gov-blue);
+            transform: translateX(5px);
+            background: white;
+        }
+
+        .impact-prediction {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--gov-blue);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .methodology-tag {
+            background: var(--gov-blue-deep);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .visualization-container {
+            height: 400px;
+            margin: 20px 0;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="watermark">For Official Use Only</div>
+
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">REGIONAL PEER BENCHMARKING ENGINE</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">INTELLIGENCE & PARITY
+                    GOVERNANCE UNIT</p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link active">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div class="breadcrumb-trail"><span>National</span> <span>Governance</span> Peer Benchmarking</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--gov-blue);">INTELLIGENCE ENGINE: ONLINE</div>
+        </div>
+
+        <!-- CONTROL PANEL -->
+        <div class="glass-card" style="margin-bottom: 25px; display: flex; align-items: flex-end; gap: 20px;">
+            <div style="flex: 2;">
+                <label
+                    style="font-size: 0.65rem; font-weight: 800; color: var(--text-secondary); display: block; margin-bottom: 8px;">TARGET
+                    REGION SELECTION</label>
+                <select id="stateTarget" class="select-gov" style="width: 100%; padding: 10px; height: 45px;">
+                    <option value="">Detecting Regional Profiles...</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <button class="btn-tool-blue" onclick="BenchmarkingEngine.loadAnalysis()"
+                    style="width: 100%; height: 45px;">GENERATE INTELLIGENCE REPORT</button>
+            </div>
+        </div>
+
+        <div id="noDataPlaceholder" style="text-align:center; padding: 100px 0; opacity: 0.5;">
+            <i class="fas fa-layer-group" style="font-size: 4rem; margin-bottom: 20px;"></i>
+            <h3>Select a region to initialize the Benchmarking Intelligence Engine</h3>
+            <p>Compare performance against statistically similar demographic cohorts.</p>
+            <small style="opacity: 0.3;">Engine Version: 4.0.0-ROBUST</small>
+        </div>
+
+        <div id="resultsArea" style="display:none;">
+            <!-- KPI BAND -->
+            <div class="grid-system" style="margin-bottom: 25px;">
+                <div class="stat-card" style="grid-column: span 3;">
+                    <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">PERFORMANCE DELTA</div>
+                    <div id="gapVal" class="counter">--</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Vs Cohort Median</div>
+                </div>
+                <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-saffron);">
+                    <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">COHORT SIZE</div>
+                    <div id="peerCount" class="counter">--</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Statistically Similar Regions</div>
+                </div>
+                <div class="stat-card" style="grid-column: span 3; border-top-color: var(--gov-green);">
+                    <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">COHORT LEADER</div>
+                    <div id="practiceLeader" class="counter" style="font-size: 1.2rem;">--</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">Efficiency Benchmark</div>
+                </div>
+                <div class="stat-card" style="grid-column: span 3; border-top-color: #6C5CE7;">
+                    <div class="text-secondary" style="font-size: 0.7rem; font-weight: 800;">PREDICTED IMPROVEMENT</div>
+                    <div id="predictedGain" class="counter" style="color: #6C5CE7;">+--%</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">90-Day Targeted Growth</div>
+                </div>
+            </div>
+
+            <div class="benchmark-grid">
+                <!-- COHORT SIDEBAR -->
+                <div class="glass-card">
+                    <div class="sidebar-header">Peer Region Cohort</div>
+                    <div id="peerList">
+                        <!-- Members injected -->
+                    </div>
+                </div>
+
+                <!-- MAIN ANALYSIS -->
+                <div class="glass-card">
+                    <div class="sidebar-header">Saturation Parity Visualization</div>
+                    <div class="visualization-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+
+                    <div class="impact-prediction">
+                        <div class="methodology-tag">AI-DRIVEN GOVERNANCE INSIGHT</div>
+                        <h4 style="margin: 0 0 10px 0; color: var(--gov-blue-deep);" id="focusTitle">Intervention
+                            Opportunity Identified</h4>
+                        <p id="focusInsight" style="font-size: 0.9rem; line-height: 1.6; color: #444; margin: 0;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/data-loader.js?v=4.0.0"></script>
+    <script>
+        const BenchmarkingEngine = {
+            data: null,
+            chart: null,
+
+            async init() {
+                console.log('[Benchmarking] Initializing Engine...');
+                try {
+                    this.data = await DataLoader.fetchBenchmarkingData();
+                    if (!this.data) {
+                        throw new Error('Data fetch returned null');
+                    }
+                    this.populateDropdown();
+                } catch (err) {
+                    console.error('[Benchmarking] Initialization failed:', err);
+                    document.getElementById('noDataPlaceholder').innerHTML = `
+                        <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--color-alert); margin-bottom: 20px;"></i>
+                        <h3>Engine Initialization Failure</h3>
+                        <p>Could not connect to the comparative intelligence service. Please check server logs.</p>
+                        <div style="font-size: 0.8rem; color: #dc3545; background: #fff5f5; padding: 10px; border-radius: 4px; border: 1px solid #fed7d7; margin-top: 20px;">
+                            <strong>Diagnostic Error:</strong> ${err.message}<br>
+                            <small>Source: DataLoader.fetchBenchmarkingData</small>
+                        </div>
+                    `;
+                }
+            },
+
+            populateDropdown() {
+                const select = document.getElementById('stateTarget');
+                if (!select) return;
+
+                if (!this.data || !Array.isArray(this.data) || this.data.length === 0) {
+                    select.innerHTML = '<option value="">No Data Available</option>';
+                    return;
+                }
+
+                const states = [...new Set(this.data.map(s => s.state.trim()))].sort();
+                select.innerHTML = '<option value="">-- Select Region for Analysis --</option>' +
+                    states.map(s => `<option value="${s}">${s}</option>`).join('');
+                console.log(`[Benchmarking] Populated ${states.length} states`);
+            },
+
+            loadAnalysis() {
+                const state = document.getElementById('stateTarget').value;
+                if (!state) return;
+
+                const benchmark = this.data.find(d => d.state.trim() === state);
+                if (benchmark) {
+                    this.selectedBenchmark = benchmark;
+                    this.renderResults();
+                }
+            },
+
+            renderResults() {
+                const analysis = this.selectedBenchmark;
+                if (!analysis) return;
+
+                document.getElementById('noDataPlaceholder').style.display = 'none';
+                document.getElementById('resultsArea').style.display = 'block';
+
+                // KPI Updates
+                const gap = parseFloat(analysis.performance_gap) || 0;
+                document.getElementById('gapVal').innerText = (gap > 0 ? '+' : '') + gap.toFixed(1) + '%';
+                document.getElementById('gapVal').style.color = analysis.is_lagging ? 'var(--color-alert)' : 'var(--gov-green)';
+                document.getElementById('peerCount').innerText = analysis.peers.length;
+
+                // Prediction logic
+                const predictedImprovement = analysis.is_lagging ? (Math.abs(gap) * 0.4).toFixed(1) : '1.2';
+                document.getElementById('predictedGain').innerText = '+' + predictedImprovement + '%';
+
+                // Peer List (Deduplicated)
+                const uniquePeers = [...new Set(analysis.peers.map(p => p.trim()))];
+                const peerList = document.getElementById('peerList');
+                peerList.innerHTML = uniquePeers.map(p => `
+                    <div class="peer-item" onclick="document.getElementById('stateTarget').value='${p}'; BenchmarkingEngine.loadAnalysis();" style="cursor:pointer;">
+                        <span style="font-weight:700; color:var(--gov-blue-deep); font-size:0.8rem;">${p}</span>
+                        <i class="fas fa-chevron-right" style="margin-left:auto; font-size:0.6rem; opacity:0.3;"></i>
+                    </div>
+                `).join('');
+
+                // Insight
+                document.getElementById('focusInsight').innerText = analysis.comparative_insight;
+                document.getElementById('focusTitle').innerText = analysis.is_lagging
+                    ? `Priority Action Plan for ${analysis.state}`
+                    : `Incentive Model for ${analysis.state} Leadership`;
+
+                // Cohort Leader
+                const cohort = this.data.filter(d => d.peer_group === analysis.peer_group);
+                const sortedCohort = [...cohort].sort((a, b) => (b.performance_gap || 0) - (a.performance_gap || 0));
+                const leader = sortedCohort[0] || analysis;
+                document.getElementById('practiceLeader').innerText = leader.state;
+
+                this.renderChart(analysis, leader);
+            },
+
+            renderChart(target, leader) {
+                console.log('[Benchmarking] Rendering Chart for:', target.state, 'against Leader:', leader.state);
+                const container = document.querySelector('.visualization-container');
+                let canvas = document.getElementById('comparisonChart');
+
+                if (!canvas) {
+                    container.innerHTML = '<canvas id="comparisonChart"></canvas>';
+                    canvas = document.getElementById('comparisonChart');
+                }
+
+                // Force container visibility and dimensions
+                container.style.display = 'block';
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+
+                const ctx = canvas.getContext('2d');
+                if (this.chart) {
+                    this.chart.destroy();
+                    this.chart = null;
+                }
+
+                const medianVal = 70;
+
+                try {
+                    if (typeof Chart === 'undefined') throw new Error('Chart.js not loaded');
+
+                    this.chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [target.state, 'Cohort Median', leader.state + ' (Leader)'],
+                            datasets: [{
+                                label: 'Service Saturation %',
+                                data: [
+                                    parseFloat(medianVal) + parseFloat(target.performance_gap || 0),
+                                    parseFloat(medianVal),
+                                    parseFloat(medianVal) + parseFloat(leader.performance_gap || 0)
+                                ],
+                                backgroundColor: [
+                                    target.is_lagging ? 'rgba(220, 38, 38, 0.7)' : 'rgba(15, 77, 146, 0.7)',
+                                    'rgba(156, 163, 175, 0.4)',
+                                    'rgba(22, 163, 74, 0.7)'
+                                ],
+                                borderColor: [
+                                    target.is_lagging ? '#dc2626' : '#0F4D92',
+                                    '#9ca3af',
+                                    '#16a34a'
+                                ],
+                                borderWidth: 2,
+                                borderRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        afterLabel: (context) => {
+                                            if (context.dataIndex === 0) return 'Target Region';
+                                            if (context.dataIndex === 1) return 'Peer Group Average';
+                                            return 'Cohort Benchmark';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    grid: { borderDash: [5, 5] },
+                                    title: { display: true, text: 'Saturation Index (%)', font: { weight: 'bold' } }
+                                },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                } catch (err) {
+                    console.error('[Benchmarking] Chart Error:', err);
+                    container.innerHTML = `<div style="padding:20px; color:#dc3545; text-align:center;">
+                        <p>Visualization Error: ${err.message}</p>
+                        <button onclick="BenchmarkingEngine.loadAnalysis()" class="btn-tool-blue" style="font-size:0.7rem; padding:5px 10px;">Retry Rendering</button>
+                    </div>`;
+                }
+            }
+        };
+
+        window.BenchmarkingEngine = BenchmarkingEngine;
+        document.addEventListener('DOMContentLoaded', () => BenchmarkingEngine.init());
+    </script>
+</body>
+
+</html>

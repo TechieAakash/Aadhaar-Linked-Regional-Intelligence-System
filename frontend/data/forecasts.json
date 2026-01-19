@@ -1,0 +1,132 @@
+{
+  "simple": {
+    "target": "total_enrolment",
+    "periods_ahead": 3,
+    "forecast_values": [
+      831867.5,
+      808691.0,
+      785514.5
+    ],
+    "method": "moving_average_with_trend"
+  },
+  "state_forecasts": {
+    "Uttar Pradesh": {
+      "historical_avg": 111403.0,
+      "trend": 19467.67,
+      "forecast_3month": [
+        208742.0,
+        228209.0,
+        247677.0
+      ],
+      "expected_growth": 116.49
+    },
+    "Bihar": {
+      "historical_avg": 65973.0,
+      "trend": 12838.3,
+      "forecast_3month": [
+        130164.0,
+        143002.0,
+        155841.0
+      ],
+      "expected_growth": 79.37
+    },
+    "Madhya Pradesh": {
+      "historical_avg": 54210.0,
+      "trend": 13266.0,
+      "forecast_3month": [
+        120540.0,
+        133806.0,
+        147072.0
+      ],
+      "expected_growth": 80.26
+    },
+    "West Bengal": {
+      "historical_avg": 41023.0,
+      "trend": 10893.83,
+      "forecast_3month": [
+        95492.0,
+        106386.0,
+        117280.0
+      ],
+      "expected_growth": 146.33
+    },
+    "Maharashtra": {
+      "historical_avg": 40383.0,
+      "trend": 9457.57,
+      "forecast_3month": [
+        87671.0,
+        97128.0,
+        106586.0
+      ],
+      "expected_growth": 96.59
+    },
+    "Rajasthan": {
+      "historical_avg": 37843.0,
+      "trend": 9187.35,
+      "forecast_3month": [
+        83780.0,
+        92968.0,
+        102155.0
+      ],
+      "expected_growth": 111.54
+    },
+    "Gujarat": {
+      "historical_avg": 30560.0,
+      "trend": 3911.38,
+      "forecast_3month": [
+        50117.0,
+        54029.0,
+        57940.0
+      ],
+      "expected_growth": 90.67
+    },
+    "Assam": {
+      "historical_avg": 25040.0,
+      "trend": 2487.72,
+      "forecast_3month": [
+        37478.0,
+        39966.0,
+        42454.0
+      ],
+      "expected_growth": 110.6
+    },
+    "Karnataka": {
+      "historical_avg": 24402.0,
+      "trend": 6051.37,
+      "forecast_3month": [
+        54659.0,
+        60710.0,
+        66762.0
+      ],
+      "expected_growth": 73.0
+    },
+    "Tamil Nadu": {
+      "historical_avg": 23968.0,
+      "trend": 7894.98,
+      "forecast_3month": [
+        63443.0,
+        71338.0,
+        79233.0
+      ],
+      "expected_growth": 127.35
+    }
+  },
+  "stress_periods": {
+    "high_threshold": 462507.0,
+    "critical_threshold": 550246.0,
+    "periods": [
+      {
+        "month": "2025-03",
+        "total_activity": 14580234,
+        "daily_avg": 486007.8,
+        "stress_level": "High"
+      },
+      {
+        "month": "2025-12",
+        "total_activity": 14763861,
+        "daily_avg": 492128.7,
+        "stress_level": "High"
+      }
+    ]
+  }
+}

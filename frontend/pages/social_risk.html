@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Social Vulnerability & Aadhaar Inclusion Dashboard - ALRIS">
+    <title>Social Vulnerability Dashboard | ALRIS</title>
+
+    <!-- Gov Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="../css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="../css/unified-footer.css?v=3">
+
+    <style>
+        :root {
+            --nic-blue: #0A3D62;
+            --nic-ash: #F1F2F6;
+            --nic-saffron: #FF9933;
+            --nic-green: #138808;
+            --text-primary: #1A1A1A;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--nic-ash);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Layout Utilities */
+        .grid-system {
+            display: grid;
+            gap: 20px;
+        }
+
+        /* Header */
+        .gov-masthead {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation */
+        .nav-toolbar {
+            background: #fff;
+            padding: 0 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            padding: 12px 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--nic-blue);
+            border-bottom-color: var(--nic-blue);
+            font-weight: 700;
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--nic-blue);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-title {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--nic-blue);
+            margin: 5px 0;
+        }
+
+        .metric-meta {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* Map Section */
+        .map-container {
+            height: 600px;
+            background: #e6e6e6;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .map-overlay-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 500;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Breakdown Panel */
+        .breakdown-panel {
+            background: white;
+            height: 600px;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tables & Buttons */
+        .gov-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        .gov-table th {
+            background: var(--nic-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .gov-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .gov-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn-action {
+            background: var(--nic-blue);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: white;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .badge-critical {
+            background: #D32F2F;
+        }
+
+        .badge-high {
+            background: #F57C00;
+        }
+
+        .badge-medium {
+            background: #FBC02D;
+            color: #333;
+        }
+
+        .badge-low {
+            background: var(--nic-green);
+        }
+
+        /* Chart Box */
+        .chart-box {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            height: 320px;
+        }
+
+        /* Height adjustment for Forecast Chart */
+        .forecast-box {
+            height: 200px;
+            margin-bottom: 20px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        /* Analysis Panel */
+        #analysisPanel {
+            position: fixed;
+            right: -600px;
+            top: 0;
+            width: 550px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            z-index: 2100;
+            transition: right 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            overflow-y: auto;
+            padding: 30px;
+            border-left: 1px solid #eee;
+        }
+
+        #analysisPanel.open {
+            right: 0;
+        }
+
+        .panel-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
+            z-index: 2050;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .panel-backdrop.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .ml-card {
+            background: #f8fbff;
+            border: 1px solid #e1e9f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .ml-badge {
+            background: #0A3D62;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. Stick Header -->
+    <header class="gov-masthead">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="../assets/images/goi_logo.png" alt="GoI Emblem" style="height: 50px;">
+            <div style="border-left: 2px solid #ddd; padding-left: 15px;">
+                <h1 style="margin: 0; font-size: 1.2rem; color: var(--nic-blue); font-weight: 700;">ALRIS</h1>
+                <p style="margin: 0; font-size: 0.8rem; font-weight: 600;">Social Vulnerability & Inclusion Dashboard
+                </p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <select class="form-control" id="stateSelector"
+                style="padding: 5px; border-radius:3px; border:1px solid #ccc;">
+                <option value="all">All India</option>
+            </select>
+            <button class="btn-action" style="background: transparent; color: #333; border: 1px solid #ccc;">EN /
+                HI</button>
+            <div style="text-align: right; margin-left: 20px;"><img
+                    src="https://uidai.gov.in/images/logo/uidai_english_logo.svg" alt="Aadhaar Logo"
+                    style="height: 55px;"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-toolbar">
+        <a href="/" class="nav-link">🏠 Dashboard</a>
+        <a href="/lifecycle" class="nav-link">📊 Data Insights</a>
+        <a href="/equity" class="nav-link">⚖️ Service Equity</a>
+        <a href="/social_risk" class="nav-link active">🌍 Social Risk</a>
+        <a href="/forecasting" class="nav-link">📈 Forecasting</a>
+        <a href="/anomalies" class="nav-link">⚠️ Anomalies</a>
+        <a href="/benchmarking" class="nav-link">🧭 Peer Benchmarking</a>
+        <a href="/decisions" class="nav-link">🎯 Decisions</a>
+    </nav>
+
+    <div class="dashboard-container" style="max-width: 1400px; margin: 0 auto; padding: 20px;">
+
+        <!-- 2. KPIs -->
+        <div class="grid-system"
+            style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 25px;">
+            <div class="metric-card" style="border-left-color: var(--nic-saffron);">
+                <div class="metric-title">VULNERABILITY RISK SCORE</div>
+                <div class="metric-value" id="kpi-risk-score">--</div>
+                <div class="metric-meta">National Weighted Average</div>
+            </div>
+            <div class="metric-card" style="border-left-color: var(--nic-green);">
+                <div class="metric-title">SERVICE COVERAGE INDEX</div>
+                <div class="metric-value" id="kpi-coverage">--%</div>
+                <div class="metric-meta">Biometric Update Saturation</div>
+            </div>
+            <div class="metric-card" style="border-left-color: #D32F2F;">
+                <div class="metric-title">HIGH-RISK DISTRICTS</div>
+                <div class="metric-value" id="kpi-districts">--</div>
+                <div class="metric-meta">Requiring Immediate Intervention</div>
+            </div>
+            <div class="metric-card" style="border-left-color: var(--nic-blue);">
+                <div class="metric-title">POPULATION IMPACTED</div>
+                <div class="metric-value" id="kpi-pop">--%</div>
+                <div class="metric-meta">Living in Vulnerable Zones</div>
+            </div>
+        </div>
+
+        <!-- 3. Map & Breakdown -->
+        <div class="grid-system" style="grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="map-container" id="indiaMap">
+                <div class="map-overlay-controls">
+                    <div style="font-weight: 600; margin-bottom: 5px;">Layers</div>
+                    <label style="display:block;"><input type="checkbox" checked> Social Vulnerability</label>
+                    <label style="display:block;"><input type="checkbox"> Aadhaar Centers</label>
+                </div>
+            </div>
+
+            <div class="breakdown-panel">
+                <h3
+                    style="margin-top: 0; color: var(--nic-blue); border-bottom: 2px solid var(--nic-saffron); padding-bottom: 8px;">
+                    Risk Breakdown
+                </h3>
+                <div id="region-detail-content">
+                    <p
+                        style="font-size: 0.9rem; color: #666; font-style: italic; text-align: center; margin-top: 50px;">
+                        Select a region on map or table to view details.
+                    </p>
+                </div>
+                <!-- Breakdown Chart -->
+                <div style="margin-top: 20px; height: 250px;">
+                    <canvas id="breakdownChart"></canvas>
+                </div>
+
+                <!-- Detailed Bar Chart (Moved) -->
+                <div style="margin-top: 25px; height: 250px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">Comparative Analysis</h4>
+                    <canvas id="detailedBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Visual Insights -->
+        <div class="grid-system" style="grid-template-columns: 1fr 1fr; margin-bottom: 25px;">
+            <div class="chart-box">
+                <h4 style="margin: 0 0 15px 0; color:var(--nic-blue);">Vulnerability vs. Coverage</h4>
+                <div style="height: 250px;">
+                    <canvas id="correlationChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-box">
+                <h4 style="margin: 0 0 15px 0; color:var(--nic-blue);">Severity Heatmap</h4>
+                <div id="heatmapContainer" style="height: 250px; overflow-y: auto;">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 5. Table -->
+        <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <h3 style="margin:0; color: var(--nic-blue);">Regional Classification Analysis</h3>
+                <div>
+                    <button id="btnExportCSV" class="btn-action" style="background: #28a745;"><i
+                            class="fas fa-file-excel"></i>
+                        CSV</button>
+                    <button id="btnExportPDF" class="btn-action" style="background: #dc3545;"><i
+                            class="fas fa-file-pdf"></i> PDF</button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="gov-table" id="riskTable">
+                    <thead>
+                        <tr>
+                            <th>State / UT</th>
+                            <th>Vuln. Score</th>
+                            <th>Coverage</th>
+                            <th>Risk Category</th>
+                            <th>Rank</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riskTableBody">
+                        <!-- Populated JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Detailed Analysis Panel -->
+    <div class="panel-backdrop" id="panelBackdrop" onclick="closeAnalysisPanel()"></div>
+    <div id="analysisPanel">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+            <div style="flex:1;">
+                <span class="ml-badge">AI Regional Intelligence</span>
+                <h2 id="panelStateName" style="margin: 5px 0; font-size: 1.5rem;">State Analysis</h2>
+            </div>
+            <button onclick="closeAnalysisPanel()"
+                style="border:none; background:none; font-size:1.8rem; cursor:pointer; color:#999;">&times;</button>
+        </div>
+
+        <div id="panelContent">
+            <!-- Dynamically Populated -->
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <h4 style="margin:0 0 10px 0; font-size: 0.9rem; color: #555;">90-Day Service Gap Forecast</h4>
+            <div class="forecast-box">
+                <canvas id="forecastChart"></canvas>
+            </div>
+
+            <div
+                style="background:#fff3cd; padding:10px; border-radius:4px; border:1px solid #ffeeba; display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-clock" style="color:#856404;"></i>
+                <div>
+                    <div style="font-size:0.75rem; color:#856404; font-weight:600;">Backlog Clearance Estimate</div>
+                    <div id="burnDownText" style="font-size:0.85rem; font-weight:700; color:#533f03;">-- days with
+                        current capacity</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4 style="margin:0 0 10px 0; font-size: 0.9rem; color: #555;">District-Level Risk Hotspots</h4>
+                <span class="badge-warning-pulse"><i class="fas fa-exclamation-triangle"></i> Early Warning</span>
+            </div>
+            <div id="hotspotContainer">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="ml-card">
+            <h4 style="margin:0 0 10px 0; font-size: 0.9rem; color: #0A3D62;"><i class="fas fa-brain"></i> Strategic AI
+                Projection</h4>
+
+            <div style="margin-bottom: 10px;">
+                <p id="mlPredictionText" style="font-size: 0.85rem; line-height: 1.5; color: #444; margin: 0;"></p>
+            </div>
+
+            <!-- XAI Section -->
+            <div
+                style="background:rgba(10, 61, 98, 0.05); padding:10px; border-radius:4px; margin-bottom:10px; border-left:3px solid #0A3D62;">
+                <div style="font-size:0.7rem; font-weight:700; color:#0A3D62; margin-bottom:4px;">WHY THIS
+                    RECOMMENDATION?</div>
+                <ul id="xaiReasoning"
+                    style="margin:0; padding-left:15px; font-size:0.75rem; color:#555; line-height:1.4;">
+                    <!-- Populated -->
+                </ul>
+            </div>
+
+            <div class="confidence-grid">
+                <div class="confidence-item">
+                    <div class="conf-label">DATA FRESHNESS</div>
+                    <div class="conf-val" style="color:#2E7D32;">✅ 99.2%</div>
+                </div>
+                <div class="confidence-item">
+                    <div class="conf-label">HISTORICAL ACCURACY</div>
+                    <div class="conf-val">94.1%</div>
+                </div>
+                <div class="confidence-item">
+                    <div class="conf-label">PATTERN STABILITY</div>
+                    <div class="conf-val">Stable</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+            <button class="btn-action" style="width:100%; justify-content:center; padding: 12px;"
+                onclick="openPlanModalFromPanel()">
+                <i class="fas fa-file-contract"></i> GENERATE DEPLOYMENT ORDER
+            </button>
+        </div>
+    </div>
+
+    <!-- Plan Modal -->
+    <div id="planModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 25px; width: 500px; border-radius: 8px;">
+            <div
+                style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--nic-blue);">Create Intervention Plan</h3>
+                <button onclick="document.getElementById('planModal').style.display='none'"
+                    style="border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div id="modalContent"></div>
+
+            <!-- Enhanced Deployment Fields -->
+            <div style="margin-top:15px;" id="deploymentExtras">
+                <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:5px;">Priority
+                    Tier</label>
+                <select class="deployment-tier-select">
+                    <option value="1">🔴 Tier-1: Immediate Action (≤15 days)</option>
+                    <option value="2">🟠 Tier-2: Preventive Measures</option>
+                    <option value="3">🔵 Tier-3: Monitor Only</option>
+                </select>
+
+                <div class="deployment-stat-row">
+                    <span>Projected Impact:</span>
+                    <strong>12% Gap Reduction</strong>
+                </div>
+                <div class="deployment-stat-row">
+                    <span>Cost-Efficiency Score:</span>
+                    <strong>9.4/10</strong>
+                </div>
+                <div class="deployment-stat-row">
+                    <span>Auto-Expiry:</span>
+                    <strong><span id="expiryDate"></span></strong>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                <button class="btn-action" style="background: #6c757d;"
+                    onclick="document.getElementById('planModal').style.display='none'">Cancel</button>
+                <button class="btn-action"
+                    onclick="alert('Deployment Order Generated & Sent to Regional Office')">Confirm Deployment</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+
+            <div class="footer-links-row" style="margin-top: 5px;">
+                <a href="https://www.mygov.in/" target="_blank">My Gov</a>
+                <span class="separator">|</span>
+                <a href="https://www.digitalindia.gov.in/" target="_blank">Digital India</a>
+                <span class="separator">|</span>
+                <a href="https://www.gst.gov.in/" target="_blank">GST.gov.in</a>
+                <span class="separator">|</span>
+                <a href="https://dbtbharat.gov.in/" target="_blank">DBT Bharat</a>
+            </div>
+
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/social_risk.js"></script>
+</body>
+
+</html>

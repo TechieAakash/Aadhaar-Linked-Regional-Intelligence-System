@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Simulator | ALRIS Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sim-primary: #6C5CE7;
+            --sim-secondary: #A29BFE;
+        }
+
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .control-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid var(--sim-primary);
+        }
+
+        .simulation-view {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .slider-header label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .slider-header span {
+            font-family: var(--font-data);
+            font-weight: 700;
+            color: var(--sim-primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--sim-primary);
+        }
+
+        .metric-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pill-live {
+            background: rgba(22, 163, 74, 0.1);
+            color: #16a34a;
+        }
+
+        .pill-sim {
+            background: rgba(108, 92, 231, 0.1);
+            color: #6c5ce7;
+        }
+
+        .projection-card {
+            border: 1px dashed var(--sim-primary);
+            background: rgba(108, 92, 231, 0.02);
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="gov-masthead">
+        <div class="logo-section">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">POLICY SIMULATION HUB</h1>
+                <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">STRATEGIC PLANNING INTERFACE
+                </p>
+            </div>
+        </div>
+        <div style="text-align: right;"><img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg"
+                alt="Aadhaar Logo" style="height: 55px;"></div>
+    </header>
+
+    <nav class="nav-toolbar">
+        <a href="/equity" class="nav-link">← Return to Equity Index</a>
+        <div style="flex-grow:1;"></div>
+        <span class="status-pill pill-live">● SYSTEM LIVE</span>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="section-header">
+            <div>
+                <div class="breadcrumb-trail"><span>National</span> <span>Strategic</span> Policy Simulation</div>
+                <h2 style="margin: 5px 0 0 0;">National Inclusion Scenario Modeling</h2>
+            </div>
+            <div style="text-align: right;">
+                <button class="btn-tool-outline" onclick="resetSimulation()"><i class="fas fa-undo"></i> Reset
+                    Model</button>
+            </div>
+        </div>
+
+        <div class="simulator-grid">
+            <div class="simulation-view">
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 10px 0;">Impact Analysis: National Inclusion Score</h4>
+                        <p style="font-size: 0.9rem; color: #666;">Visualizing how policy adjustments affect service
+                            parity across demographics.</p>
+                    </div>
+                    <div
+                        style="text-align: center; background: #f0f4f8; padding: 15px; border-radius: 8px; min-width: 150px;">
+                        <div style="font-size: 0.7rem; font-weight: 700; color: #666; text-transform: uppercase;">
+                            Simulated Score</div>
+                        <div id="targetScore" style="font-size: 2.5rem; font-weight: 800; color: var(--sim-primary);">
+                            88.4</div>
+                        <div id="scoreDiff" style="font-size: 0.8rem; font-weight: 700; color: #16a34a;">+0.0 (Baseline)
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="height: 300px; position: relative; background: #fafafa; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #eee;">
+                    <canvas id="simChart"></canvas>
+                </div>
+
+                <div class="metric-comparison">
+                    <div class="projection-card">
+                        <h5 style="margin: 0 0 10px 0; color: var(--sim-primary);"><i class="fas fa-venus-mars"></i>
+                            Gender Parity Gap</h5>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div>
+                                <div style="font-size: 0.6rem; color: #666;">Current</div>
+                                <div style="font-size: 1.2rem; font-weight: 700;">4.2%</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.6rem; color: var(--sim-primary);">Projected</div>
+                                <div id="projectedGender"
+                                    style="font-size: 1.4rem; font-weight: 800; color: var(--sim-primary);">4.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="projection-card">
+                        <h5 style="margin: 0 0 10px 0; color: var(--sim-primary);"><i class="fas fa-city"></i>
+                            Rural-Urban Variance</h5>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div>
+                                <div style="font-size: 0.6rem; color: #666;">Current</div>
+                                <div style="font-size: 1.2rem; font-weight: 700;">7.8%</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.6rem; color: var(--sim-primary);">Projected</div>
+                                <div id="projectedRural"
+                                    style="font-size: 1.4rem; font-weight: 800; color: var(--sim-primary);">7.8%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <h4 style="margin: 0 0 20px 0; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px;">Simulation
+                    Handles</h4>
+
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <label>State Budget Allocation</label>
+                        <span id="valBudget">100%</span>
+                    </div>
+                    <input type="range" id="inputBudget" min="50" max="200" value="100" oninput="updateSimulation()">
+                    <p style="font-size: 0.65rem; color: #888; margin-top: 5px;">Adjusting operational funds for Zonal
+                        offices.</p>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <label>Mobile Unit Saturation</label>
+                        <span id="valMobile">Low</span>
+                    </div>
+                    <input type="range" id="inputMobile" min="0" max="100" value="20" oninput="updateSimulation()">
+                    <p style="font-size: 0.65rem; color: #888; margin-top: 5px;">Density of portable kits in remote
+                        sectors.</p>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <label>Authentication Sensitivity</label>
+                        <span id="valAuth">Balanced</span>
+                    </div>
+                    <input type="range" id="inputAuth" min="0" max="100" value="50" oninput="updateSimulation()">
+                    <p style="font-size: 0.65rem; color: #888; margin-top: 5px;">Risk threshold for biometric friction.
+                    </p>
+                </div>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #eee;">
+                    <button class="btn-tool-blue"
+                        style="width: 100%; padding: 12px; background: var(--sim-primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"
+                        onclick="authorizePolicy()">
+                        <i class="fas fa-check-double"></i> Authorize Scenario
+                    </button>
+                    <p style="font-size: 0.6rem; color: #999; text-align: center; margin-top: 10px;">Authorizing a
+                        scenario triggers a Zonal Governance review.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="uidai-global-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <img src="/assets/images/aadhaar_tagline.png" alt="Mera Aadhaar Meri Pehchan" class="footer-tagline">
+                <div class="brand-text">
+                    <span class="main-brand">UIDAI</span>
+                    <span class="sub-brand">Government of India</span>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                Copyright © 2025 Unique Identification Authority of India All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let simChart;
+        const baselineScore = 88.4;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            updateSimulation();
+        });
+
+        function initChart() {
+            const ctx = document.getElementById('simChart').getContext('2d');
+            simChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Live Baseline',
+                        data: [82, 83.5, 84, 85.2, 86, 86.8, 87.2, 88, 88.1, 88.3, 88.4, 88.4],
+                        borderColor: '#94a3b8',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Projected Scenario',
+                        data: [82, 83.5, 84, 85.2, 86, 86.8, 87.2, 88, 88.1, 88.3, 88.4, 88.4],
+                        borderColor: '#6c5ce7',
+                        backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#6c5ce7'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 10 } } }
+                    },
+                    scales: {
+                        y: { min: 80, max: 100, ticks: { font: { family: 'Roboto Mono', size: 9 } } },
+                        x: { ticks: { font: { family: 'Inter', size: 9 } } }
+                    }
+                }
+            });
+        }
+
+        function updateSimulation() {
+            const budget = parseInt(document.getElementById('inputBudget').value);
+            const mobile = parseInt(document.getElementById('inputMobile').value);
+            const auth = parseInt(document.getElementById('inputAuth').value);
+
+            // Labels update
+            document.getElementById('valBudget').innerText = budget + '%';
+            document.getElementById('valMobile').innerText = mobile < 30 ? 'Low' : (mobile < 70 ? 'Moderate' : 'High');
+            document.getElementById('valAuth').innerText = auth < 30 ? 'Lenient' : (auth < 70 ? 'Balanced' : 'Strict');
+
+            // Calculation Logic (Simplified Simulation)
+            const budgetImpact = (budget - 100) * 0.05;
+            const mobileImpact = (mobile - 20) * 0.08;
+            const authImpact = (50 - auth) * 0.03; // Higher security = more friction = lower inclusion
+
+            const totalImpact = budgetImpact + mobileImpact + authImpact;
+            const newScore = Math.min(99.9, (baselineScore + totalImpact)).toFixed(1);
+            const diff = (newScore - baselineScore).toFixed(1);
+
+            // UI Update
+            document.getElementById('targetScore').innerText = newScore;
+            const diffEl = document.getElementById('scoreDiff');
+            diffEl.innerText = (diff >= 0 ? '+' : '') + diff + ' (' + (diff >= 0 ? 'Improvement' : 'Degradation') + ')';
+            diffEl.style.color = diff >= 0 ? '#16a34a' : '#dc2626';
+
+            // Projected Metrics
+            document.getElementById('projectedGender').innerText = Math.max(0.5, (4.2 - totalImpact * 0.3)).toFixed(1) + '%';
+            document.getElementById('projectedRural').innerText = Math.max(0.2, (7.8 - totalImpact * 0.6)).toFixed(1) + '%';
+
+            // Chart Update
+            if (simChart) {
+                const newData = simChart.data.datasets[1].data.map((val, i) => {
+                    if (i < 8) return val; // Past data
+                    const progression = (i - 7) / 4;
+                    return Math.min(100, parseFloat(val) + (totalImpact * progression));
+                });
+                simChart.data.datasets[1].data = newData;
+                simChart.update('none');
+            }
+        }
+
+        function authorizePolicy() {
+            const score = document.getElementById('targetScore').innerText;
+            alert(`SCENARIO AUTHORIZED\n\nTarget National Inclusion Score: ${score}\nSimulation Hash: SIM-UIDAI-${Math.random().toString(36).substr(2, 9).toUpperCase()}\n\nRegional Offices will be notified of modified baseline targets.`);
+        }
+
+        function resetSimulation() {
+            document.getElementById('inputBudget').value = 100;
+            document.getElementById('inputMobile').value = 20;
+            document.getElementById('inputAuth').value = 50;
+            updateSimulation();
+        }
+    </script>
+</body>
+
+</html>

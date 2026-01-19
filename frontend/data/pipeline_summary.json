@@ -1,0 +1,29 @@
+{
+  "pipeline": "ALRIS Analytics Pipeline",
+  "version": "1.0.0",
+  "execution_time": "31.45 seconds",
+  "started_at": "2026-01-19 21:38:41",
+  "completed_at": "2026-01-19 21:39:12",
+  "modules_executed": [
+    "Data Preparation",
+    "Feature Engineering",
+    "Lifecycle Intelligence",
+    "Demand Forecasting",
+    "Anomaly Detection",
+    "Decision Support",
+    "Service Equity Index"
+  ],
+  "outputs": {
+    "charts": "C:\\Users\\AAKASH\\OneDrive\\Desktop\\UIDAI\\output\\charts",
+    "reports": "C:\\Users\\AAKASH\\OneDrive\\Desktop\\UIDAI\\output\\reports",
+    "frontend_data": "C:\\Users\\AAKASH\\OneDrive\\Desktop\\UIDAI\\frontend\\data"
+  },
+  "statistics": {
+    "total_enrolment_records": 982599,
+    "total_demographic_records": 1222252,
+    "total_biometric_records": 1765720,
+    "states_analyzed": 61,
+    "recommendations_generated": 9,
+    "anomalies_detected": 29
+  }
+}

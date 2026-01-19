@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.DS_Store
+test_pdf_export.pdf
+debug_output.txt
+debug_output_2.txt
+output/data/
+output/charts/
+*.log
+.env
