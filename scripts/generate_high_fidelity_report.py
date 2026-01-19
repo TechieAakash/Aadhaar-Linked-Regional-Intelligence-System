@@ -23,8 +23,8 @@ COLORS = {
     'light_gray': '#f8f9fa'
 }
 
-OUTPUT_DIR = os.path.join(os.getcwd(), 'output', 'reports')
-DATA_DIR = os.path.join(os.getcwd(), 'output', 'data')
+OUTPUT_DIR = os.path.join(os.getcwd(), 'static', 'assets', 'infographics')
+DATA_DIR = os.path.join(os.getcwd(), 'data')
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Regional Zone Mapping for Cleaner Faceted Views

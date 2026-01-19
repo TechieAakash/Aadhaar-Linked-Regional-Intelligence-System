@@ -586,7 +586,7 @@ class AnomalyDetectionEngine:
         ax.set_ylabel('Enrolment Count')
         plt.tight_layout()
         
-        chart_path = os.path.join(output_path, 'output', 'charts')
+        chart_path = os.path.join(output_path, 'static', 'assets', 'charts')
         os.makedirs(chart_path, exist_ok=True)
         plt.savefig(os.path.join(chart_path, 'anomaly_timeline.png'), dpi=150, bbox_inches='tight')
         plt.close()
@@ -658,7 +658,7 @@ class AnomalyDetectionEngine:
         print("\n[SAVE] Saving anomaly report...")
         from backend.utils import save_json, convert_to_native_types
         
-        json_path = os.path.join(output_path, 'frontend', 'data')
+        json_path = os.path.join(output_path, 'data')
         os.makedirs(json_path, exist_ok=True)
         
         report_clean = convert_to_native_types(self.report)
@@ -687,7 +687,7 @@ def run_anomaly_detection(processed_data, features, output_path):
     ingestor = IngestionLayer(api_key="SECURE_MOCK_KEY_123") 
     
     # 2. Ingest Data (Real-time + Historical)
-    data_path = os.path.join(output_path, 'output', 'data')
+    data_path = os.path.join(output_path, 'data')
     ingested_data = ingestor.aggregate_ingested_data(data_path)
     
     # 3. Initialize Engine
@@ -715,7 +715,7 @@ def run_anomaly_detection(processed_data, features, output_path):
     engine.apply_pattern_correlation()          # [CORRELATION]
     
     # STAGE 6: Peer Benchmarking
-    benchmark_file = os.path.join(output_path, 'output', 'data', 'regional_benchmarks.csv')
+    benchmark_file = os.path.join(output_path, 'data', 'regional_benchmarks.csv')
     engine.detect_peer_lag_anomalies(benchmark_file)
     
     engine.generate_anomaly_visualization(output_path)

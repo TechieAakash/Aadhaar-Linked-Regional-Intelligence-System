@@ -349,7 +349,7 @@ class DataPreparationLayer:
         print("\n[SAVE] Saving aggregations...")
         
         # Save CSVs to output directory
-        csv_path = os.path.join(output_path, 'output', 'data')
+        csv_path = os.path.join(output_path, 'data')
         os.makedirs(csv_path, exist_ok=True)
         
         self.monthly_agg.to_csv(os.path.join(csv_path, 'monthly_aggregation.csv'), index=False)
@@ -357,7 +357,7 @@ class DataPreparationLayer:
         self.state_monthly_agg.to_csv(os.path.join(csv_path, 'state_monthly_aggregation.csv'), index=False)
         
         # Save JSON for frontend
-        json_path = os.path.join(output_path, 'frontend', 'data')
+        json_path = os.path.join(output_path, 'data')
         os.makedirs(json_path, exist_ok=True)
         
         self.monthly_agg.to_json(os.path.join(json_path, 'monthly_data.json'), orient='records')

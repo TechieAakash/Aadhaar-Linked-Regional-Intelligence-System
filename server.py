@@ -6,12 +6,11 @@ import csv
 from flask_cors import CORS
 from backend.budget_optimizer import maximize_inclusion
 
-app = Flask(__name__, static_folder='frontend')
+app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
 
 # Configuration
-DATA_DIR = os.path.join(os.getcwd(), 'frontend', 'data')
-PAGES_DIR = os.path.join(os.getcwd(), 'frontend', 'pages')
+DATA_DIR = os.path.join(os.getcwd(), 'data')
 
 # --- Security Configuration ---
 # API Key for UIDAI Analytics (Loaded from Environment with hardcoded fallback to prevent interruption)
@@ -34,82 +33,80 @@ def require_api_key(f):
 
 @app.route('/')
 def index():
-    return send_from_directory('frontend', 'index.html')
+    return render_template('index.html')
 
 @app.route('/policy-simulator')
 def policy_simulator():
-    return send_from_directory(PAGES_DIR, 'policy_simulator.html')
+    return render_template('policy_simulator.html')
 
 @app.route('/lifecycle')
 def lifecycle():
-    return send_from_directory(PAGES_DIR, 'lifecycle.html')
+    return render_template('lifecycle.html')
 
 @app.route('/planning')
 def planning():
-    return send_file(os.path.join(os.getcwd(), 'frontend', 'pages', 'resource_planning.html'))
+    return render_template('resource_planning.html')
 
 @app.route('/forecasting')
 def forecasting():
-    return send_from_directory(PAGES_DIR, 'forecasting.html')
+    return render_template('forecasting.html')
 
 @app.route('/anomalies')
 def anomalies():
-    return send_from_directory(PAGES_DIR, 'anomalies.html')
+    return render_template('anomalies.html')
 
 @app.route('/decisions')
 def decisions():
-    return send_from_directory(PAGES_DIR, 'decisions.html')
+    return render_template('decisions.html')
 
 @app.route('/execution-plan')
 def execution_plan():
-    return send_from_directory(PAGES_DIR, 'execution_plan.html')
+    return render_template('execution_plan.html')
 
 @app.route('/feedback')
 def feedback():
-    return send_from_directory(PAGES_DIR, 'feedback.html')
+    return render_template('feedback.html')
 
 @app.route('/terms')
 def terms():
-    return send_from_directory(PAGES_DIR, 'terms.html')
+    return render_template('terms.html')
 
 @app.route('/help')
 def help():
-    return send_from_directory(PAGES_DIR, 'help.html')
+    return render_template('help.html')
 
 @app.route('/equity')
 def equity():
-    return send_file(os.path.join(os.getcwd(), 'frontend', 'pages', 'equity_index.html'))
+    return render_template('equity_index.html')
 
 @app.route('/equity/insights')
 def equity_insights():
-    return send_file(os.path.join(os.getcwd(), 'frontend', 'pages', 'equity_insights.html'))
+    return render_template('equity_insights.html')
 
 @app.route('/social_risk')
 def social_risk():
-    return send_from_directory(PAGES_DIR, 'social_risk.html')
+    return render_template('social_risk.html')
 
 @app.route('/benchmarking')
 def benchmarking():
-    return send_from_directory(PAGES_DIR, 'benchmarking.html')
+    return render_template('benchmarking.html')
 
-
-
-# --- Static Asset Routes (Critical for Styling & Map) ---
+# --- Static Asset Routes (Fallback for explicit calls) ---
 @app.route('/css/<path:filename>')
 def serve_css(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'frontend', 'css'), filename)
+    return send_from_directory(os.path.join(os.getcwd(), 'static', 'css'), filename)
 
 @app.route('/js/<path:filename>')
 def serve_js(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'frontend', 'js'), filename)
+    return send_from_directory(os.path.join(os.getcwd(), 'static', 'js'), filename)
 
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'frontend', 'assets'), filename)
+    return send_from_directory(os.path.join(os.getcwd(), 'static', 'assets'), filename)
 
-@app.route('/output/<path:filename>')
-def serve_output(filename):
-    return send_from_directory(os.path.join(os.getcwd(), 'output'), filename)
+@app.route('/data/<path:filename>')
+def serve_data_files(filename):
+    return send_from_directory(os.path.join(os.getcwd(), 'data'), filename)
 # -------------------------------------------------------
 
 @app.route('/api/data/<path:filename>')
@@ -119,16 +116,10 @@ def get_data(filename):
         if not filename.endswith('.json'):
             return jsonify({"error": "Only JSON files allowed"}), 400
         
-        # Primary check: frontend/data
         if os.path.exists(os.path.join(DATA_DIR, filename)):
             return send_from_directory(DATA_DIR, filename)
             
-        # Summerized Fallback: output/data
-        output_data_dir = os.path.join(os.getcwd(), 'output', 'data')
-        if os.path.exists(os.path.join(output_data_dir, filename)):
-            return send_from_directory(output_data_dir, filename)
-            
-        return jsonify({"error": "File not found in any data directory"}), 404
+        return jsonify({"error": "File not found in data directory"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -339,7 +330,7 @@ def download_audit():
             return jsonify({"error": "Audit logs are empty"}), 404
 
         # Define CSV output path
-        csv_path = os.path.join(os.getcwd(), 'output', 'admin_audit_trail.csv')
+        csv_path = os.path.join(os.getcwd(), 'data', 'admin_audit_trail.csv')
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
         
         # Create DataFrame and Export
@@ -357,8 +348,8 @@ def download_audit():
 def get_social_risk():
     """Returns Integrated Risk Data (CSV -> JSON)"""
     try:
-        path = os.path.join(os.getcwd(), 'output', 'data', 'integrated_service_risk.csv')
-        features_path = os.path.join(os.getcwd(), 'output', 'data', 'social_vulnerability_features.csv')
+        path = os.path.join(os.getcwd(), 'data', 'integrated_service_risk.csv')
+        features_path = os.path.join(os.getcwd(), 'data', 'social_vulnerability_features.csv')
         
         if os.path.exists(path):
             data = []
@@ -402,7 +393,7 @@ def get_social_risk():
 def get_social_fairness():
     """Returns Fairness Analysis Data (CSV -> JSON)"""
     try:
-        path = os.path.join(os.getcwd(), 'output', 'data', 'social_fairness_analysis.csv')
+        path = os.path.join(os.getcwd(), 'data', 'social_fairness_analysis.csv')
         if os.path.exists(path):
             data = []
             states_seen = set()
@@ -423,7 +414,7 @@ def get_social_fairness():
 def get_social_insights():
     """Returns Explainable Insights (JSON)"""
     try:
-        path = os.path.join(os.getcwd(), 'output', 'data', 'social_insights.json')
+        path = os.path.join(os.getcwd(), 'data', 'social_insights.json')
         if os.path.exists(path):
             with open(path, 'r') as f:
                 data = json.load(f)
@@ -450,7 +441,7 @@ def optimize_budget():
 def export_social_risk_csv():
     """Exports the integrated social risk data as CSV."""
     try:
-        path = os.path.join(os.getcwd(), 'output', 'data', 'integrated_service_risk.csv')
+        path = os.path.join(os.getcwd(), 'data', 'integrated_service_risk.csv')
         if os.path.exists(path):
             # For simplicity, we just send the existing CSV
             return send_file(path, as_attachment=True, download_name=f"Regional_Analysis_{datetime.now().strftime('%Y%m%d')}.csv")
@@ -465,8 +456,8 @@ def export_social_risk_pdf():
     try:
         from fpdf import FPDF
         
-        path = os.path.join(os.getcwd(), 'output', 'data', 'integrated_service_risk.csv')
-        features_path = os.path.join(os.getcwd(), 'output', 'data', 'social_vulnerability_features.csv')
+        path = os.path.join(os.getcwd(), 'data', 'integrated_service_risk.csv')
+        features_path = os.path.join(os.getcwd(), 'data', 'social_vulnerability_features.csv')
         
         if os.path.exists(path):
             data = []
@@ -531,7 +522,7 @@ def export_social_risk_pdf():
             pdf.cell(0, 10, 'Confidential - For Official Use Only | UIDAI FPEWS Dashboard', 0, 1, 'C')
             
             # Save PDF
-            pdf_path = os.path.join(os.getcwd(), 'output', 'Regional_Classification_Analysis.pdf')
+            pdf_path = os.path.join(os.getcwd(), 'data', 'Regional_Classification_Analysis.pdf')
             os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
             pdf.output(pdf_path)
             

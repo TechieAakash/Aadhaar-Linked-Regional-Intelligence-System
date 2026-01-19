@@ -40,7 +40,7 @@ def fetch_live_data(api_key):
     except:
         return {}
 
-def maximize_inclusion(budget_total, fairness_path='output/data/social_fairness_analysis.csv', risk_path='output/data/integrated_service_risk.csv'):
+def maximize_inclusion(budget_total, fairness_path='data/social_fairness_analysis.csv', risk_path='data/integrated_service_risk.csv'):
     """
     Advanced ALRIS Strategic Planning Engine.
     Objective: Maximize National Inclusion Score subject to Budget Constraints.

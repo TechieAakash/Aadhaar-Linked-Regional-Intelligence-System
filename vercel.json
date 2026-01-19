@@ -13,19 +13,19 @@
         },
         {
             "src": "/css/(.*)",
-            "dest": "frontend/css/$1"
+            "dest": "static/css/$1"
         },
         {
             "src": "/js/(.*)",
-            "dest": "frontend/js/$1"
+            "dest": "static/js/$1"
         },
         {
             "src": "/assets/(.*)",
-            "dest": "frontend/assets/$1"
+            "dest": "static/assets/$1"
         },
         {
-            "src": "/output/(.*)",
-            "dest": "output/$1"
+            "src": "/data/(.*)",
+            "dest": "data/$1"
         },
         {
             "src": "/(.*)",
