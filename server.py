@@ -13,6 +13,25 @@ CORS(app)
 DATA_DIR = os.path.join(os.getcwd(), 'frontend', 'data')
 PAGES_DIR = os.path.join(os.getcwd(), 'frontend', 'pages')
 
+# --- Security Configuration ---
+# API Key for UIDAI Analytics (Loaded from Environment with hardcoded fallback to prevent interruption)
+DEFAULT_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16"
+UIDAI_API_KEY = os.getenv('UIDAI_API_KEY', DEFAULT_KEY)
+
+def require_api_key(f):
+    """Simple decorator to enforce API key validation."""
+    from functools import wraps
+    from flask import request
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # We allow the request if the key matches the environment variable OR the default fallback
+        provided_key = request.headers.get('x-api-key')
+        if provided_key != UIDAI_API_KEY and provided_key != DEFAULT_KEY:
+            return jsonify({"error": "Unauthorized: Invalid API Key"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+# ------------------------------
+
 @app.route('/')
 def index():
     return send_from_directory('frontend', 'index.html')
@@ -114,6 +133,7 @@ def get_data(filename):
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/train')
+@require_api_key
 def train_model():
     """Trigger background model training."""
     # In a real app, this would trigger a Celery task.
@@ -124,6 +144,7 @@ def train_model():
     })
 
 @app.route('/api/anomaly/investigate/<state>')
+@require_api_key
 def investigate_anomaly(state):
     """
     Returns deterministic ML insights for a specific state anomaly.
@@ -182,6 +203,7 @@ def investigate_anomaly(state):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@require_api_key
 @app.route('/api/stats')
 def get_stats():
     """Return system health and pipeline statistics."""
@@ -216,6 +238,7 @@ from datetime import datetime
 from flask import request
 
 @app.route('/api/admin/block', methods=['POST'])
+@require_api_key
 def block_entity():
     """Blocks a high-risk entity (center/state) and logs the action."""
     try:
@@ -264,6 +287,7 @@ def block_entity():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/admin/undo', methods=['POST'])
+@require_api_key
 def undo_action():
     """Reverses the last administrative action for an entity."""
     try:
@@ -330,6 +354,7 @@ def download_audit():
 
 # --- Social Vulnerability API ---
 @app.route('/api/social/risk')
+@require_api_key
 def get_social_risk():
     """Returns Integrated Risk Data (CSV -> JSON)"""
     try:
@@ -358,6 +383,7 @@ def get_social_risk():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/social/fairness')
+@require_api_key
 def get_social_fairness():
     """Returns Fairness Analysis Data (CSV -> JSON)"""
     try:
@@ -373,6 +399,7 @@ def get_social_fairness():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/social/insights')
+@require_api_key
 def get_social_insights():
     """Returns Explainable Insights (JSON)"""
     try:
@@ -386,6 +413,7 @@ def get_social_insights():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/budget/optimize', methods=['POST'])
+@require_api_key
 def optimize_budget():
     try:
         from flask import request
@@ -398,6 +426,7 @@ def optimize_budget():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/social/export/csv')
+@require_api_key
 def export_social_risk_csv():
     """Exports the integrated social risk data as CSV."""
     try:
@@ -426,6 +455,7 @@ def export_social_risk_csv():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/social/export/pdf')
+@require_api_key
 def export_social_risk_pdf():
     """Exports the integrated social risk data as a formatted PDF report."""
     try:
