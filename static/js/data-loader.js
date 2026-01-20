@@ -38,10 +38,11 @@ const DataLoader = {
                 const staticPath = `${window.location.origin}/data/${filename}?v=${timestamp}`;
                 console.warn(`[ALRIS] API Failed (${response.status}). Trying Static: ${staticPath}`);
                 const localResp = await fetch(staticPath);
-                if (localResp.ok) return await localResp.json();
+                if (localResp.ok) return (await localResp.json()) || {};
                 throw new Error(`Server API Error: ${response.status} | Static Path Error: ${localResp.status}`);
             }
-            return await response.json();
+            const data = await response.json();
+            return data || {};
         } catch (e) {
             let errorMsg = e.message;
             if (e instanceof TypeError && e.message === "Failed to fetch") {

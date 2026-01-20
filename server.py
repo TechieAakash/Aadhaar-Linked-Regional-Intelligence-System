@@ -56,7 +56,23 @@ def smart_response(data, status=200):
     from flask import has_request_context
     if has_request_context():
         return jsonify(data), status
-    return data
+    # Clean data for Anvil Uplink (removes NaN/Inf which crash Anvil JS)
+    return clean_for_anvil(data)
+
+def clean_for_anvil(obj):
+    """Recursively clean objects for Anvil (handles NaN, Inf, and None)."""
+    import math
+    if isinstance(obj, list):
+        return [clean_for_anvil(i) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: clean_for_anvil(v) for k, v in obj.items()}
+    elif isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return 0.0
+        return obj
+    elif obj is None:
+        return ""
+    return obj
 
 # --- Anvil Uplink Connectivity ---
 ANVIL_KEY = os.environ.get("ANVIL_UPLINK_KEY")
