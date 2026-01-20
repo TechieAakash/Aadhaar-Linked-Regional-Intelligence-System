@@ -144,10 +144,18 @@ function renderKPIs(data) {
     const avgRisk = data.reduce((a, b) => a + b.integrated_risk_score, 0) / data.length;
     const avgCov = data.reduce((a, b) => a + (b.biometric_update_ratio || 0), 0) / data.length;
 
-    document.getElementById('kpi-risk-score').innerText = avgRisk.toFixed(1);
-    document.getElementById('kpi-coverage').innerText = (avgCov * 100).toFixed(1) + '%';
-    document.getElementById('kpi-districts').innerText = critical;
-    document.getElementById('kpi-pop').innerText = "12.4%"; 
+    // Safely update KPI elements if they exist
+    const kpiRiskScore = document.getElementById('kpi-risk-score');
+    const kpiCoverage = document.getElementById('kpi-coverage');
+    const kpiDistricts = document.getElementById('kpi-districts');
+    const kpiPop = document.getElementById('kpi-pop');
+    
+    if (kpiRiskScore) kpiRiskScore.innerText = avgRisk.toFixed(1);
+    if (kpiCoverage) kpiCoverage.innerText = (avgCov * 100).toFixed(1) + '%';
+    if (kpiDistricts) kpiDistricts.innerText = critical;
+    if (kpiPop) kpiPop.innerText = "12.4%";
+    
+    console.log("[ALRIS] KPIs rendered:", { avgRisk: avgRisk.toFixed(1), avgCov: (avgCov * 100).toFixed(1), critical });
 }
 
 // 3. Table Logic
