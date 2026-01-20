@@ -78,7 +78,12 @@ async function initDashboard() {
         console.log("[ALRIS] Populating state selector...");
         populateStateSelector(riskData);
         
-        document.getElementById('lastRefresh').innerText = new Date().toLocaleDateString();
+        // Update last refresh time if element exists
+        const lastRefreshEl = document.getElementById('lastRefresh');
+        if (lastRefreshEl) {
+            lastRefreshEl.innerText = new Date().toLocaleDateString();
+        }
+        
         console.log("[ALRIS] Dashboard initialization complete!");
 
     } catch (error) {
