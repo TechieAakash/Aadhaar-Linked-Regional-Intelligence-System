@@ -333,10 +333,12 @@
                             // Delhi variants
                             if (normalizedName === "Delhi" || normalizedName === "Nct Of Delhi") normalizedName = "NCT of Delhi";
 
-                            // Store original data reference using normalized key
-                            // (We lowercase for lookup consistency)
-                            featureMap[normalizedName.toLowerCase()] = f;
-                            stateSet.add(normalizedName);
+                            // Only add if not already in featureMap (prevents duplicates from multiple data rows)
+                            const key = normalizedName.toLowerCase();
+                            if (!featureMap[key]) {
+                                featureMap[key] = f;
+                                stateSet.add(normalizedName);
+                            }
                         }
                     });
                 }
@@ -433,21 +435,40 @@
                         // Look up using the Lowercase of the dropdown value (which is normalized Title Case)
                         const stats = featureMap[selectedState.toLowerCase()];
 
-                        // 1. Zoom Map
+                        // 1. Zoom Map with better matching
                         let found = false;
                         geoLayer.eachLayer(layer => {
                             const props = layer.feature.properties;
-                            // Naive string matching for map bounds
-                            const name = (props.st_nm || props.NAME_1 || "").toLowerCase();
-                            // We compare against selectedState.toLowerCase() which might be slightly different 
-                            // from map properties, so we use 'includes' or fuzzy match if needed.
-                            // For strictness, let's try direct compare first.
-                            if (name === selectedState.toLowerCase() || name.includes(selectedState.toLowerCase())) {
+                            const mapStateName = (props.st_nm || props.NAME_1 || "").toLowerCase().trim();
+                            const selectedLower = selectedState.toLowerCase().trim();
+
+                            // Try multiple matching strategies
+                            let isMatch = false;
+
+                            // Direct match
+                            if (mapStateName === selectedLower) isMatch = true;
+
+                            // Handle state name variants in GeoJSON
+                            if (selectedLower === "jammu & kashmir" && (mapStateName.includes("jammu") || mapStateName.includes("kashmir"))) isMatch = true;
+                            if (selectedLower === "nct of delhi" && mapStateName.includes("delhi")) isMatch = true;
+                            if (selectedLower === "west bengal" && mapStateName.includes("bengal")) isMatch = true;
+                            if (selectedLower === "tamil nadu" && mapStateName.includes("tamil")) isMatch = true;
+                            if (selectedLower === "andhra pradesh" && mapStateName.includes("andhra")) isMatch = true;
+
+                            // Partial match as fallback
+                            if (!isMatch && selectedLower.length > 5 && mapStateName.includes(selectedLower.substring(0, 5))) {
+                                isMatch = true;
+                            }
+
+                            if (isMatch && !found) {
                                 map.fitBounds(layer.getBounds());
-                                layer.openPopup();
                                 found = true;
                             }
                         });
+
+                        if (!found) {
+                            console.warn(`Could not zoom to state: ${selectedState}`);
+                        }
 
                         // 2. Update Dashboard Cards
                         if (stats) {
