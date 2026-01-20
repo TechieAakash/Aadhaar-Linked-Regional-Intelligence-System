@@ -10,3 +10,4 @@ statsmodels
 ruptures
 openpyxl
 xlrd
+gunicorn

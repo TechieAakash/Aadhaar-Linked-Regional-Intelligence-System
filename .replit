@@ -1,0 +1,10 @@
+run = "python server.py"
+entrypoint = "server.py"
+
+[packager]
+# Replit uses this to auto-detect and install packages
+language = "python3"
+
+[env]
+# Optional: Set default environment variables
+UIDAI_API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16"

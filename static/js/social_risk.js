@@ -2,6 +2,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initDashboard();
+    
+    // Bind Export Buttons
+    const btnCSV = document.getElementById('btnExportCSV');
+    const btnPDF = document.getElementById('btnExportPDF');
+    
+    if (btnCSV) btnCSV.onclick = exportToCSV;
+    if (btnPDF) btnPDF.onclick = exportToPDF;
 });
 
 
@@ -46,7 +53,7 @@ async function initDashboard() {
 
         // Fetch Anomalies for Hotspots
         try {
-            const anomalyRes = await fetch('../data/anomalies.json'); // Adjusted path as per standard structure
+            const anomalyRes = await fetch('/api/data/anomalies.json', { headers: API_HEADERS }); // Added headers
             if(anomalyRes.ok) {
                 const anomalyData = await anomalyRes.json();
                 globalAnomalies = anomalyData.state_anomalies || [];
@@ -61,7 +68,8 @@ async function initDashboard() {
         initCharts(riskData);
         populateStateSelector(riskData);
         
-        document.getElementById('lastRefresh').innerText = new Date().toLocaleDateString();
+        const refreshEl = document.getElementById('lastRefresh');
+        if (refreshEl) refreshEl.innerText = new Date().toLocaleDateString();
 
     } catch (error) {
         console.error("Dashboard Error:", error);
@@ -71,21 +79,13 @@ async function initDashboard() {
 
 // Export Functions
 function exportToCSV() {
-    window.location.href = '/api/social/export/csv';
+    window.location.href = `/api/social/export/csv?key=${API_KEY}`;
 }
 
 function exportToPDF() {
-    window.location.href = '/api/social/export/pdf';
+    window.location.href = `/api/social/export/pdf?key=${API_KEY}`;
 }
 
-// Bind Export Buttons
-document.addEventListener('DOMContentLoaded', function() {
-    const btnCSV = document.getElementById('btnExportCSV');
-    const btnPDF = document.getElementById('btnExportPDF');
-    
-    if (btnCSV) btnCSV.onclick = exportToCSV;
-    if (btnPDF) btnPDF.onclick = exportToPDF;
-});
 
 // 1. Map Logic
 function initMap() {
@@ -202,8 +202,8 @@ function getStateLogo(stateName) {
         slug = "dadra_and_nagar_haveli_and_daman_and_diu";
     }
 
-    const officialLogo = `../assets/images/states/seal_${slug}.png`;
-    const universalLogo = '../assets/images/states/universal_state_logo.png';
+    const officialLogo = `/assets/images/states/seal_${slug}.png`;
+    const universalLogo = '/assets/images/states/universal_state_logo.png';
     
     const availableLogos = [
         "andaman_and_nicobar_islands", "assam", "chandigarh", "delhi", 

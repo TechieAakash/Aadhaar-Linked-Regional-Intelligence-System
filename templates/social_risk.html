@@ -18,9 +18,9 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
     <!-- Design System -->
-    <link rel="stylesheet" href="../css/govt-design-system.css?v=3">
-    <link rel="stylesheet" href="../css/dashboard-layout.css?v=3">
-    <link rel="stylesheet" href="../css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=3">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=3">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=3">
 
     <style>
         :root {
@@ -302,7 +302,7 @@
     <!-- 1. Stick Header -->
     <header class="gov-masthead">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <img src="../assets/images/goi_logo.png" alt="GoI Emblem" style="height: 50px;">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 50px;">
             <div style="border-left: 2px solid #ddd; padding-left: 15px;">
                 <h1 style="margin: 0; font-size: 1.2rem; color: var(--nic-blue); font-weight: 700;">ALRIS</h1>
                 <p style="margin: 0; font-size: 0.8rem; font-weight: 600;">Social Vulnerability & Inclusion Dashboard
@@ -311,6 +311,10 @@
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="font-size: 0.7rem; color: #666; font-weight: 600; text-align: right;">
+                <i class="fas fa-sync-alt"></i> LAST SYNC<br>
+                <span id="lastRefresh" style="color: var(--nic-blue);">--/--/----</span>
+            </div>
             <select class="form-control" id="stateSelector"
                 style="padding: 5px; border-radius:3px; border:1px solid #ccc;">
                 <option value="all">All India</option>
@@ -607,7 +611,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/social_risk.js"></script>
+    <script src="/js/social_risk.js?v=4"></script>
 </body>
 
 </html>

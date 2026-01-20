@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Modular Command Center CSS -->
-    <link rel="stylesheet" href="css/govt-design-system.css?v=2">
-    <link rel="stylesheet" href="css/dashboard-layout.css?v=2">
-    <link rel="stylesheet" href="css/charts-theme.css?v=2">
-    <link rel="stylesheet" href="css/interactive-components.css?v=2">
-    <link rel="stylesheet" href="css/unified-footer.css?v=2">
+    <link rel="stylesheet" href="/css/govt-design-system.css?v=2">
+    <link rel="stylesheet" href="/css/dashboard-layout.css?v=2">
+    <link rel="stylesheet" href="/css/charts-theme.css?v=2">
+    <link rel="stylesheet" href="/css/interactive-components.css?v=2">
+    <link rel="stylesheet" href="/css/unified-footer.css?v=2">
 
     <style>
         #indiaMap {
@@ -70,7 +70,7 @@
 
     <header class="gov-masthead">
         <div class="logo-section">
-            <img src="assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
+            <img src="/assets/images/goi_logo.png" alt="GoI Emblem" style="height: 60px;">
             <div style="border-left: 1px solid var(--border-color); padding-left: 20px;">
                 <h1 style="margin:0; font-size: 1.4rem; color: var(--gov-blue);">AADHAAR ANALYTICS COMMAND CENTER</h1>
                 <p style="margin:0; font-size: 0.75rem; font-weight: 700; opacity: 0.7;">UNIQUE IDENTIFICATION AUTHORITY
@@ -226,9 +226,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="js/data-loader.js"></script>
-    <script src="js/anomaly-alert-system.js"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/data-loader.js"></script>
+    <script src="/js/anomaly-alert-system.js"></script>
+    <script src="/js/app.js"></script>
 
     <script>
         // ULTIMATE INTERACTIVE MAP ENGINE
@@ -289,7 +289,7 @@
 
             // 4. Load GeoJSON & Plot Anomalies
             try {
-                const response = await fetch('assets/map-geojson/india_states.json');
+                const response = await fetch('/assets/map-geojson/india_states.json');
                 const geoData = await response.json();
 
                 // Create Lookups
