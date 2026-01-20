@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "dataInsights": "Data Insights",
+    "serviceEquity": "Service Equity",
+    "strategicPlanning": "Strategic Planning",
+    "socialRisk": "Social Risk",
+    "forecasting": "Forecasting",
+    "anomalies": "Anomalies",
+    "peerBenchmarking": "Peer Benchmarking",
+    "decisions": "Decisions"
+  },
+  "header": {
+    "title": "AADHAAR ANALYTICS COMMAND CENTER",
+    "subtitle": "UNIQUE IDENTIFICATION AUTHORITY OF INDIA (UIDAI)",
+    "watermark": "For Official Use Only"
+  },
+  "kpi": {
+    "nationalCoverage": "NATIONAL COVERAGE RATE",
+    "updateIntensity": "UPDATE INTENSITY",
+    "engineHealth": "ENGINE HEALTH",
+    "anomaliesDetected": "ANOMALIES DETECTED",
+    "riskScore": "VULNERABILITY RISK SCORE",
+    "nationalAverage": "National Weighted Average",
+    "serviceCoverage": "SERVICE COVERAGE INDEX",
+    "biometricSaturation": "Biometric Update Saturation",
+    "highRiskDistricts": "HIGH-RISK DISTRICTS",
+    "immediateIntervention": "Requiring Immediate Intervention",
+    "populationImpacted": "POPULATION IMPACTED",
+    "vulnerableZones": "Living in Vulnerable Zones"
+  },
+  "common": {
+    "loading": "Loading...",
+    "syncingBackend": "Syncing with UIDAI Backend...",
+    "applyView": "APPLY VIEW",
+    "exportData": "Export Data",
+    "detailedAnalysis": "Detailed Analysis",
+    "enterModule": "ENTER MODULE",
+    "allIndia": "All India (National View)",
+    "currentCycle": "Current Cycle (Jan 2026)",
+    "lastRefresh": "Last Refresh",
+    "optimal": "OPTIMAL",
+    "actionRequired": "Action Required",
+    "yoY": "YoY"
+  },
+  "modules": {
+    "lifecycle": {
+      "title": "Lifecycle Intelligence",
+      "description": "Age-group behavior and biometric frequency trends."
+    },
+    "forecasting": {
+      "title": "Predictive Forecasting",
+      "description": "ML-driven demand estimation and stress calendars."
+    },
+    "anomalies": {
+      "title": "Anomaly Alerts",
+      "description": "Real-time detection of regional statistical outliers."
+    },
+    "decisions": {
+      "title": "Policy Decisions",
+      "description": "Smart recommendations and action plan generation."
+    },
+    "equity": {
+      "title": "Service Equity",
+      "description": "Fairness metrics, utilization gaps, and coverage analysis."
+    }
+  },
+  "footer": {
+    "tagline": "Mera Aadhaar Meri Pehchan",
+    "uidai": "UIDAI",
+    "government": "Government of India",
+    "copyright": "Copyright © 2025 Unique Identification Authority of India All Rights Reserved"
+  },
+  "social_risk": {
+    "title": "Social Vulnerability & Inclusion Dashboard",
+    "layers": "Layers",
+    "socialVulnerability": "Social Vulnerability",
+    "aadhaarCenters": "Aadhaar Centers",
+    "riskBreakdown": "Risk Breakdown",
+    "selectRegion": "Select a region on map or table to view details.",
+    "comparativeAnalysis": "Comparative Analysis",
+    "vulnerabilityVsCoverage": "Vulnerability vs. Coverage",
+    "severityHeatmap": "Severity Heatmap",
+    "regionalClassification": "Regional Classification Analysis",
+    "stateAnalysis": "State Analysis",
+    "forecast90Day": "90-Day Service Gap Forecast",
+    "backlogEstimate": "Backlog Clearance Estimate",
+    "daysWithCapacity": "days with current capacity",
+    "districtHotspots": "District-Level Risk Hotspots",
+    "earlyWarning": "Early Warning",
+    "aiProjection": "Strategic AI Projection",
+    "whyRecommendation": "WHY THIS RECOMMENDATION?",
+    "dataFreshness": "DATA FRESHNESS",
+    "historicalAccuracy": "HISTORICAL ACCURACY",
+    "patternStability": "PATTERN STABILITY",
+    "stable": "Stable",
+    "generateOrder": "GENERATE DEPLOYMENT ORDER"
+  },
+  "filters": {
+    "region": "REGION / STATE",
+    "timePeriod": "TIME PERIOD",
+    "metricFocus": "METRIC FOCUS",
+    "enrolmentVolume": "Enrolment Volume"
+  }
+}

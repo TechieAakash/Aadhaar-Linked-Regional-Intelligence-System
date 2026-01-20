@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "dataInsights": "डेटा अंतर्दृष्टि",
+    "serviceEquity": "सेवा समानता",
+    "strategicPlanning": "रणनीतिक योजना",
+    "socialRisk": "सामाजिक जोखिम",
+    "forecasting": "पूर्वानुमान",
+    "anomalies": "विसंगतियाँ",
+    "peerBenchmarking": "सहकर्मी बेंचमार्किंग",
+    "decisions": "निर्णय"
+  },
+  "header": {
+    "title": "आधार विश्लेषण कमांड सेंटर",
+    "subtitle": "भारतीय विशिष्ट पहचान प्राधिकरण (यूआईडीएआई)",
+    "watermark": "केवल आधिकारिक उपयोग के लिए"
+  },
+  "kpi": {
+    "nationalCoverage": "राष्ट्रीय कवरेज दर",
+    "updateIntensity": "अद्यतन तीव्रता",
+    "engineHealth": "इंजन स्वास्थ्य",
+    "anomaliesDetected": "विसंगतियाँ पहचानी गईं",
+    "riskScore": "भेद्यता जोखिम स्कोर",
+    "nationalAverage": "राष्ट्रीय भारित औसत",
+    "serviceCoverage": "सेवा कवरेज सूचकांक",
+    "biometricSaturation": "बायोमेट्रिक अद्यतन संतृप्ति",
+    "highRiskDistricts": "उच्च जोखिम वाले जिले",
+    "immediateIntervention": "तत्काल हस्तक्षेप की आवश्यकता",
+    "populationImpacted": "प्रभावित जनसंख्या",
+    "vulnerableZones": "संवेदनशील क्षेत्रों में रहने वाले"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "syncingBackend": "यूआईडीएआई बैकएंड के साथ सिंक हो रहा है...",
+    "applyView": "दृश्य लागू करें",
+    "exportData": "डेटा निर्यात करें",
+    "detailedAnalysis": "विस्तृत विश्लेषण",
+    "enterModule": "मॉड्यूल में प्रवेश करें",
+    "allIndia": "अखिल भारत (राष्ट्रीय दृश्य)",
+    "currentCycle": "वर्तमान चक्र (जनवरी 2026)",
+    "lastRefresh": "अंतिम रीफ्रेश",
+    "optimal": "इष्टतम",
+    "actionRequired": "कार्रवाई आवश्यक",
+    "yoY": "वर्ष-दर-वर्ष"
+  },
+  "modules": {
+    "lifecycle": {
+      "title": "जीवनचक्र बुद्धिमत्ता",
+      "description": "आयु-समूह व्यवहार और बायोमेट्रिक आवृत्ति रुझान।"
+    },
+    "forecasting": {
+      "title": "भविष्यवाणी पूर्वानुमान",
+      "description": "एमएल-संचालित मांग अनुमान और तनाव कैलेंडर।"
+    },
+    "anomalies": {
+      "title": "विसंगति अलर्ट",
+      "description": "क्षेत्रीय सांख्यिकीय बाहरी मान का वास्तविक समय पहचान।"
+    },
+    "decisions": {
+      "title": "नीति निर्णय",
+      "description": "स्मार्ट अनुशंसाएं और कार्य योजना निर्माण।"
+    },
+    "equity": {
+      "title": "सेवा समानता",
+      "description": "निष्पक्षता मेट्रिक्स, उपयोग अंतराल, और कवरेज विश्लेषण।"
+    }
+  },
+  "footer": {
+    "tagline": "मेरा आधार मेरी पहचान",
+    "uidai": "यूआईडीएआई",
+    "government": "भारत सरकार",
+    "copyright": "कॉपीराइट © 2025 भारतीय विशिष्ट पहचान प्राधिकरण सर्वाधिकार सुरक्षित"
+  },
+  "social_risk": {
+    "title": "सामाजिक भेद्यता और समावेशन डैशबोर्ड",
+    "layers": "परतें",
+    "socialVulnerability": "सामाजिक भेद्यता",
+    "aadhaarCenters": "आधार केंद्र",
+    "riskBreakdown": "जोखिम विवरण",
+    "selectRegion": "विवरण देखने के लिए मानचित्र या तालिका पर क्षेत्र चुनें।",
+    "comparativeAnalysis": "तुलनात्मक विश्लेषण",
+    "vulnerabilityVsCoverage": "भेद्यता बनाम कवरेज",
+    "severityHeatmap": "गंभीरता हीटमैप",
+    "regionalClassification": "क्षेत्रीय वर्गीकरण विश्लेषण",
+    "stateAnalysis": "राज्य विश्लेषण",
+    "forecast90Day": "90-दिवसीय सेवा अंतराल पूर्वानुमान",
+    "backlogEstimate": "बैकलॉग समाशोधन अनुमान",
+    "daysWithCapacity": "वर्तमान क्षमता के साथ दिन",
+    "districtHotspots": "जिला-स्तरीय जोखिम हॉटस्पॉट",
+    "earlyWarning": "प्रारंभिक चेतावनी",
+    "aiProjection": "रणनीतिक एआई प्रक्षेपण",
+    "whyRecommendation": "यह अनुशंसा क्यों?",
+    "dataFreshness": "डेटा ताजगी",
+    "historicalAccuracy": "ऐतिहासिक सटीकता",
+    "patternStability": "पैटर्न स्थिरता",
+    "stable": "स्थिर",
+    "generateOrder": "परिनियोजन आदेश उत्पन्न करें"
+  },
+  "filters": {
+    "region": "क्षेत्र / राज्य",
+    "timePeriod": "समय अवधि",
+    "metricFocus": "मेट्रिक फोकस",
+    "enrolmentVolume": "नामांकन मात्रा"
+  }
+}

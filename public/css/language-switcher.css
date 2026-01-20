@@ -1,0 +1,75 @@
+/* Language Switcher Styles */
+
+.language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.lang-btn {
+    background: transparent;
+    border: 2px solid var(--gov-blue);
+    color: var(--gov-blue);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-family: var(--font-heading);
+}
+
+.lang-btn:hover {
+    background: var(--gov-blue);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.lang-btn.active {
+    background: var(--gov-saffron);
+    border-color: var(--gov-saffron);
+    color: white;
+}
+
+.lang-divider {
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .language-toggle {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 1001;
+    }
+
+    .lang-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Hindi font support */
+[lang="hi"],
+.hindi-text {
+    font-family: 'Noto Sans Devanagari', 'Hind', 'Mukta', Arial, sans-serif;
+}
+
+/* Smooth language transition */
+[data-i18n] {
+    transition: opacity 0.2s ease;
+}
+
+.language-switching [data-i18n] {
+    opacity: 0.7;
+}
+
+/* High contrast mode for language toggle */
+@media (prefers-contrast: high) {
+    .lang-btn {
+        border-width: 3px;
+    }
+}
