@@ -37,7 +37,15 @@ This project is fully optimized for deployment on the **Anvil** platform using *
    risk_data = anvil.server.call('get_social_risk')
    ```
 
-## 🛡️ Stability Features
-- **Data Cleaning**: The backend automatically removes `NaN` and `Inf` values that cause browser crashes in Anvil.
-- **Context Awareness**: The server intelligently detects if a call is coming from a web browser (Flask) or an Anvil Server callable, adjusting security and response formats automatically.
-- **Mock Fallback**: If `anvil-uplink` is not installed, the server automatically enters "Safe Mode" and runs as a standard Flask dashboard without crashing.
+## 🧭 Quick Troubleshoot Checklist (Frontend Fixes)
+
+If you encounter errors like `Cannot read properties of undefined (reading 'editable')` in the Anvil IDE, follow this checklist:
+
+- [ ] **Confirm component existence**: Ensure the component you are trying to access actually exists in your Form design.
+- [ ] **Check `.editable` support**: Verify that the component you are accessing supports the `.editable` property (standard inputs do, but some custom components might not).
+- [ ] **Execution Order**: Ensure your logic runs **after** `self.init_components()` in your Form's `__init__` method.
+- [ ] **No Flask on Client**: Ensure you are not importing Flask in your Anvil Form code (Anvil Uses its own client-side Python).
+- [ ] **Spelling & Casing**: Double-check the spelling and casing of your component names in the Anvil properties panel vs your code.
+
+---
+*ALRIS | Aadhaar Intelligence & Governance System Deployment Documentation*
