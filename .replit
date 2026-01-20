@@ -1,4 +1,4 @@
-run = "python server.py"
+run = "gunicorn -w 4 -b 0.0.0.0:5000 server:app"
 entrypoint = "server.py"
 
 [packager]
