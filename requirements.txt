@@ -11,3 +11,4 @@ ruptures
 openpyxl
 xlrd
 gunicorn
+anvil-uplink

@@ -6,6 +6,8 @@ import random
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, render_template, Response
 from flask_cors import CORS
+import anvil.server
+
 
 
 
@@ -20,7 +22,13 @@ UIDAI_API_KEY = os.environ.get("UIDAI_API_KEY", DEFAULT_KEY)
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
 def validate_api_key():
-    """Helper to validate API Key from request headers or query params (for downloads)."""
+    """Helper to validate API Key. Returns True if in Anvil context or valid API key provided."""
+    # If not in a Flask request context (e.g. called via Anvil Uplink), 
+    # we trust the call because Anvil Uplink is already authenticated via secret key.
+    from flask import has_request_context
+    if not has_request_context():
+        return True
+        
     api_key = request.headers.get('x-api-key') or \
               request.headers.get('X-Api-Key') or \
               request.args.get('key')  # Support for direct browser downloads
@@ -30,6 +38,23 @@ def validate_api_key():
 
 def unauthorized_response():
     return jsonify({"error": "Unauthorized: Valid UIDAI API Key required"}), 401
+
+def smart_response(data, status=200):
+    from flask import has_request_context
+    if has_request_context():
+        return jsonify(data), status
+    return data
+
+# --- Anvil Uplink Connectivity ---
+ANVIL_KEY = os.environ.get("ANVIL_UPLINK_KEY")
+if ANVIL_KEY:
+    try:
+        anvil.server.connect(ANVIL_KEY)
+        print("[ALRIS] Anvil Uplink Connected Successfully.")
+    except Exception as e:
+        print(f"[ALRIS] Anvil Uplink Connection Failed: {e}")
+else:
+    print("[ALRIS] Skipping Anvil Uplink (No ANVIL_UPLINK_KEY found).")
 
 # --- Frontend Routes ---
 @app.route('/')
@@ -101,6 +126,7 @@ def get_data(filename):
     return jsonify({"error": f"File {filename} not found"}), 404
 
 @app.route('/api/train', methods=['POST'])
+@anvil.server.callable
 def train_trigger():
     if not validate_api_key():
         return unauthorized_response()
@@ -155,7 +181,7 @@ def train_trigger():
             base_path
         )
         
-        return jsonify({
+        return smart_response({
             "status": "Success", 
             "message": "ALRIS Analytics Pipeline executed successfully.",
             "statistics": {
@@ -164,7 +190,7 @@ def train_trigger():
             }
         })
     except Exception as e:
-        return jsonify({"status": "Error", "message": str(e)}), 500
+        return smart_response({"status": "Error", "message": str(e)}, 500)
 
 # 2. Operations & Social Export Logic
 @app.route('/api/operations/export/csv')
@@ -300,6 +326,7 @@ def run_optimization():
 
 # 4. Social Service Logic
 @app.route('/api/social/risk')
+@anvil.server.callable
 def get_social_risk():
     if not validate_api_key():
         return unauthorized_response()
@@ -344,11 +371,12 @@ def get_social_risk():
                 except:
                     item['rural_population_percentage'] = 0.0
 
-        return jsonify(data)
+        return smart_response(data)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return smart_response({"error": str(e)}, 500)
 
 @app.route('/api/social/fairness')
+@anvil.server.callable
 def get_social_fairness():
     if not validate_api_key():
         return unauthorized_response()
@@ -376,9 +404,9 @@ def get_social_fairness():
                     else:
                         row[col] = 0.0
                 data.append(row)
-        return jsonify(data)
+        return smart_response(data)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return smart_response({"error": str(e)}, 500)
 
 @app.route('/api/social/insights')
 def get_social_insights():
@@ -475,6 +503,7 @@ def admin_undo():
     return jsonify({"status": "Success", "message": f"Block for {entity_id} reversed."})
 
 @app.route('/api/admin/download-audit')
+@anvil.server.callable
 def download_audit():
     if not validate_api_key():
         return unauthorized_response()
@@ -530,13 +559,16 @@ def download_audit():
         cw = csv.writer(si)
         cw.writerows(output)
         
-        return Response(
-            si.getvalue(),
-            mimetype="text/csv",
-            headers={"Content-Disposition": "attachment; filename=ALRIS_Legal_Audit_Trail.csv"}
-        )
+        from flask import has_request_context
+        if has_request_context():
+            return Response(
+                si.getvalue(),
+                mimetype="text/csv",
+                headers={"Content-Disposition": "attachment; filename=ALRIS_Legal_Audit_Trail.csv"}
+            )
+        return si.getvalue() # Raw CSV string for Anvil
     except Exception as e:
-        return jsonify({"error": f"Audit Generation Failed: {str(e)}"}), 500
+        return smart_response({"error": f"Audit Generation Failed: {str(e)}"}, 500)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=int(os.environ.get('PORT', 5000)))

@@ -137,14 +137,14 @@
                             }
                         });
 
-                        if (!res.ok) throw new Error('Model training refused by server.');
-
                         const json = await res.json();
+                        if (!res.ok) throw new Error(json.message || json.error || 'Model training refused by server.');
+
                         trainBtn.innerHTML = '<i class="fas fa-check-circle"></i> Optimization Complete';
                         trainBtn.style.background = 'var(--gov-green)';
 
                         setTimeout(() => {
-                            alert('ALRIS Intelligence Engine: ' + json.message);
+                            alert('ALRIS Intelligence Engine: ' + (json.message || 'Success'));
                             location.reload();
                         }, 800);
 
