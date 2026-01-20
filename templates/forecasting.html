@@ -45,7 +45,7 @@
 
     <div class="dashboard-container">
         <div class="section-header">
-            <div class="breadcrumb-trail"><span>India</span> <span>National</span> Predictive Forecasting</div>
+            <div class="breadcrumb-trail"><span>India</span> <span>National</span> Predictive Forecasting Hub</div>
             <div style="display:flex; align-items:center; gap:15px;">
                 <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Model Confidence: <span
                         id="modelConf">Calculating...</span></div>
@@ -55,91 +55,209 @@
         </div>
 
         <section class="grid-system">
+            <!-- 1. Main Forecast -->
             <div class="chart-box" style="grid-column: span 12;">
-                <h4>ARIMA DEMAND FORECAST (6-MONTH OUTLOOK)</h4>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h4 style="margin:0;">ARIMA DEMAND FORECAST (6-MONTH OUTLOOK)</h4>
+                    <div id="forecastMethod"
+                        style="font-size:0.7rem; font-weight:700; color:var(--gov-blue); background:#EBF8FF; padding:4px 10px; border-radius:4px;">
+                        METHOD: AUTO-ARIMA</div>
+                </div>
                 <div style="height: 450px;"><canvas id="forecastCanvas"></canvas></div>
             </div>
 
-            <div class="stat-card" style="grid-column: span 6; border-top-color: var(--gov-saffron);">
-                <h4>INFRASTRUCTURE STRESS CALENDAR</h4>
-                <div class="stress-calendar" id="stressCalendar" style="margin-top:20px;"></div>
-                <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-top:10px;">
-                    <span>Low Load</span>
-                    <span>Critical Stress</span>
+            <!-- 2. National Stress Analysis (NEW) -->
+            <div class="stat-card" style="grid-column: span 4; border-top-color: var(--color-alert);">
+                <h4>NATIONAL STRESS THRESHOLDS</h4>
+                <div id="stressMetrics" style="margin-top:20px;">
+                    <div class="metric-item" style="margin-bottom:15px;">
+                        <div style="font-size:0.7rem; color:var(--text-secondary);">CRITICAL THRESHOLD</div>
+                        <div id="critThreshold" style="font-size:1.5rem; font-weight:800; color:var(--color-alert);">--
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div style="font-size:0.7rem; color:var(--text-secondary);">HIGH STRESS ALERT</div>
+                        <div id="highThreshold" style="font-size:1.5rem; font-weight:800; color:var(--gov-saffron);">--
+                        </div>
+                    </div>
+                    <div id="stressAlerts" style="margin-top:20px; font-size:0.75rem; color:#666; font-style:italic;">
+                        Scanning for upcoming peak periods...
+                    </div>
                 </div>
             </div>
 
-            <div class="stat-card" style="grid-column: span 6; border-top-color: var(--gov-green);">
-                <h4>STATE-WISE DEMAND GROWTH</h4>
-                <div id="stateGrid"
-                    style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:20px;">
+            <!-- 3. Infrastructure Stress Calendar -->
+            <div class="stat-card" style="grid-column: span 8; border-top-color: var(--gov-saffron);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4>STRESS CALENDAR (CURRENT CYCLE)</h4>
+                    <div style="font-size:0.7rem;">Average Daily Activity: <span id="avgDailyActivity"
+                            style="font-weight:700;">--</span></div>
+                </div>
+                <div class="stress-calendar" id="stressCalendar" style="margin-top:20px;"></div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-top:10px;">
+                    <span><i class="fas fa-circle" style="color:#28A745"></i> Nominal (0-80%)</span>
+                    <span><i class="fas fa-circle" style="color:#FFC107"></i> High (80-100%)</span>
+                    <span><i class="fas fa-circle" style="color:#DC3545"></i> Critical (>100%)</span>
+                </div>
+            </div>
+
+            <!-- 4. State-wise Demand Growth -->
+            <div class="stat-card" style="grid-column: span 12; border-top-color: var(--gov-green);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h4 style="margin:0;">REGIONAL DEMAND & TREND ANALYSIS</h4>
+                    <div style="font-size:0.7rem; opacity:0.6;">*Based on historical 12-month smoothing</div>
+                </div>
+                <div id="stateGrid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px;">
                     <!-- State Mini Cards injected by JS -->
                 </div>
             </div>
         </section>
     </div>
 
-    </div>
-
-    <script src="/js/data-loader.js"></script>
-    <script src="/js/visualization-engine.js"></script>
+    <script src="/js/data-loader.js?v=3"></script>
+    <script src="/js/visualization-engine.js?v=3"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const data = await DataLoader.fetchAll();
+            // 1. Attachment of core administrative listeners (independent of data state)
+            const API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16";
+            const trainBtn = document.getElementById('trainBtn');
 
-            // 1. Render Main Forecast
-            if (data.forecasts) {
-                // Update Confidence Score
-                const conf = data.forecasts.arima?.model_confidence || 98.5;
-                document.getElementById('modelConf').innerText = conf + '%';
+            if (trainBtn) {
+                trainBtn.addEventListener('click', async () => {
+                    trainBtn.disabled = true;
+                    trainBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing Neural Pipeline...';
+                    trainBtn.style.opacity = '0.8';
 
-                VisualizationEngine.renderForecastingHub('forecastCanvas', data.forecasts);
-            }
+                    try {
+                        const res = await fetch('/api/train', {
+                            method: 'POST',
+                            headers: {
+                                'x-api-key': API_KEY,
+                                'Content-Type': 'application/json'
+                            }
+                        });
 
-            // 2. Render State Grid
-            if (data.forecasts && data.forecasts.state_forecasts) {
-                const grid = document.getElementById('stateGrid');
-                grid.innerHTML = ''; // Clear mock data
-                Object.entries(data.forecasts.state_forecasts).slice(0, 6).forEach(([state, metrics]) => {
-                    const div = document.createElement('div');
-                    div.style.background = '#f9fafb';
-                    div.style.padding = '10px';
-                    div.style.borderRadius = '4px';
-                    div.innerHTML = `<strong>${state}:</strong> +${metrics.expected_growth}% <small>(${metrics.expected_growth > 10 ? 'High' : 'Stable'})</small>`;
-                    grid.appendChild(div);
+                        if (!res.ok) throw new Error('Model training refused by server.');
+
+                        const json = await res.json();
+                        trainBtn.innerHTML = '<i class="fas fa-check-circle"></i> Optimization Complete';
+                        trainBtn.style.background = 'var(--gov-green)';
+
+                        setTimeout(() => {
+                            alert('ALRIS Intelligence Engine: ' + json.message);
+                            location.reload();
+                        }, 800);
+
+                    } catch (e) {
+                        console.error(e);
+                        let errorMsg = e.message;
+                        if (e instanceof TypeError && e.message === "Failed to fetch") {
+                            errorMsg = "Backend Unreachable. Start 'server.py' to run Neural Calibration.";
+                        }
+                        alert('Command Center Error: ' + errorMsg);
+                        trainBtn.disabled = false;
+                        trainBtn.innerHTML = '🚀 Rethink Model';
+                        trainBtn.style.background = 'var(--color-alert)';
+                    }
                 });
             }
 
-            // 3. Render Stress Calendar
-            const cal = document.getElementById('stressCalendar');
-            cal.innerHTML = '';
-            for (let i = 0; i < 31; i++) {
-                const day = document.createElement('div');
-                day.className = 'day-cell';
-                const intensity = Math.random();
-                day.style.background = intensity > 0.8 ? '#DC3545' : (intensity > 0.5 ? '#FFC107' : '#28A745');
-                day.style.color = 'white';
-                day.textContent = i + 1;
-                cal.appendChild(day);
-            }
+            // 2. Data-driven rendering (susceptible to data sync errors)
+            try {
+                const data = await DataLoader.fetchAll();
+                if (!data) throw new Error("Null data payload");
 
-            // 4. Train Button Logic
-            document.getElementById('trainBtn').addEventListener('click', async () => {
-                const btn = document.getElementById('trainBtn');
-                btn.disabled = true;
-                btn.innerText = 'Training...';
+                // Render Main Forecast
+                if (data.forecasts) {
+                    const arima = data.forecasts.arima || {};
+                    const conf = arima.model_confidence || 98.5;
+                    document.getElementById('modelConf').innerText = conf + '%';
 
-                try {
-                    const res = await fetch('/api/train');
-                    const json = await res.json();
-                    alert('Validating Model Training: ' + json.message);
-                    location.reload();
-                } catch (e) {
-                    alert('Training Error: ' + e.message);
-                    btn.disabled = false;
-                    btn.innerText = '🚀 Rethink Model';
+                    if (data.forecasts.simple && data.forecasts.simple.method) {
+                        document.getElementById('forecastMethod').innerText = 'METHOD: ' + data.forecasts.simple.method.toUpperCase().replace(/_/g, ' ');
+                    }
+
+                    VisualizationEngine.renderForecastingHub('forecastCanvas', data.forecasts);
+
+                    // Update Stress Thresholds
+                    if (data.forecasts.stress_periods) {
+                        const sp = data.forecasts.stress_periods;
+                        document.getElementById('critThreshold').innerText = (sp.critical_threshold / 1000).toFixed(0) + 'K/Day';
+                        document.getElementById('highThreshold').innerText = (sp.high_threshold / 1000).toFixed(0) + 'K/Day';
+
+                        if (sp.periods && sp.periods.length > 0) {
+                            const nextPeak = sp.periods[0];
+                            document.getElementById('stressAlerts').innerHTML = `<strong>ALERT:</strong> Predicted peak in ${nextPeak.month} with ${nextPeak.stress_level} stress levels.`;
+                        }
+
+                        // Stress Calendar Logic
+                        const avgDaily = sp.periods && sp.periods[0] ? sp.periods[0].daily_avg : 450000;
+                        document.getElementById('avgDailyActivity').innerText = (avgDaily / 1000).toFixed(1) + 'K';
+
+                        const cal = document.getElementById('stressCalendar');
+                        if (cal) {
+                            cal.innerHTML = '';
+                            for (let i = 0; i < 31; i++) {
+                                const day = document.createElement('div');
+                                day.className = 'day-cell';
+                                const variance = 0.7 + (Math.random() * 0.6);
+                                const dailyCount = avgDaily * variance;
+
+                                let color = '#28A745';
+                                if (dailyCount > sp.critical_threshold) color = '#DC3545';
+                                else if (dailyCount > sp.high_threshold) color = '#FFC107';
+
+                                day.style.background = color;
+                                day.style.color = color === '#FFC107' ? '#333' : 'white';
+                                day.textContent = i + 1;
+                                day.title = `Est. Load: ${(dailyCount / 1000).toFixed(1)}K`;
+                                cal.appendChild(day);
+                            }
+                        }
+                    }
                 }
-            });
+
+                // Render State Grid
+                if (data.forecasts && data.forecasts.state_forecasts) {
+                    const grid = document.getElementById('stateGrid');
+                    if (grid) {
+                        grid.innerHTML = '';
+                        Object.entries(data.forecasts.state_forecasts).sort((a, b) => b[1].expected_growth - a[1].expected_growth).forEach(([state, m]) => {
+                            const div = document.createElement('div');
+                            div.style.background = '#f8fafc';
+                            div.style.padding = '15px';
+                            div.style.borderRadius = '8px';
+                            div.style.border = '1px solid #e2e8f0';
+                            div.style.display = 'flex';
+                            div.style.flexDirection = 'column';
+                            div.style.justifyContent = 'space-between';
+                            div.style.minHeight = '140px';
+
+                            const growthClass = m.expected_growth > 100 ? 'color:var(--color-alert)' : (m.expected_growth > 50 ? 'color:var(--gov-saffron)' : 'color:var(--gov-green)');
+
+                            div.innerHTML = `
+                                <div style="font-weight:700; color:var(--gov-blue); border-bottom:1px solid #eee; margin-bottom:10px; padding-bottom:5px;">${state}</div>
+                                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                    <span style="font-size:0.65rem; color:#666;">GROWTH</span>
+                                    <span style="font-size:0.75rem; font-weight:800; ${growthClass}">+${m.expected_growth}%</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                    <span style="font-size:0.65rem; color:#666;">HIST. AVG</span>
+                                    <span style="font-size:0.7rem; font-weight:600;">${(m.historical_avg / 1000).toFixed(1)}K</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="font-size:0.65rem; color:#666;">TREND</span>
+                                    <span style="font-size:0.7rem; font-weight:600; color:#444;">${m.trend > 0 ? '↑' : '↓'} ${(m.trend / 1000).toFixed(1)}K</span>
+                                </div>
+                            `;
+                            grid.appendChild(div);
+                        });
+                    }
+                }
+            } catch (err) {
+                console.warn("[ALRIS] Data Sync Error | Dashboard limited functionality:", err.message);
+                document.getElementById('modelConf').innerText = "CALIBRATION ERROR";
+            }
         });
     </script>
     <footer class="uidai-global-footer">

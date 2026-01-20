@@ -223,6 +223,92 @@ const VisualizationEngine = {
         const container = document.getElementById(containerId);
         if (!container) return;
         // Logic moved to Radar for better fidelity
+    },
+
+    /**
+     * Anomaly Intensity Timeline (Chart.js)
+     * Aggregates and plots anomaly weights over time
+     */
+    renderAnomalyTimeline(canvasId, anomalies) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        if (this.charts[canvasId]) this.charts[canvasId].destroy();
+
+        if (!anomalies) return;
+
+        // Aggregate All Dated Anomalies
+        const allIncidents = [
+            ...(anomalies.state_anomalies || []),
+            ...(anomalies.seasonal_anomalies || []),
+            ...(anomalies.retry_anomalies || [])
+        ];
+
+        const datedScores = {};
+
+        allIncidents.forEach(a => {
+            const dateStr = a.date || a.date_dt;
+            if (!dateStr || dateStr === "NaT" || dateStr === "null") return;
+            
+            const dp = new Date(dateStr);
+            if (isNaN(dp.getTime())) return;
+
+            const displayDate = dateStr.split(' ')[0];
+            const weight = a.severity === 'Critical' ? 10 : (a.severity === 'High' ? 5 : 2);
+            
+            datedScores[displayDate] = (datedScores[displayDate] || 0) + weight;
+        });
+
+        // Sort by date
+        const sortedDates = Object.keys(datedScores).sort((a, b) => new Date(a) - new Date(b));
+        const labels = sortedDates;
+        const dataValues = sortedDates.map(d => datedScores[d]);
+
+        this.charts[canvasId] = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Anomaly Intensity Score',
+                    data: dataValues,
+                    borderColor: this.colors.alert,
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.15,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: this.colors.alert
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                resizeDelay: 100,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `Risk Intensity: ${context.parsed.y}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        title: { display: true, text: 'Aggregated Risk Weight', font: { weight: 'bold' } }
+                    }
+                }
+            }
+        });
     }
 };
 

@@ -43,8 +43,12 @@ const DataLoader = {
             }
             return await response.json();
         } catch (e) {
-            console.error(`[ALRIS] Data Sync Failed for ${filename}:`, e.message);
-            throw e; // Propagate the error to the caller
+            let errorMsg = e.message;
+            if (e instanceof TypeError && e.message === "Failed to fetch") {
+                errorMsg = "ALRIS Backend Offline. Please ensure 'python server.py' is running and you are accessing via http://127.0.0.1:5000";
+            }
+            console.error(`[ALRIS] Data Sync Failed for ${filename}:`, errorMsg);
+            throw new Error(errorMsg);
         }
     },
 

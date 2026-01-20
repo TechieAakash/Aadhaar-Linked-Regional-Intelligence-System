@@ -115,6 +115,55 @@
     margin-top: 1.5rem;
 }
 
+/* Responsive Grid Overrides */
+@media (max-width: 1024px) {
+    .grid-system {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    /* Auto-centering smaller spans on tablet */
+    [style*="grid-column: span 12"],
+    [style*="grid-column: span 8"],
+    [style*="grid-column: span 6"] {
+        grid-column: span 6 !important;
+    }
+
+    [style*="grid-column: span 4"],
+    [style*="grid-column: span 3"] {
+        grid-column: span 3 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-system {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .gov-masthead {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .nav-toolbar {
+        overflow-x: auto;
+        padding: 0 1rem;
+        gap: 1.5rem;
+    }
+
+    .nav-link {
+        white-space: nowrap;
+    }
+}
+
 /* Cards & Panels */
 .stat-card,
 .chart-box {

@@ -159,6 +159,63 @@ const AnomalyAlertSystem = {
         `;
     },
 
+    renderIncidentTimeline(containerId, anomalies) {
+        const container = document.getElementById(containerId);
+        if (!container || !anomalies) return;
+
+        const allIncidents = [
+            ...(anomalies.state_anomalies || []).map(a => ({ ...a, category: 'State' })),
+            ...(anomalies.seasonal_anomalies || []).map(a => ({ ...a, category: 'Seasonal' })),
+            ...(anomalies.retry_anomalies || []).map(a => ({ ...a, category: 'Security' }))
+        ];
+
+        // Process dates and filter out ones without dates or with "NaT"
+        const datedIncidents = allIncidents.filter(a => {
+            const d = a.date || a.date_dt;
+            return d && d !== "NaT" && d !== "null";
+        }).map(a => {
+            const dateStr = a.date || a.date_dt;
+            return {
+                ...a,
+                parsed_date: new Date(dateStr),
+                display_date: dateStr.split(' ')[0]
+            };
+        }).filter(a => !isNaN(a.parsed_date.getTime()))
+          .sort((a, b) => b.parsed_date - a.parsed_date);
+
+        if (datedIncidents.length === 0) {
+            container.innerHTML = '<div style="padding:20px; font-size:0.8rem; opacity:0.6;">No temporal incident data available.</div>';
+            return;
+        }
+
+        container.style.display = 'block';
+        container.style.overflowY = 'auto';
+        container.style.maxHeight = '300px';
+
+        container.innerHTML = `
+            <div style="padding:10px;">
+                <div style="border-left: 2px solid #e2e8f0; margin-left:10px; padding-left:20px; position:relative;">
+                    ${datedIncidents.slice(0, 10).map(inc => {
+                        const color = this._getSeverityColor(inc.severity);
+                        return `
+                            <div style="margin-bottom:20px; position:relative;">
+                                <div style="position:absolute; left:-27px; top:0; width:12px; height:12px; border-radius:50%; background:${color}; border:2px solid white; box-shadow:0 0 0 2px #f1f5f9;"></div>
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                    <span style="font-size:0.65rem; font-weight:700; color:#64748b; background:#f1f5f9; padding:2px 6px; border-radius:4px;">${inc.display_date}</span>
+                                    <span style="font-size:0.6rem; font-weight:800; color:${color}; text-transform:uppercase;">${inc.severity}</span>
+                                </div>
+                                <div style="margin-top:5px;">
+                                    <div style="font-size:0.8rem; font-weight:700; color:var(--gov-blue);">${inc.region || inc.state}</div>
+                                    <div style="font-size:0.7rem; color:#475569; line-height:1.2;">${inc.anomaly_type}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    },
+
     renderDefaultGovernance() {
         const container = document.getElementById('governanceActions');
         if (!container) return;
@@ -399,7 +456,10 @@ const AnomalyAlertSystem = {
         try {
             const res = await fetch('/api/admin/block', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-api-key': typeof API_KEY !== 'undefined' ? API_KEY : ''
+                },
                 body: JSON.stringify({
                     entity_id: entityId,
                     reason: reason,
@@ -424,7 +484,10 @@ const AnomalyAlertSystem = {
         try {
             const res = await fetch('/api/admin/undo', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-api-key': typeof API_KEY !== 'undefined' ? API_KEY : ''
+                },
                 body: JSON.stringify({ entity_id: entityId })
             });
 
@@ -440,7 +503,8 @@ const AnomalyAlertSystem = {
     async downloadAuditTrail() {
         this.showToast("Preparing legal audit trail...", "info");
         try {
-            window.location.href = '/api/admin/download-audit';
+            const url = '/api/admin/download-audit?key=' + (typeof API_KEY !== 'undefined' ? API_KEY : '');
+            window.location.href = url;
         } catch (e) {
             this.showToast("Failed to initiate download.", "error");
         }

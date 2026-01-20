@@ -1,11 +1,16 @@
 {
-  "CEN-639105": {
-    "timestamp": "2026-01-19T23:31:50.845084",
-    "action": "BLOCK",
-    "entity": "CEN-639105",
-    "reason": "not required",
-    "ml_confidence": "90",
-    "persistence": "Semi-Permanent",
-    "admin_id": "ADM-HQ-01"
-  }
+    "CEN-639105": {
+        "timestamp": "2026-01-19T23:31:50.845084",
+        "action": "BLOCK",
+        "entity": "CEN-639105",
+        "reason": "not required",
+        "ml_confidence": "90",
+        "persistence": "Semi-Permanent",
+        "admin_id": "ADM-HQ-01"
+    },
+    "CEN-176302": {
+        "status": "Blocked",
+        "reason": "not required",
+        "timestamp": "2026-01-20T17:24:53.750814"
+    }
 }

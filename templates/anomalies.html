@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/css/charts-theme.css?v=3">
     <link rel="stylesheet" href="/css/interactive-components.css?v=3">
     <link rel="stylesheet" href="/css/unified-footer.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         /* Block Confirmation Modal */
         #blockModal {
@@ -130,6 +133,24 @@
                 opacity: 1;
             }
         }
+
+        /* Custom Scrollbar for Timeline */
+        #incidentTimeline::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #incidentTimeline::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #incidentTimeline::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        #incidentTimeline::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
 
@@ -230,14 +251,29 @@
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 2fr; gap:20px; margin-top:15px;">
                     <div id="riskHeatmap"
-                        style="background:var(--bg-light); border-radius:8px; padding:15px; min-height:200px;">
+                        style="background:var(--bg-light); border-radius:8px; padding:15px; height:300px;">
                         Loading heatmap...
                     </div>
-                    <div id="incidentTimeline"
-                        style="background:var(--bg-light); border-radius:8px; padding:10px; display:flex; align-items:center; justify-content:center;">
-                        <img src="/output/charts/anomaly_timeline.png" alt="Incident Timeline"
-                            style="max-width:100%; border-radius:4px; border:1px solid var(--border-color);">
+                    <div
+                        style="background:var(--bg-light); border-radius:8px; padding:15px; height:300px; position:relative; display:flex; flex-direction:column;">
+                        <div
+                            style="font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:10px;">
+                            ANOMALY INTENSITY TREND</div>
+                        <div style="flex:1; position:relative;">
+                            <canvas id="anomalyTimelineCanvas"></canvas>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- INCIDENT AUDIT TRAIL (Restored & Optimized) -->
+            <div class="chart-box" style="grid-column: span 12;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h4>📜 INCIDENT AUDIT TRAIL (TEMPORAL LOGS)</h4>
+                    <span class="badge badge-warning">Real-time Sequential Log</span>
+                </div>
+                <div id="incidentTimeline" style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                    Loading audit trail...
                 </div>
             </div>
 
@@ -398,8 +434,11 @@
     <div id="toastContainer"></div>
 
     <script src="/js/data-loader.js?v=3"></script>
+    <script src="/js/visualization-engine.js?v=3"></script>
     <script src="/js/anomaly-alert-system.js?v=3"></script>
     <script>
+        const API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16";
+
         document.addEventListener('DOMContentLoaded', async () => {
             const data = await DataLoader.fetchAll();
 
@@ -410,6 +449,12 @@
             AnomalyAlertSystem.renderDeviationMatrix('anomalyList', data.anomalies);
             AnomalyAlertSystem.renderCenterWatchlist('centerWatchlist', data.anomalies);
             AnomalyAlertSystem.renderRetryPatterns('retryPatterns', data.anomalies);
+
+            // Render Dynamic Chart
+            VisualizationEngine.renderAnomalyTimeline('anomalyTimelineCanvas', data.anomalies);
+
+            // Render Detailed Audit Trail (List)
+            AnomalyAlertSystem.renderIncidentTimeline('incidentTimeline', data.anomalies);
 
             // Auto-Investigate param support
             const urlParams = new URLSearchParams(window.location.search);

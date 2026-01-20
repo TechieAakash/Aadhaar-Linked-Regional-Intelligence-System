@@ -479,15 +479,64 @@ def download_audit():
     if not validate_api_key():
         return unauthorized_response()
     
-    # Return a dummy audit trail CSV or PDF
-    content = "Timestamp,Entity,Action,Reason,ML_Confidence\n"
-    content += f"{datetime.now().isoformat()},System,AuditInitiated,SelfCheck,100%\n"
-    
-    return Response(
-        content,
-        mimetype="text/csv",
-        headers={"Content-Disposition": "attachment; filename=ALRIS_Audit_Trail.csv"}
-    )
+    try:
+        # 1. Load Anomaly Data
+        anomalies_path = os.path.join(DATA_DIR, 'anomalies.json')
+        anomalies = {}
+        if os.path.exists(anomalies_path):
+            with open(anomalies_path, 'r') as f:
+                anomalies = json.load(f)
+        
+        # 2. Load Watchlist (Governance Actions)
+        watchlist_path = os.path.join(DATA_DIR, 'watchlist_active.json')
+        watchlist = {}
+        if os.path.exists(watchlist_path):
+            with open(watchlist_path, 'r') as f:
+                watchlist = json.load(f)
+        
+        # 3. Build CSV Content
+        output = [["Timestamp", "Region/Entity", "Category", "Status", "Reason", "ML_Confidence"]]
+        
+        # Add Anomalies
+        # Data structure from JSON has 'state_anomalies', 'seasonal_anomalies', etc.
+        # Fallback to critical_priority/etc if that's what's there
+        categories = ['state_anomalies', 'seasonal_anomalies', 'retry_anomalies', 'center_anomalies']
+        for cat in categories:
+            for item in anomalies.get(cat, []):
+                region = item.get('state') or item.get('region') or item.get('center_id') or "Unknown"
+                output.append([
+                    item.get('date') or item.get('date_dt') or datetime.now().strftime("%Y-%m-%d"),
+                    region,
+                    cat.replace('_', ' ').title(),
+                    "Detected",
+                    item.get('anomaly_type') or item.get('reason') or "Unusual Pattern",
+                    f"{item.get('confidence') or item.get('risk_score') or 0}%"
+                ])
+        
+        # Add Watchlist Actions
+        for entity, details in watchlist.items():
+            output.append([
+                details.get('timestamp', datetime.now().isoformat()),
+                entity,
+                "GOVERNANCE ACTION",
+                details.get('status', 'Action Taken'),
+                details.get('reason', 'Administrative Review'),
+                "NA"
+            ])
+
+        # 4. Generate CSV String
+        import io
+        si = io.StringIO()
+        cw = csv.writer(si)
+        cw.writerows(output)
+        
+        return Response(
+            si.getvalue(),
+            mimetype="text/csv",
+            headers={"Content-Disposition": "attachment; filename=ALRIS_Legal_Audit_Trail.csv"}
+        )
+    except Exception as e:
+        return jsonify({"error": f"Audit Generation Failed: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=int(os.environ.get('PORT', 5000)))
