@@ -200,6 +200,13 @@
                 <p style="font-size: 0.8rem; opacity: 0.7;">ML-driven demand estimation and stress calendars.</p>
                 <div class="text-saffron" style="font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
             </div>
+            <div class="stat-card" style="grid-column: span 3; border-top-color: #d69e2e; cursor: pointer;"
+                onclick="window.location.href='/planning'">
+                <h4>Budget Optimization</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Strategic resource allocation to maximize national inclusion
+                    score.</p>
+                <div style="color: #d69e2e; font-weight: 700; margin-top: 10px;">ENTER MODULE →</div>
+            </div>
             <div class="stat-card" style="grid-column: span 3; border-top-color: var(--color-alert); cursor: pointer;"
                 onclick="window.location.href='/anomalies'">
                 <h4>Anomaly Alerts</h4>
@@ -309,10 +316,22 @@
                             // Normalize state name to Title Case for display and uniqueness
                             let normalizedName = toTitleCase(f.state.trim());
 
-                            // Handle Specific Corrections
+                            // Handle Specific Corrections (Comprehensive list)
                             if (normalizedName === "Westbengal" || normalizedName === "West Bengli") normalizedName = "West Bengal";
                             if (normalizedName === "Tamilnadu") normalizedName = "Tamil Nadu";
                             if (normalizedName.includes("Andhra")) normalizedName = "Andhra Pradesh";
+                            if (normalizedName === "Odisha " || normalizedName === "Orissa") normalizedName = "Odisha";
+                            if (normalizedName === "Uttrakhand" || normalizedName === "Uttaranchal") normalizedName = "Uttarakhand";
+                            if (normalizedName === "Chattisgarh") normalizedName = "Chhattisgarh";
+                            // Jammu & Kashmir variants
+                            if (normalizedName.includes("Jammu") || normalizedName.includes("Kashmir") || normalizedName === "J&K" || normalizedName === "Jk") {
+                                normalizedName = "Jammu & Kashmir";
+                            }
+                            // Ladakh (split from J&K in 2019)
+                            if (normalizedName.toLowerCase() === "ladakh") normalizedName = "Ladakh";
+
+                            // Delhi variants
+                            if (normalizedName === "Delhi" || normalizedName === "Nct Of Delhi") normalizedName = "NCT of Delhi";
 
                             // Store original data reference using normalized key
                             // (We lowercase for lookup consistency)
@@ -519,8 +538,21 @@
                 document.getElementById('exportBtn').addEventListener('click', exportDashboardData);
 
             } catch (err) {
-                console.error(err);
-                document.getElementById('indiaMap').innerHTML = 'Map Error: ' + err.message;
+                console.error('Map loading error:', err);
+                document.getElementById('indiaMap').innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center;">
+                        <i class="fas fa-map-marked-alt" style="font-size: 4rem; color: var(--color-alert); margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3 style="color: var(--gov-blue); margin-bottom: 10px;">Map Initialization Failed</h3>
+                        <p style="color: #666; margin-bottom: 20px;">Unable to load geographical data. Please check your connection.</p>
+                        <div style="background: #fff5f5; border: 1px solid #fed7d7; padding: 15px; border-radius: 4px; margin-bottom: 20px; max-width: 500px;">
+                            <strong style="color: #c53030;">Error Details:</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #555;">${err.message}</p>
+                        </div>
+                        <button class="btn-tool-blue" onclick="location.reload()">
+                            <i class="fas fa-sync-alt"></i> Retry Loading
+                        </button>
+                    </div>
+                `;
             }
         });
     </script>

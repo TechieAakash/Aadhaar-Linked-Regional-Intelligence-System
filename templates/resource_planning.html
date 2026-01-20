@@ -378,7 +378,8 @@
 
     <!-- SCRIPT -->
     <script>
-        const API_URL = '/api/budget/optimize';
+        const API_URL = '/api/optimization';
+        const API_KEY = "579b464db66ec23bdd000001623c2de44ffb40755360bbc473134c16";
         let chart = null;
 
         document.getElementById('btnOptimize').addEventListener('click', async () => {
@@ -394,9 +395,17 @@
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    },
                     body: JSON.stringify({ budget: parseFloat(budget) })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
 
                 const data = await response.json();
 
@@ -414,7 +423,13 @@
 
             } catch (err) {
                 console.error(err);
-                loader.innerHTML = '<span style="color:red">Optimization Failed. Server Error.</span>';
+                loader.style.display = 'none';
+                document.getElementById('btnOptimize').style.display = 'flex';
+                loader.innerHTML = `<span style="color:red">Optimization Failed: ${err.message}</span>`;
+                setTimeout(() => {
+                    loader.innerHTML = '';
+                    loader.style.display = 'none';
+                }, 5000);
             }
         });
 
