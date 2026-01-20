@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/css/unified-footer.css?v=2">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         .planning-header {
@@ -364,7 +365,7 @@
                     </div>
 
                     <div style="margin-top: 15px; text-align: right;">
-                        <button class="btn-secondary"
+                        <button id="exportPDFBtn" class="btn-secondary"
                             style="border: 1px solid #cbd5e0; background: white; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
                             <i class="fas fa-file-export"></i> Export Proposal (PDF)
                         </button>
@@ -434,6 +435,9 @@
         });
 
         function renderDashboard(data) {
+            // Store for PDF export
+            optimizationResult = data;
+
             // 0. Update Source Status
             if (data.data_source) {
                 document.getElementById('apiStatus').innerHTML = `<i class="fas fa-link" style="color:#48bb78;"></i> ${data.data_source}`;
@@ -552,6 +556,114 @@
                 }
             });
         }
+
+        // Store optimization result for PDF export
+        let optimizationResult = null;
+
+        document.getElementById('exportPDFBtn').addEventListener('click', () => {
+            if (!optimizationResult) {
+                alert('Please run optimization first before exporting.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const data = optimizationResult;
+
+            // Header
+            doc.setFontSize(16);
+            doc.setTextColor(10, 77, 146);
+            doc.text('BUDGET OPTIMIZATION PROPOSAL', 105, 15, { align: 'center' });
+
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text('Strategic Resource Planning - ALRIS', 105, 22, { align: 'center' });
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 105, 28, { align: 'center' });
+
+            // Summary
+            let yPos = 40;
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text('Executive Summary', 14, yPos);
+            yPos += 8;
+
+            doc.setFontSize(9);
+            doc.text(`Total Budget: ₹${(data.fiscal_summary.budget_cap / 10000000).toFixed(1)} Cr`, 14, yPos);
+            yPos += 6;
+            doc.text(`Allocated: ₹${(data.fiscal_summary.total_allocated / 10000000).toFixed(1)} Cr (${data.fiscal_summary.utilization_pct}%)`, 14, yPos);
+            yPos += 6;
+            doc.text(`National Inclusion Lift: +${data.impact_metrics.national_inclusion_lift}`, 14, yPos);
+            yPos += 6;
+            doc.text(`ROI Index: ${data.impact_metrics.roi_index}`, 14, yPos);
+            yPos += 10;
+
+            // Allocations Table
+            doc.setFontSize(11);
+            doc.setTextColor(0);
+            doc.text('State-wise Allocation Plan', 14, yPos);
+            yPos += 6;
+
+            doc.setFontSize(8);
+            const tableData = data.allocations.slice(0, 20).map(row => [
+                row.state,
+                `₹${(row.allocation / 100000).toFixed(1)}L`,
+                row.intervention_summary,
+                `+${row.improvement}`
+            ]);
+
+            // Simple text table
+            doc.text('State', 14, yPos);
+            doc.text('Allocation', 60, yPos);
+            doc.text('Interventions', 95, yPos);
+            doc.text('Impact', 160, yPos);
+            yPos += 5;
+
+            tableData.forEach(row => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.text(row[0].substring(0, 20), 14, yPos);
+                doc.text(row[1], 60, yPos);
+                doc.text(row[2].substring(0, 30), 95, yPos);
+                doc.text(row[3], 160, yPos);
+                yPos += 6;
+            });
+
+            // Unfunded Section
+            if (data.unfunded_mandates && data.unfunded_mandates.length > 0) {
+                yPos += 8;
+                if (yPos > 260) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.setFontSize(11);
+                doc.setTextColor(229, 62, 62);
+                doc.text('Unfunded Priorities', 14, yPos);
+                yPos += 8;
+
+                doc.setFontSize(8);
+                doc.setTextColor(0);
+                data.unfunded_mandates.slice(0, 15).forEach(row => {
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.text(row.state, 14, yPos);
+                    doc.text(`₹${(row.required_budget / 100000).toFixed(1)}L`, 60, yPos);
+                    doc.text(row.intervention_summary.substring(0, 50), 95, yPos);
+                    yPos += 6;
+                });
+            }
+
+            // Footer
+            doc.setFontSize(7);
+            doc.setTextColor(150);
+            doc.text('UIDAI - Unique Identification Authority of India | For Official Use Only', 105, 285, { align: 'center' });
+
+            doc.save(`ALRIS_Budget_Proposal_${new Date().toISOString().split('T')[0]}.pdf`);
+        });
+
     </script>
     <footer class="uidai-global-footer">
         <div class="footer-content">

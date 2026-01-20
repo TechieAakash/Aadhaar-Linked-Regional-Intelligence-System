@@ -294,6 +294,32 @@
             };
             info.addTo(map);
 
+            // Add Legend for Color Gradient
+            const legend = L.control({ position: 'bottomright' });
+            legend.onAdd = function (map) {
+                const div = L.DomUtil.create('div', 'map-info');
+                div.style.background = 'rgba(255,255,255,0.95)';
+                div.style.padding = '10px';
+                div.style.fontSize = '0.75rem';
+                div.style.lineHeight = '1.4';
+
+                const grades = [
+                    { color: '#C62828', label: 'Critical (90-100%)' },
+                    { color: '#EF6C00', label: 'High (70-89%)' },
+                    { color: '#F9A825', label: 'Medium (50-69%)' },
+                    { color: '#FDD835', label: 'Low (<50%)' },
+                    { color: '#2E7D32', label: 'Normal' }
+                ];
+
+                div.innerHTML = '<strong style="display:block; margin-bottom:5px;">Anomaly Severity</strong>';
+                grades.forEach(g => {
+                    div.innerHTML += `<span style="background:${g.color}; display:inline-block; width:14px; height:14px; margin-right:5px; border-radius:2px;"></span> ${g.label}<br>`;
+                });
+
+                return div;
+            };
+            legend.addTo(map);
+
             // 4. Load GeoJSON & Plot Anomalies
             try {
                 const response = await fetch('/assets/map-geojson/india_states.json');
@@ -360,13 +386,36 @@
                     style: (feature) => {
                         const rawName = feature.properties.st_nm || feature.properties.NAME_1 || "";
                         const stateName = rawName.toLowerCase();
-                        const hasAnomaly = anomalyMap[stateName];
+                        const anomalyData = anomalyMap[stateName];
+
+                        // Gradient coloring based on severity
+                        let fillColor = '#2E7D32'; // Green for no anomaly
+                        let fillOpacity = 0.5;
+
+                        if (anomalyData) {
+                            const severity = anomalyData.ml_confidence || 0;
+                            // Create gradient: Green → Yellow → Orange → Red
+                            if (severity >= 90) {
+                                fillColor = '#C62828'; // Dark Red - Critical
+                                fillOpacity = 0.75;
+                            } else if (severity >= 70) {
+                                fillColor = '#EF6C00'; // Deep Orange - High
+                                fillOpacity = 0.7;
+                            } else if (severity >= 50) {
+                                fillColor = '#F9A825'; // Amber - Medium
+                                fillOpacity = 0.65;
+                            } else {
+                                fillColor = '#FDD835'; // Yellow - Low
+                                fillOpacity = 0.6;
+                            }
+                        }
+
                         return {
-                            fillColor: hasAnomaly ? '#DC3545' : '#0F4D92', // Red for anomaly, Blue for normal
-                            weight: 2,
+                            fillColor: fillColor,
+                            weight: 1.5,
                             opacity: 1,
                             color: 'white',
-                            fillOpacity: hasAnomaly ? 0.6 : 0.7
+                            fillOpacity: fillOpacity
                         };
                     },
                     onEachFeature: (feature, layer) => {
@@ -374,19 +423,28 @@
                         const stateName = rawStateName.toLowerCase();
                         const anomaly = anomalyMap[stateName];
 
-                        // Add "Dot" Marker for Anomalies
+                        // Add Circle Marker for Anomalies with size based on severity
                         if (anomaly) {
                             const center = layer.getBounds().getCenter();
+                            const severity = anomaly.ml_confidence || 50;
+                            const radius = 6 + (severity / 100) * 8; // 6-14px based on severity
+
+                            let markerColor = '#FDD835';
+                            if (severity >= 90) markerColor = '#C62828';
+                            else if (severity >= 70) markerColor = '#EF6C00';
+                            else if (severity >= 50) markerColor = '#F9A825';
+
                             L.circleMarker(center, {
-                                radius: 8,
-                                fillColor: "#FF0000",
+                                radius: radius,
+                                fillColor: markerColor,
                                 color: "#fff",
                                 weight: 2,
                                 opacity: 1,
-                                fillOpacity: 1
+                                fillOpacity: 0.9
                             }).addTo(map).bindPopup(`
                                 <strong>${anomaly.state}</strong><br>
-                                alert: ${anomaly.anomaly_type}<br>
+                                <span style="color: ${markerColor};">●</span> ${anomaly.anomaly_type}<br>
+                                Severity: ${severity}%<br>
                                 <button class="btn-tool-outline" style="margin-top:5px;" onclick="window.location.href='/anomalies?state=${encodeURIComponent(anomaly.state)}'">Investigate</button>
                             `);
                         }
@@ -394,18 +452,12 @@
                         layer.on({
                             mouseover: (e) => {
                                 const l = e.target;
-                                l.setStyle({ weight: 5, color: '#FF9933', fillOpacity: 0.9 });
+                                l.setStyle({ weight: 4, color: '#FF9933', dashArray: '5, 5' });
                                 l.bringToFront();
                                 info.update(feature.properties, anomaly);
                             },
                             mouseout: (e) => {
-                                const l = e.target;
-                                l.setStyle({
-                                    fillColor: anomaly ? '#DC3545' : '#0F4D92',
-                                    weight: 2,
-                                    color: 'white',
-                                    fillOpacity: anomaly ? 0.6 : 0.7
-                                });
+                                geoLayer.resetStyle(e.target);
                                 info.update();
                             },
                             click: (e) => {
