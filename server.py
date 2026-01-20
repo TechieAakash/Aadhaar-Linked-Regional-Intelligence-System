@@ -6,7 +6,20 @@ import random
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, render_template, Response
 from flask_cors import CORS
-import anvil.server
+
+# --- Optional Anvil Uplink Integration ---
+try:
+    import anvil.server
+    ANVIL_AVAILABLE = True
+except ImportError:
+    ANVIL_AVAILABLE = False
+    # Mock decorator if anvil is missing
+    class anvil:
+        class server:
+            @staticmethod
+            def callable(func): return func
+            @staticmethod
+            def connect(key): pass
 
 
 
@@ -47,12 +60,14 @@ def smart_response(data, status=200):
 
 # --- Anvil Uplink Connectivity ---
 ANVIL_KEY = os.environ.get("ANVIL_UPLINK_KEY")
-if ANVIL_KEY:
+if ANVIL_AVAILABLE and ANVIL_KEY:
     try:
         anvil.server.connect(ANVIL_KEY)
         print("[ALRIS] Anvil Uplink Connected Successfully.")
     except Exception as e:
         print(f"[ALRIS] Anvil Uplink Connection Failed: {e}")
+elif not ANVIL_AVAILABLE:
+    print("[ALRIS] Anvil Library not found. Running in Flask-only mode.")
 else:
     print("[ALRIS] Skipping Anvil Uplink (No ANVIL_UPLINK_KEY found).")
 
