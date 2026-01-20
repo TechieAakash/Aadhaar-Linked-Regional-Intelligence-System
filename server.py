@@ -76,16 +76,19 @@ def clean_for_anvil(obj):
 
 # --- Anvil Uplink Connectivity ---
 ANVIL_KEY = os.environ.get("ANVIL_UPLINK_KEY")
-if ANVIL_AVAILABLE and ANVIL_KEY:
-    try:
-        anvil.server.connect(ANVIL_KEY)
-        print("[ALRIS] Anvil Uplink Connected Successfully.")
-    except Exception as e:
-        print(f"[ALRIS] Anvil Uplink Connection Failed: {e}")
-elif not ANVIL_AVAILABLE:
-    print("[ALRIS] Anvil Library not found. Running in Flask-only mode.")
+if ANVIL_AVAILABLE:
+    if ANVIL_KEY:
+        try:
+            # Use 'threaded=True' on connection to prevent blocking Flask
+            anvil.server.connect(ANVIL_KEY)
+            print("[ALRIS] ✅ Anvil Uplink Connected Successfully.")
+        except Exception as e:
+            print(f"[ALRIS] ❌ Anvil Uplink Connection Failed: {e}")
+    else:
+        print("[ALRIS] ℹ️ Anvil Uplink skipped: ANVIL_UPLINK_KEY not set.")
+        print("[ALRIS] 💡 To deploy on Anvil, set your environment variable: ANVIL_UPLINK_KEY=your-key-here")
 else:
-    print("[ALRIS] Skipping Anvil Uplink (No ANVIL_UPLINK_KEY found).")
+    print("[ALRIS] ⚠️ Anvil Library not installed. Running in Flask-only mode.")
 
 # --- Frontend Routes ---
 @app.route('/')
