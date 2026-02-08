@@ -92,7 +92,13 @@ else:
 
 # --- Frontend Routes ---
 @app.route('/')
-def index():
+def login():
+    """Smart Login Page - Default Landing"""
+    return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    """Main Dashboard - After Login"""
     return render_template('index.html')
 
 @app.route('/<page>')
@@ -102,6 +108,8 @@ def serve_page(page):
     
     # Map friendly names to templates
     template_map = {
+        'login': 'login.html',
+        'dashboard': 'index.html',
         'lifecycle': 'lifecycle.html',
         'equity': 'equity_index.html',
         'planning': 'resource_planning.html',

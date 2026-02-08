@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UIDAI Aadhaar Analytics Command Center - Official Login Portal">
+    <title>Login | UIDAI Aadhaar Analytics Command Center</title>
+
+    <!-- Gov Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --gov-blue: #003d62;
+            --gov-blue-light: #0f4d92;
+            --gov-saffron: #ff9933;
+            --gov-green: #138808;
+            --gov-white: #ffffff;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+            --shadow-soft: 0 10px 40px rgba(0, 61, 98, 0.15);
+            --shadow-glow: 0 0 60px rgba(0, 61, 98, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fbff 0%, #e6f0ff 50%, #fff8f0 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 153, 51, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 61, 98, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(19, 136, 8, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Tricolor Top Bar */
+        .tricolor-bar {
+            display: flex;
+            width: 100%;
+            height: 6px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .tricolor-bar span {
+            flex: 1;
+        }
+
+        .tricolor-bar .saffron {
+            background: var(--gov-saffron);
+        }
+
+        .tricolor-bar .white {
+            background: var(--gov-white);
+        }
+
+        .tricolor-bar .green {
+            background: var(--gov-green);
+        }
+
+        /* Header */
+        .gov-header {
+            background: var(--gov-white);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 6px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .gov-header img {
+            height: 65px;
+        }
+
+        .header-text {
+            text-align: center;
+            border-left: 2px solid var(--border-color);
+            padding-left: 30px;
+        }
+
+        .header-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gov-blue);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .header-text p {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--gov-white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            position: relative;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Header */
+        .card-header {
+            background: linear-gradient(135deg, var(--gov-blue) 0%, var(--gov-blue-light) 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-header .emblem {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .card-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gov-white);
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        /* Restricted Banner */
+        .restricted-banner {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%);
+            color: #92400e;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-align: center;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #f59e0b;
+        }
+
+        .restricted-banner i {
+            font-size: 1rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-group label i {
+            color: var(--gov-blue);
+            font-size: 0.85rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gov-blue);
+            background: var(--gov-white);
+            box-shadow: 0 0 0 4px rgba(0, 61, 98, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%234a5568' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 24px;
+            padding-right: 40px;
+        }
+
+        /* Password Container */
+        .password-container {
+            position: relative;
+        }
+
+        .password-container .form-control {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .password-toggle:hover {
+            color: var(--gov-blue);
+        }
+
+        /* Login Button */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gov-blue) 0%, var(--gov-blue-light) 100%);
+            color: var(--gov-white);
+            box-shadow: 0 4px 15px rgba(0, 61, 98, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 61, 98, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        }
+
+        .divider span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border: 2px dashed var(--gov-green);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .demo-header i {
+            font-size: 1.2rem;
+            color: var(--gov-saffron);
+        }
+
+        .demo-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gov-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .demo-credentials {
+            background: var(--gov-white);
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-credentials strong {
+            color: var(--gov-blue);
+        }
+
+        .btn-demo {
+            background: linear-gradient(135deg, var(--gov-green) 0%, #16a34a 100%);
+            color: var(--gov-white);
+            box-shadow: 0 4px 15px rgba(19, 136, 8, 0.3);
+        }
+
+        .btn-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(19, 136, 8, 0.4);
+        }
+
+        .btn-demo i {
+            font-size: 1.1rem;
+        }
+
+        /* Footer Info */
+        .card-footer {
+            background: #f8fafc;
+            padding: 20px 30px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-info {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .footer-info strong {
+            color: var(--gov-blue);
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gov-green);
+            background: #f0fdf4;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .security-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* Global Footer */
+        .global-footer {
+            background: var(--gov-blue);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .global-footer a {
+            color: var(--gov-saffron);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .global-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Role Description */
+        .role-list {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .role-list li {
+            margin-bottom: 4px;
+        }
+
+        .role-list li strong {
+            color: var(--text-primary);
+        }
+
+        /* Loading State */
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 0.8rem;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        /* Responsive */
+        @media (max-width: 540px) {
+            .gov-header {
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .header-text {
+                border-left: none;
+                padding-left: 0;
+                border-top: 1px solid var(--border-color);
+                padding-top: 15px;
+            }
+
+            .header-text h1 {
+                font-size: 1.1rem;
+            }
+
+            .login-card {
+                margin: 0 10px;
+            }
+
+            .form-container,
+            .card-footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Tricolor Top Bar -->
+    <div class="tricolor-bar">
+        <span class="saffron"></span>
+        <span class="white"></span>
+        <span class="green"></span>
+    </div>
+
+    <!-- Government Header -->
+    <header class="gov-header">
+        <img src="/assets/images/goi_logo.png" alt="Government of India Emblem">
+        <div class="header-text">
+            <h1>🇮🇳 GOVERNMENT OF INDIA</h1>
+            <p>Unique Identification Authority of India (UIDAI)</p>
+        </div>
+        <img src="https://uidai.gov.in/images/logo/uidai_english_logo.svg" alt="Aadhaar Logo" style="height: 55px;">
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="login-card">
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="emblem">🏛️</div>
+                <h2>AADHAAR ANALYTICS COMMAND CENTER</h2>
+                <p>Official Governance & Decision Support Portal</p>
+            </div>
+
+            <!-- Restricted Banner -->
+            <div class="restricted-banner">
+                <i class="fas fa-shield-alt"></i>
+                RESTRICTED ACCESS — AUTHORIZED OFFICIALS ONLY
+            </div>
+
+            <!-- Form -->
+            <div class="form-container">
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials. Please try again.</span>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Officer Email / ID</label>
+                        <input type="email" id="email" class="form-control" placeholder="officer@uidai.gov.in" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Secure Password</label>
+                        <div class="password-container">
+                            <input type="password" id="password" class="form-control" placeholder="Enter your password"
+                                required>
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-user-shield"></i> Access Level</label>
+                        <select id="accessLevel" class="form-control" required>
+                            <option value="" disabled selected>▼ Select Role</option>
+                            <option value="national">National HQ - Full Access</option>
+                            <option value="state">State Officer - Regional View</option>
+                            <option value="audit">Audit / Review - Read Only</option>
+                        </select>
+                        <ul class="role-list">
+                            <li><strong>National HQ:</strong> Complete analytics & decision controls</li>
+                            <li><strong>State Officer:</strong> Regional data visualization</li>
+                            <li><strong>Audit/Review:</strong> Report viewing & exports only</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn-login btn-primary" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> SECURE LOGIN
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>For Hackathon Judges / Demo</span>
+                </div>
+
+                <!-- Demo Section -->
+                <div class="demo-section">
+                    <div class="demo-header">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Quick Demo Access</h3>
+                    </div>
+                    <div class="demo-credentials">
+                        <strong>Email:</strong> judge@demo.uidai.gov.in<br>
+                        <strong>Password:</strong> uidai2026
+                    </div>
+                    <button type="button" class="btn-login btn-demo" id="demoBtn">
+                        <i class="fas fa-bolt"></i> QUICK DEMO LOGIN — CLICK HERE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer">
+                <p class="footer-info">
+                    <strong>Built for:</strong> UIDAI Hackathon 2026 |
+                    <strong>Team:</strong> ALRIS Intelligence |
+                    <strong>Problem:</strong> Smart Aadhaar Service
+                </p>
+                <span class="security-badge">
+                    <i class="fas fa-lock"></i> All sessions encrypted & logged
+                </span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="global-footer">
+        Copyright © 2026 Unique Identification Authority of India. All Rights Reserved. |
+        <a href="https://uidai.gov.in" target="_blank">UIDAI.gov.in</a>
+    </footer>
+
+    <script>
+        // Demo Credentials
+        const DEMO_CREDENTIALS = {
+            email: 'judge@demo.uidai.gov.in',
+            password: 'uidai2026',
+            role: 'national'
+        };
+
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const accessLevelSelect = document.getElementById('accessLevel');
+        const loginBtn = document.getElementById('loginBtn');
+        const demoBtn = document.getElementById('demoBtn');
+        const togglePassword = document.getElementById('togglePassword');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        // Toggle Password Visibility
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            togglePassword.innerHTML = type === 'password'
+                ? '<i class="fas fa-eye"></i>'
+                : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Show Error
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => errorMessage.classList.remove('show'), 5000);
+        }
+
+        // Set Loading State
+        function setLoading(button, loading) {
+            if (loading) {
+                button.classList.add('btn-loading');
+                button.innerHTML = '<i class="fas fa-spinner spinner"></i> Authenticating...';
+            } else {
+                button.classList.remove('btn-loading');
+                if (button.id === 'loginBtn') {
+                    button.innerHTML = '<i class="fas fa-sign-in-alt"></i> SECURE LOGIN';
+                } else {
+                    button.innerHTML = '<i class="fas fa-bolt"></i> QUICK DEMO LOGIN — CLICK HERE';
+                }
+            }
+        }
+
+        // Handle Login
+        function handleLogin(email, password, role) {
+            // Simulate authentication
+            // In production, this would validate against a backend
+
+            // Accept demo credentials or any non-empty credentials for demo purposes
+            const isValid = (
+                (email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password) ||
+                (email && password && role)
+            );
+
+            if (isValid) {
+                // Store session info
+                sessionStorage.setItem('uidai_user', JSON.stringify({
+                    email: email,
+                    role: role,
+                    loginTime: new Date().toISOString()
+                }));
+
+                // Redirect to dashboard
+                window.location.href = '/dashboard';
+            } else {
+                showError('Invalid credentials. Please check your email and password.');
+            }
+        }
+
+        // Form Submit
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const role = accessLevelSelect.value;
+
+            if (!role) {
+                showError('Please select an access level.');
+                return;
+            }
+
+            setLoading(loginBtn, true);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                setLoading(loginBtn, false);
+                handleLogin(email, password, role);
+            }, 1200);
+        });
+
+        // Demo Login
+        demoBtn.addEventListener('click', () => {
+            setLoading(demoBtn, true);
+
+            // Animate filling in credentials
+            emailInput.value = DEMO_CREDENTIALS.email;
+            passwordInput.value = DEMO_CREDENTIALS.password;
+            accessLevelSelect.value = DEMO_CREDENTIALS.role;
+
+            setTimeout(() => {
+                setLoading(demoBtn, false);
+                handleLogin(DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password, DEMO_CREDENTIALS.role);
+            }, 1500);
+        });
+
+        // Focus animation on form fields
+        document.querySelectorAll('.form-control').forEach(el => {
+            el.addEventListener('focus', () => {
+                el.parentElement.classList.add('focused');
+            });
+            el.addEventListener('blur', () => {
+                el.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
+</body>
+
+</html>
